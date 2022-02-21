@@ -188,16 +188,16 @@ cmake_install.cmake
 *-server
 
 # non-default config files containing server specific things
-/conf/license.conf
-/conf/version.conf
-/conf/login.conf
-/conf/maint.conf
-/conf/map.conf
-/conf/packet_tcp.conf
-/conf/packet_udp.conf
-/conf/search_server.conf
-/conf/server_message.conf
-/conf/server_message_fr.conf
+#/conf/license.conf
+#/conf/version.conf
+#/conf/login.conf
+#/conf/maint.conf
+#/conf/map.conf
+#/conf/packet_tcp.conf
+#/conf/packet_udp.conf
+#/conf/search_server.conf
+#/conf/server_message.conf
+#/conf/server_message_fr.conf
 
 # non-default settings script files containing server specific things
 /scripts/settings/main.lua
