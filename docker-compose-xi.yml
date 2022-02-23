@@ -1,0 +1,97 @@
+version: '3.9'
+
+services:
+  xidb:
+    image: xi-db:main
+    networks:
+      xi-network:
+        ipv4_address: 192.168.10.5
+    expose:
+      - "3306"
+    volumes:
+      - ${DB_MOUNT}:/var/lib/mysql
+    restart: unless-stopped
+
+  autobackup-xidb:
+    image: selim13/automysqlbackup
+    volumes:
+      - /home/korisd/db-bak:/backup
+    environment:
+      DBHOST: "xidb"
+      DBPORT: 3306
+      DBNAMES: "all"
+      USERNAME: "${DB_USER}"
+      PASSWORD: "${DB_USER_PASSWD}"
+      CRON_SCHEDULE: "0 0 * * *"
+      CREATE_DATABASE: "no"
+    networks:
+      xi-network:
+        ipv4_address: 192.168.10.4
+    restart: unless-stopped
+
+  xiconnect:
+    image: xi-run-time:main
+    environment:
+      - XI_DB_HOST=192.168.10.5
+      - XI_DB_NAME=${DB_NAME}
+      - XI_DB_PORT=3306
+      - XI_DB_USER=${DB_USER}
+      - XI_DB_USER_PASSWD=${DB_USER_PASSWD}
+      - XI_MSG_IP=192.168.10.6
+      - XI_MSG_PORT=54003
+    ports:
+      - "54001:54001"
+      - "54230:54230/tcp"
+      - "54231:54231"
+    expose:
+      - "54003"
+    networks:
+      xi-network:
+        ipv4_address: 192.168.10.6
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    command: >
+      bash -c "sleep 15; ./topaz_connect"
+  xigame:
+    image: xi-run-time:main
+    environment:
+      - XI_DB_HOST=192.168.10.5
+      - XI_DB_NAME=${DB_NAME}
+      - XI_DB_PORT=3306
+      - XI_DB_USER=${DB_USER}
+      - XI_DB_USER_PASSWD=${DB_USER_PASSWD}
+      - XI_MSG_IP=192.168.10.6
+      - XI_MSG_PORT=54003
+    ports:
+      - "54230:54230/udp"
+    networks:
+      xi-network:
+        ipv4_address: 192.168.10.2
+    tty: true
+    restart: unless-stopped
+    command: >
+      bash -c "sleep 15; ./topaz_game"
+  xisearch:
+    image: xi-run-time:main
+    environment:
+      - XI_DB_HOST=192.168.10.5
+      - XI_DB_NAME=${DB_NAME}
+      - XI_DB_PORT=3306
+      - XI_DB_USER=${DB_USER}
+      - XI_DB_USER_PASSWD=${DB_USER_PASSWD}
+    ports:
+      - "54002:54002"
+    networks:
+      xi-network:
+        ipv4_address: 192.168.10.3
+    restart: unless-stopped
+    command: >
+      bash -c "sleep 15; ./topaz_search"
+
+networks:
+  xi-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.10.0/24
