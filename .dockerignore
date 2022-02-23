@@ -1,0 +1,21 @@
+# Folders
+.github
+.vscode
+cmake-build-debug*
+documentation
+icons
+log
+res
+venv
+
+# Files
+.editorconfig
+.gitattributes
+.gitignore
+.gitmodules
+CmakeSettings.json
+*.md
+*.dll
+*Dockerfile*
+*docker-compose*
+LICENSE
