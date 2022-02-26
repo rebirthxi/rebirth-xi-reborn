@@ -15,7 +15,7 @@ services:
   autobackup-xidb:
     image: selim13/automysqlbackup
     volumes:
-      - /home/korisd/db-bak:/backup
+      - ${DB_BACKUP}:/backup
     environment:
       DBHOST: "xidb"
       DBPORT: 3306
