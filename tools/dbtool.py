@@ -173,11 +173,26 @@ def fetch_errors():
 
 def fetch_credentials():
     global database, host, port, login, password
-    database = os.getenv('XI_DB_NAME') or ""
-    host = os.getenv('XI_DB_HOST') or ""
-    port = os.getenv('XI_DB_PORT') or 3306
-    login = os.getenv('XI_DB_USER') or ""
-    password = os.getenv('XI_DB_USER_PASSWD') or ""
+    credentials = {}
+
+    # Grab mysql credentials
+    filename = '../conf/map.conf'
+    try:
+        with open(filename) as f:
+            while True:
+                line = f.readline()
+                if not line: break
+                match = re.match(r'(mysql_\w+):\s+(\S+)', line)
+                if match:
+                    credentials[match.group(1)] = match.group(2)
+        database = os.getenv('XI_DB_NAME') or credentials['mysql_database']
+        host = os.getenv('XI_DB_HOST') or credentials['mysql_host']
+        port = os.getenv('XI_DB_PORT') or int(credentials['mysql_port'])
+        login = os.getenv('XI_DB_USER') or credentials['mysql_login']
+        password = os.getenv('XI_DB_USER_PASSWD') or credentials['mysql_password']
+    except:
+        print(Fore.RED + 'Error fetching credentials.\nCheck ../conf/map.conf.')
+        return False
 
 def fetch_versions():
     global current_version, current_client, release_version, release_client
