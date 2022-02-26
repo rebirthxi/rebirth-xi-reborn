@@ -18,5 +18,15 @@ pipeline {
             '''
          }
       }
+      stage('Creating a backup of the database') {
+         steps {
+            sh 'docker-compose -f docker-compose-xi.yml -p rebirthxireborn exec -T autobackup-xidb automysqlbackup'
+         }
+      }
+      stage('Shutting down all remaining services') {
+         steps {
+            sh 'docker-compose -f docker-compose-xi.yml -p rebirthxireborn stop'
+         }
+      }
    }
 }
