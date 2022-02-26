@@ -1,10 +1,15 @@
 FROM mysql:5.7
 
-RUN apt-get update && apt-get install -y git python3 python3-pip && apt clean
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    git \
+    python3 \
+    python3-pip \
+    && apt-get clean
 
 RUN pip3 install --upgrade pip
 
-ADD tools/requirements.txt ./requirements.txt
+ADD tools/requirements-rebirth-xi.txt ./requirements.txt
 
 RUN pip3 install -r requirements.txt
 
