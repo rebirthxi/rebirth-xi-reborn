@@ -28,7 +28,7 @@ pipeline {
                      'DB_BACKUP=' + params.DB_BACKUP,
                      'DB_NAME=' + params.DB_NAME]) {
                 withCredentials([usernamePassword(credentialsId:params.CREDENTIALS, usernameVariable:'DB_USER', passwordVariable:'DB_USER_PASSWD')]) {
-                    sh 'docker-compose -f docker-compose-xi.yml up -d'
+                    sh 'docker-compose -f docker-compose-xi.yml -p rebirthxireborn up -d'
                 }
             }
          }
