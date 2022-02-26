@@ -13,14 +13,8 @@ ADD tools/requirements-rebirth-xi.txt ./requirements.txt
 
 RUN pip3 install -r requirements.txt
 
-# for doing updates
-ADD sql ./sql
-
 # tool to do the updates
-ADD tools/dbtool.py ./dbtool.py
+ADD tools/migrate.py ./migrate.py
 
 # the imports the dbtool needs for migrations
 ADD tools/migrations ./migrations
-
-# because... ugh, design choices?
-ADD .git/ ./.git
