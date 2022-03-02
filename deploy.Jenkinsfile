@@ -1,7 +1,7 @@
 pipeline {
    agent any
    stages {
-      stage('Build and Init the Submodules') {
+      stage('Init Submodules and Build Docker Images') {
          steps {
             sh '''
                git submodule init
