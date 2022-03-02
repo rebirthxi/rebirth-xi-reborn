@@ -19,6 +19,9 @@
 #include "entities/battleentity.h"
 #include "entities/mobentity.h"
 
+// RebirthXI Includes
+#include "ai/ai_container.h"
+
 CNotorietyContainer::CNotorietyContainer(CBattleEntity* owner)
 : m_POwner(owner)
 {
@@ -36,6 +39,7 @@ std::set<CBattleEntity*>::iterator CNotorietyContainer::end()
 
 void CNotorietyContainer::add(CBattleEntity* entity)
 {
+    m_POwner->PAI->EventHandler.triggerListener("ENMITY_GAIN", CLuaBaseEntity(m_POwner));
     m_Lookup.insert(entity);
 }
 
@@ -45,6 +49,10 @@ void CNotorietyContainer::remove(CBattleEntity* entity)
     if (entity_itr != m_Lookup.end())
     {
         m_Lookup.erase(*entity_itr);
+    }
+    if (m_Lookup.empty())
+    {
+        m_POwner->PAI->EventHandler.triggerListener("ENMITY_TOTALLY_GONE", CLuaBaseEntity(m_POwner));
     }
 }
 

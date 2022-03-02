@@ -840,6 +840,7 @@ xi.effect =
     -- PLACEHOLDER           = 804, -- Description
     -- 804-1022
     -- PLACEHOLDER             = 1023 -- The client dat file seems to have only this many "slots", results of exceeding that are untested.
+    OUT_OF_COMBAT_MOVE       = 900,
 }
 
 -----------------------------------
