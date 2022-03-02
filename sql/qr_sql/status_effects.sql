@@ -1,0 +1,1 @@
+INSERT INTO `status_effects` VALUES(900,'out_of_combat_move',256,0,0,0,0,0,0,0,0);
