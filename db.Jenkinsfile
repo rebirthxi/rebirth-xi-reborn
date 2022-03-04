@@ -24,6 +24,7 @@ pipeline {
            withCredentials([usernamePassword(credentialsId:'reborn-db', usernameVariable:'DB_USER', passwordVariable:'DB_USER_PASSWD')]) {
               sh '''
                  docker exec -i rebirthxireborn-xidb-1 sh -c "mysql -u ${DB_USER} -p${DB_USER_PASSWD} xidb" < sql/qr_sql/status_effects.sql
+                 docker exec -i rebirthxireborn-xidb-1 sh -c "mysql -u ${DB_USER} -p${DB_USER_PASSWD} xidb" < sql/qr_sql/black_mage_time_machine.sql
               '''
            }
         }
