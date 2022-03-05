@@ -6235,7 +6235,7 @@ namespace charutils
     void LoadDistributeXp(CCharEntity* PChar)
     {
         const char* fmtQuery = "SELECT war, mnk, whm, blm, rdm, thf, pld, drk, bst, brd, rng, sam, nin, drg, smn, blu, cor, pup, dnc, sch, geo, run "
-                               "FROM char_job_exp_distribution "
+                               "FROM char_distribute_xp "
                                "WHERE charid = %u;";
 
         int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id);
@@ -6279,7 +6279,7 @@ namespace charutils
 
         const char *fmtQuery;
 
-        fmtQuery = "INSERT INTO char_job_exp_distribution (charid, war, mnk, whm, blm, rdm, thf, pld, drk, bst, brd, rng, sam, nin,\n"
+        fmtQuery = "INSERT INTO char_distribute_xp (charid, war, mnk, whm, blm, rdm, thf, pld, drk, bst, brd, rng, sam, nin,\n"
                    "                                            drg, smn, blu, cor, pup, dnc, sch, geo, run)\n"
                    "VALUES (%u, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT,\n"
                    "        DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)"
@@ -6290,73 +6290,73 @@ namespace charutils
         switch(job)
         {
             case JOB_WAR:
-                fmtQuery = "UPDATE char_job_exp_distribution SET war = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET war = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_MNK:
-                fmtQuery = "UPDATE char_job_exp_distribution SET mnk = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET mnk = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_WHM:
-                fmtQuery = "UPDATE char_job_exp_distribution SET whm = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET whm = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_BLM:
-                fmtQuery = "UPDATE char_job_exp_distribution SET blm = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET blm = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_RDM:
-                fmtQuery = "UPDATE char_job_exp_distribution SET rdm = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET rdm = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_THF:
-                fmtQuery = "UPDATE char_job_exp_distribution SET thf = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET thf = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_PLD:
-                fmtQuery = "UPDATE char_job_exp_distribution SET pld = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET pld = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_DRK:
-                fmtQuery = "UPDATE char_job_exp_distribution SET drk = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET drk = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_BST:
-                fmtQuery = "UPDATE char_job_exp_distribution SET bst = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET bst = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_BRD:
-                fmtQuery = "UPDATE char_job_exp_distribution SET brd = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET brd = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_RNG:
-                fmtQuery = "UPDATE char_job_exp_distribution SET rng = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET rng = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_SAM:
-                fmtQuery = "UPDATE char_job_exp_distribution SET sam = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET sam = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_NIN:
-                fmtQuery = "UPDATE char_job_exp_distribution SET nin = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET nin = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_DRG:
-                fmtQuery = "UPDATE char_job_exp_distribution SET drg = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET drg = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_SMN:
-                fmtQuery = "UPDATE char_job_exp_distribution SET smn = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET smn = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_BLU:
-                fmtQuery = "UPDATE char_job_exp_distribution SET blu = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET blu = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_COR:
-                fmtQuery = "UPDATE char_job_exp_distribution SET cor = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET cor = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_PUP:
-                fmtQuery = "UPDATE char_job_exp_distribution SET pup = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET pup = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_DNC:
-                fmtQuery = "UPDATE char_job_exp_distribution SET dnc = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET dnc = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_SCH:
-                fmtQuery = "UPDATE char_job_exp_distribution SET sch = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET sch = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_GEO:
-                fmtQuery = "UPDATE char_job_exp_distribution SET geo = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET geo = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_RUN:
-                fmtQuery = "UPDATE char_job_exp_distribution SET run = %u WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET run = %u WHERE charid = %u LIMIT 1";
                 break;
             case JOB_NON:
-                fmtQuery = "UPDATE char_job_exp_distribution SET war = 0, mnk = 0, whm = 0, blm = 0, rdm = 0, thf = 0, pld = 0, drk = 0, bst = 0, brd = 0, rng = 0, sam = 0, nin = 0, drg = 0, smn = 0, blu = 0, cor = 0, pup = 0, dnc = 0, sch = 0, geo = 0, run = 0 WHERE charid = %u LIMIT 1";
+                fmtQuery = "UPDATE char_distribute_xp SET war = 0, mnk = 0, whm = 0, blm = 0, rdm = 0, thf = 0, pld = 0, drk = 0, bst = 0, brd = 0, rng = 0, sam = 0, nin = 0, drg = 0, smn = 0, blu = 0, cor = 0, pup = 0, dnc = 0, sch = 0, geo = 0, run = 0 WHERE charid = %u LIMIT 1";
                 break;
             default:
                 fmtQuery = "";

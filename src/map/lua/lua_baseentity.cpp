@@ -13437,7 +13437,7 @@ uint32 CLuaBaseEntity::getHistory(uint8 index)
 // Beginning of Custom Lua calls for RebirthXI Reborn       //
 //==========================================================//
 
-void CLuaBaseEntity::setDistributedExp(uint8 job, uint8 level)
+void CLuaBaseEntity::setDistributeXp(uint8 job, uint8 level)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
@@ -13454,7 +13454,7 @@ void CLuaBaseEntity::setDistributedExp(uint8 job, uint8 level)
     charutils::SaveCharDistributeXp(PChar, static_cast<JOBTYPE>(job));
 }
 
-void CLuaBaseEntity::showDistributedExp()
+void CLuaBaseEntity::showDistributeXp()
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
@@ -14236,8 +14236,8 @@ void CLuaBaseEntity::Register()
     /**
      * Custom RebirthXI Reborn
      */
-    SOL_REGISTER("setDistributedExp", CLuaBaseEntity::setDistributedExp);
-    SOL_REGISTER("showDistributedExp", CLuaBaseEntity::showDistributedExp);
+    SOL_REGISTER("setDistributeXp", CLuaBaseEntity::setDistributeXp);
+    SOL_REGISTER("showDistributeXp", CLuaBaseEntity::showDistributeXp);
     SOL_REGISTER("getNumDistributeJobs", CLuaBaseEntity::getNumDistributeJobs);
 
 }

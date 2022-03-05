@@ -803,8 +803,8 @@ public:
     /*
      * Custom RebirthXI Reborn Stuff
      */
-    void setDistributedExp(uint8 job, uint8 level);
-    void showDistributedExp();
+    void setDistributeXp(uint8 job, uint8 level);
+    void showDistributeXp();
     uint8 getNumDistributeJobs();
 
     /*
