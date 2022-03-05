@@ -13163,6 +13163,40 @@ uint32 CLuaBaseEntity::getHistory(uint8 index)
 }
 
 //==========================================================//
+// Beginning of Custom Lua calls for RebirthXI Reborn       //
+//==========================================================//
+
+void CLuaBaseEntity::setDistributedExp(uint8 job, uint8 level)
+{
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
+
+    auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
+
+    PChar->pushPacket(new CChatMessagePacket(PChar, MESSAGE_NS_SAY, "I'm not implemented."));
+}
+
+void CLuaBaseEntity::showDistributedExp()
+{
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
+
+    auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
+
+    PChar->pushPacket(new CChatMessagePacket(PChar, MESSAGE_NS_SAY, "I'm not implemented."));
+}
+
+uint8 CLuaBaseEntity::getNumDistributeJobs()
+{
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
+
+    auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
+
+    PChar->pushPacket(new CChatMessagePacket(PChar, MESSAGE_NS_SAY, "I'm not implemented."));
+
+    return 0;
+}
+
+
+//==========================================================//
 
 void CLuaBaseEntity::Register()
 {
@@ -13885,6 +13919,14 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("updateToEntireZone", CLuaBaseEntity::updateToEntireZone);
 
     SOL_REGISTER("getHistory", CLuaBaseEntity::getHistory);
+
+    /**
+     * Custom RebirthXI Reborn
+     */
+    SOL_REGISTER("setDistributedExp", CLuaBaseEntity::setDistributedExp);
+    SOL_REGISTER("showDistributedExp", CLuaBaseEntity::showDistributedExp);
+    SOL_REGISTER("getNumDistributeJobs", CLuaBaseEntity::getNumDistributeJobs);
+
 }
 
 
