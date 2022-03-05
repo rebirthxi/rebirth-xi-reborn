@@ -13443,7 +13443,15 @@ void CLuaBaseEntity::setDistributedExp(uint8 job, uint8 level)
 
     auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
 
-    PChar->pushPacket(new CChatMessagePacket(PChar, MESSAGE_NS_SAY, "I'm not implemented."));
+    if (job == JOB_NON)
+    {
+        for (uint8 i = JOB_WAR; i < MAX_JOBTYPE; i++)
+            PChar->jobs.distributed[i] = 0;
+    }
+    else
+        PChar->jobs.distributed[job] = level;
+
+    charutils::SaveCharDistributeXp(PChar, static_cast<JOBTYPE>(job));
 }
 
 void CLuaBaseEntity::showDistributedExp()
@@ -13452,7 +13460,18 @@ void CLuaBaseEntity::showDistributedExp()
 
     auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
 
-    PChar->pushPacket(new CChatMessagePacket(PChar, MESSAGE_NS_SAY, "I'm not implemented."));
+    std::stringstream msg;
+    for( uint8 i = JOB_WAR; i < JOB_GEO; i++ )
+    {
+        msg << job_short_strings[i];
+        msg << "(";
+        msg << (int)PChar->jobs.distributed[i];
+        msg << ") ";
+        if( i % 5  == 0 )
+            msg << "\n";
+    }
+
+    PChar->pushPacket(new CChatMessagePacket((CCharEntity*)m_PBaseEntity, MESSAGE_NS_SAY, msg.str()));
 }
 
 uint8 CLuaBaseEntity::getNumDistributeJobs()
@@ -13460,10 +13479,15 @@ uint8 CLuaBaseEntity::getNumDistributeJobs()
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
     auto* PChar = static_cast<CCharEntity*>(m_PBaseEntity);
+    uint8 count = 0;
 
-    PChar->pushPacket(new CChatMessagePacket(PChar, MESSAGE_NS_SAY, "I'm not implemented."));
+    for( uint8 i = JOB_WAR; i < JOB_GEO; i++ )
+    {
+        if( PChar->jobs.distributed[i] > 0 )
+            count++;
+    }
 
-    return 0;
+    return count;
 }
 
 
