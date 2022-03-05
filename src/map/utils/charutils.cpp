@@ -2635,6 +2635,10 @@ namespace charutils
 
         AbilitiesList = ability::GetAbilities(PChar->GetMJob());
 
+        // RebirthXI Hack in Paladin Provoke for Paladin as Main job
+        if (PChar->GetMJob() == JOB_PLD and PChar->GetMLevel() >= 10)
+            addAbility(PChar, 35);
+
         for (auto PAbility : AbilitiesList)
         {
             if (PAbility == nullptr)
@@ -2674,6 +2678,10 @@ namespace charutils
         }
 
         AbilitiesList = ability::GetAbilities(PChar->GetSJob());
+
+        // RebirthXI Hack in Paladin Provoke for Paladin as Sub job
+        if (PChar->GetSJob() == JOB_PLD and PChar->GetSLevel() >= 10)
+            addAbility(PChar, 35);
 
         for (auto PAbility : AbilitiesList)
         {
