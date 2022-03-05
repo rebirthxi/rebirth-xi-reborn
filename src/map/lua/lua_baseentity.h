@@ -800,6 +800,16 @@ public:
 
     uint32 getHistory(uint8 index);
 
+    /*
+     * Custom RebirthXI Reborn Stuff
+     */
+    void setDistributedExp(uint8 job, uint8 level);
+    void showDistributedExp();
+    uint8 getNumDistributeJobs();
+
+    /*
+     * Back to the Regular Sand Ship Stuff
+     */
     static void Register();
 };
 
