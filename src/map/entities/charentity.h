@@ -49,6 +49,7 @@ struct jobs_t
     uint8  job[MAX_JOBTYPE]; // the current levels of each of the jobs from above
     uint16 exp[MAX_JOBTYPE]; // the experience points for each of the jobs above
     uint8  genkai;           // the maximum genkai level achieved
+    uint8  distributed[MAX_JOBTYPE]; // Custom RebirthXI Reborn for Distribute Xp
 };
 
 struct profile_t

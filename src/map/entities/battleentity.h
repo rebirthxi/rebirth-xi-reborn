@@ -88,6 +88,11 @@ enum JOBTYPE
 
 #define MAX_JOBTYPE 23
 
+const std::string job_short_strings[MAX_JOBTYPE] = {
+    "NONE", "WAR", "MNK", "WHM", "BLM", "RDM", "THF", "PLD", "DRK", "BST", "BRD", "RNG", "SAM",
+    "NIN", "DRG", "SMN", "BLU", "COR", "PUP", "DNC", "SCH", "GEO", "RUN"
+};
+
 enum SKILLTYPE
 {
     SKILL_NONE         = 0,

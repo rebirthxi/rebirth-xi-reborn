@@ -624,6 +624,8 @@ namespace charutils
             PChar->jobs.job[JOB_RUN] = (uint8)Sql_GetIntData(SqlHandle, 23);
         }
 
+        charutils::LoadDistributeXp(PChar);
+
         fmtQuery = "SELECT mode, war, mnk, whm, blm, rdm, thf, pld, drk, bst, brd, rng, sam, nin, drg, smn, blu, cor, pup, dnc, sch, geo, run, merits, limits "
                    "FROM char_exp "
                    "WHERE charid = %u;";
@@ -4193,7 +4195,7 @@ namespace charutils
      *                                                                       *
      ************************************************************************/
 
-    void AddExperiencePoints(bool expFromRaise, CCharEntity* PChar, CBaseEntity* PMob, uint32 exp, EMobDifficulty mobCheck, bool isexpchain)
+    void AddExperiencePointsOld(bool expFromRaise, CCharEntity* PChar, CBaseEntity* PMob, uint32 exp, EMobDifficulty mobCheck, bool isexpchain)
     {
         if (PChar->isDead())
         {
@@ -6059,5 +6061,445 @@ namespace charutils
         }
 
         return 0;
+    }
+
+    /*
+     * RebirthXI Reborn Custom Char Utils
+     */
+
+    void LoadDistributeXp(CCharEntity* PChar)
+    {
+        const char* fmtQuery = "SELECT war, mnk, whm, blm, rdm, thf, pld, drk, bst, brd, rng, sam, nin, drg, smn, blu, cor, pup, dnc, sch, geo, run "
+                               "FROM char_job_exp_distribution "
+                               "WHERE charid = %u;";
+
+        int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id);
+
+        if (ret != SQL_ERROR &&
+            Sql_NumRows(SqlHandle) != 0 &&
+            Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+        {
+            PChar->jobs.distributed[JOB_WAR] = (uint8)Sql_GetIntData(SqlHandle, 0);
+            PChar->jobs.distributed[JOB_MNK] = (uint8)Sql_GetIntData(SqlHandle, 1);
+            PChar->jobs.distributed[JOB_WHM] = (uint8)Sql_GetIntData(SqlHandle, 2);
+            PChar->jobs.distributed[JOB_BLM] = (uint8)Sql_GetIntData(SqlHandle, 3);
+            PChar->jobs.distributed[JOB_RDM] = (uint8)Sql_GetIntData(SqlHandle, 4);
+            PChar->jobs.distributed[JOB_THF] = (uint8)Sql_GetIntData(SqlHandle, 5);
+            PChar->jobs.distributed[JOB_PLD] = (uint8)Sql_GetIntData(SqlHandle, 6);
+            PChar->jobs.distributed[JOB_DRK] = (uint8)Sql_GetIntData(SqlHandle, 7);
+            PChar->jobs.distributed[JOB_BST] = (uint8)Sql_GetIntData(SqlHandle, 8);
+            PChar->jobs.distributed[JOB_BRD] = (uint8)Sql_GetIntData(SqlHandle, 9);
+            PChar->jobs.distributed[JOB_RNG] = (uint8)Sql_GetIntData(SqlHandle, 10);
+            PChar->jobs.distributed[JOB_SAM] = (uint8)Sql_GetIntData(SqlHandle, 11);
+            PChar->jobs.distributed[JOB_NIN] = (uint8)Sql_GetIntData(SqlHandle, 12);
+            PChar->jobs.distributed[JOB_DRG] = (uint8)Sql_GetIntData(SqlHandle, 13);
+            PChar->jobs.distributed[JOB_SMN] = (uint8)Sql_GetIntData(SqlHandle, 14);
+            PChar->jobs.distributed[JOB_BLU] = (uint8)Sql_GetIntData(SqlHandle, 15);
+            PChar->jobs.distributed[JOB_COR] = (uint8)Sql_GetIntData(SqlHandle, 16);
+            PChar->jobs.distributed[JOB_PUP] = (uint8)Sql_GetIntData(SqlHandle, 17);
+            PChar->jobs.distributed[JOB_DNC] = (uint8)Sql_GetIntData(SqlHandle, 18);
+            PChar->jobs.distributed[JOB_SCH] = (uint8)Sql_GetIntData(SqlHandle, 19);
+            PChar->jobs.distributed[JOB_GEO] = (uint8)Sql_GetIntData(SqlHandle, 20);
+            PChar->jobs.distributed[JOB_RUN] = (uint8)Sql_GetIntData(SqlHandle, 21);
+        }
+        else
+        {
+            ShowError("Failed to load Distributed Xp for %s.", PChar->name);
+        }
+    }
+
+    void SaveCharDistributeXp(CCharEntity* PChar, JOBTYPE job)
+    {
+        XI_DEBUG_BREAK_IF(job < JOB_NON || job >= MAX_JOBTYPE);
+
+        const char *fmtQuery;
+
+        fmtQuery = "INSERT INTO char_job_exp_distribution (charid, war, mnk, whm, blm, rdm, thf, pld, drk, bst, brd, rng, sam, nin,\n"
+                   "                                            drg, smn, blu, cor, pup, dnc, sch, geo, run)\n"
+                   "VALUES (%u, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT,\n"
+                   "        DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)"
+                   "ON DUPLICATE KEY UPDATE charid=charid;";
+
+        Sql_Query(SqlHandle, fmtQuery, PChar->id);
+
+        switch(job)
+        {
+            case JOB_WAR:
+                fmtQuery = "UPDATE char_job_exp_distribution SET war = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_MNK:
+                fmtQuery = "UPDATE char_job_exp_distribution SET mnk = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_WHM:
+                fmtQuery = "UPDATE char_job_exp_distribution SET whm = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_BLM:
+                fmtQuery = "UPDATE char_job_exp_distribution SET blm = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_RDM:
+                fmtQuery = "UPDATE char_job_exp_distribution SET rdm = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_THF:
+                fmtQuery = "UPDATE char_job_exp_distribution SET thf = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_PLD:
+                fmtQuery = "UPDATE char_job_exp_distribution SET pld = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_DRK:
+                fmtQuery = "UPDATE char_job_exp_distribution SET drk = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_BST:
+                fmtQuery = "UPDATE char_job_exp_distribution SET bst = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_BRD:
+                fmtQuery = "UPDATE char_job_exp_distribution SET brd = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_RNG:
+                fmtQuery = "UPDATE char_job_exp_distribution SET rng = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_SAM:
+                fmtQuery = "UPDATE char_job_exp_distribution SET sam = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_NIN:
+                fmtQuery = "UPDATE char_job_exp_distribution SET nin = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_DRG:
+                fmtQuery = "UPDATE char_job_exp_distribution SET drg = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_SMN:
+                fmtQuery = "UPDATE char_job_exp_distribution SET smn = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_BLU:
+                fmtQuery = "UPDATE char_job_exp_distribution SET blu = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_COR:
+                fmtQuery = "UPDATE char_job_exp_distribution SET cor = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_PUP:
+                fmtQuery = "UPDATE char_job_exp_distribution SET pup = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_DNC:
+                fmtQuery = "UPDATE char_job_exp_distribution SET dnc = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_SCH:
+                fmtQuery = "UPDATE char_job_exp_distribution SET sch = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_GEO:
+                fmtQuery = "UPDATE char_job_exp_distribution SET geo = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_RUN:
+                fmtQuery = "UPDATE char_job_exp_distribution SET run = %u WHERE charid = %u LIMIT 1";
+                break;
+            case JOB_NON:
+                fmtQuery = "UPDATE char_job_exp_distribution SET war = 0, mnk = 0, whm = 0, blm = 0, rdm = 0, thf = 0, pld = 0, drk = 0, bst = 0, brd = 0, rng = 0, sam = 0, nin = 0, drg = 0, smn = 0, blu = 0, cor = 0, pup = 0, dnc = 0, sch = 0, geo = 0, run = 0 WHERE charid = %u LIMIT 1";
+                break;
+            default:
+                fmtQuery = "";
+                break;
+        }
+        if (job == JOB_NON)
+            Sql_Query(SqlHandle, fmtQuery, PChar->id);
+        else
+            Sql_Query(SqlHandle, fmtQuery, PChar->jobs.distributed[job], PChar->id);
+    }
+
+    void AddExperiencePoints(bool expFromRaise, CCharEntity* PChar, CBaseEntity* PMob, uint32 exp, EMobDifficulty mobCheck, bool isexpchain)
+    {
+        if (PChar->isDead())
+        {
+            return;
+        }
+
+        uint16                        distributed_xp             = 0;
+        uint8  number_of_distributed_jobs = 0;
+        std::array<bool, MAX_JOBTYPE> should_distribute = {false};
+
+        if (!expFromRaise)
+        {
+            exp = (uint32)(exp * map_config.exp_rate);
+            for (uint8 i = JOB_WAR; i < MAX_JOBTYPE; i++)
+            {
+                if (ShouldDistributeXp(PChar, static_cast<JOBTYPE>(i)))
+                {
+                    number_of_distributed_jobs++;
+                    should_distribute[i] = true;
+                }
+            }
+            distributed_xp = exp / number_of_distributed_jobs;
+        }
+
+        std::array<uint16, MAX_JOBTYPE> currentExp = {0};
+        for (uint8 i = JOB_WAR; i < MAX_JOBTYPE; i++)
+            currentExp[i] = PChar->jobs.exp[i];
+
+        bool onLimitMode = false;
+
+        // Incase player de-levels to 74 on the field
+        if (PChar->MeritMode && PChar->jobs.job[PChar->GetMJob()] > 74 && !expFromRaise)
+        {
+            onLimitMode = true;
+        }
+
+        // we check if the player is level capped and max exp..
+        if (PChar->jobs.job[PChar->GetMJob()] > 74 && PChar->jobs.job[PChar->GetMJob()] >= PChar->jobs.genkai &&
+            PChar->jobs.exp[PChar->GetMJob()] == GetExpNEXTLevel(PChar->jobs.job[PChar->GetMJob()]) - 1)
+        {
+            onLimitMode = true;
+        }
+
+        if (onLimitMode)
+            currentExp[PChar->GetMJob()] = 0;
+
+        // exp added from raise shouldn't display a message. Don't need a message for zero exp either
+        if (!expFromRaise && exp > 0)
+        {
+            if (mobCheck >= EMobDifficulty::EvenMatch && isexpchain)
+            {
+                if (PChar->expChain.chainNumber != 0)
+                {
+                    if (onLimitMode)
+                    {
+                        PChar->pushPacket(new CMessageCombatPacket(PChar, PChar, distributed_xp, PChar->expChain.chainNumber, 372));
+                    }
+                    else
+                    {
+                        PChar->pushPacket(new CMessageCombatPacket(PChar, PChar, distributed_xp, PChar->expChain.chainNumber, 253));
+                    }
+                }
+                else
+                {
+                    if (onLimitMode)
+                    {
+                        PChar->pushPacket(new CMessageCombatPacket(PChar, PChar, distributed_xp, 0, 371));
+                    }
+                    else
+                    {
+                        PChar->pushPacket(new CMessageCombatPacket(PChar, PChar, distributed_xp, 0, 8));
+                    }
+                }
+                PChar->expChain.chainNumber++;
+            }
+            else
+            {
+                if (onLimitMode)
+                {
+                    PChar->pushPacket(new CMessageCombatPacket(PChar, PChar, distributed_xp, 0, 371));
+                }
+                else
+                {
+                    PChar->pushPacket(new CMessageCombatPacket(PChar, PChar, distributed_xp, 0, 8));
+                }
+            }
+        }
+
+        for (uint8 i = JOB_WAR; i < MAX_JOBTYPE; i++)
+        {
+            if (should_distribute[i])
+            {
+                if (onLimitMode && i == PChar->GetMJob())
+                {
+                    if (PChar->PMeritPoints->AddLimitPoints(distributed_xp))
+                    {
+                        PChar->loc.zone->PushPacket(PChar, CHAR_INRANGE_SELF, new CMessageCombatPacket(
+                            PChar,
+                            PMob,
+                            PChar->PMeritPoints->GetMeritPoints(),
+                            0,
+                            50
+                        ));
+                    }
+                }
+                else
+                {
+                    PChar->jobs.exp[i] += distributed_xp;
+                }
+            }
+        }
+
+
+        if (!expFromRaise)
+        {
+            REGION_TYPE region = PChar->loc.zone->GetRegionID();
+
+            // Should this user be awarded conquest points..
+            if (PChar->StatusEffectContainer->HasStatusEffect(EFFECT_SIGNET) && (region >= REGION_TYPE::RONFAURE && region <= REGION_TYPE::JEUNO))
+            {
+                // Add influence for the players region..
+                conquest::AddConquestPoints(PChar, exp);
+            }
+
+            // Should this user be awarded imperial standing..
+            if (PChar->StatusEffectContainer->HasStatusEffect(EFFECT_SANCTION) && (region >= REGION_TYPE::WEST_AHT_URHGAN && region <= REGION_TYPE::ALZADAAL))
+            {
+                charutils::AddPoints(PChar, "imperial_standing", (int32)(exp * 0.1f));
+                PChar->pushPacket(new CConquestPacket(PChar));
+            }
+
+            // Cruor Drops in Abyssea zones.
+            uint16 Pzone = PChar->getZone();
+            if (zoneutils::GetCurrentRegion(Pzone) == REGION_TYPE::ABYSSEA)
+            {
+                uint16 TextID = luautils::GetTextIDVariable(Pzone, "CRUOR_OBTAINED");
+                uint32 Total  = charutils::GetPoints(PChar, "cruor");
+                uint32 Cruor  = 0; // Need to work out how to do cruor chains, until then no cruor will drop unless this line is customized for non retail play.
+
+                if (TextID == 0)
+                {
+                    ShowWarning("Failed to fetch Cruor Message ID for zone: %i", Pzone);
+                }
+
+                if (Cruor >= 1)
+                {
+                    PChar->pushPacket(new CMessageSpecialPacket(PChar, TextID, Cruor, Total + Cruor, 0, 0));
+                    charutils::AddPoints(PChar, "cruor", Cruor);
+                }
+            }
+        }
+
+        PChar->PAI->EventHandler.triggerListener("EXPERIENCE_POINTS", CLuaBaseEntity(PChar), distributed_xp);
+
+        // Player levels up
+        bool level_up = false;
+        std::array<bool, MAX_JOBTYPE> job_leveled = {false};
+
+        for (uint8 i = JOB_WAR; i < MAX_JOBTYPE; i++)
+        {
+            if (should_distribute[i])
+            {
+                if ((currentExp[i] + distributed_xp) >= GetExpNEXTLevel(PChar->jobs.job[i]) && (!onLimitMode || (onLimitMode && i != PChar->GetMJob())))
+                {
+                    if (i == PChar->GetMJob() && PChar->jobs.job[PChar->GetMJob()] >= PChar->jobs.genkai)
+                    {
+                        PChar->jobs.exp[PChar->GetMJob()] = GetExpNEXTLevel(PChar->jobs.job[PChar->GetMJob()]) - 1;
+                        if (PChar->PParty && PChar->PParty->GetSyncTarget() == PChar)
+                        {
+                            PChar->PParty->SetSyncTarget(nullptr, 556);
+                        }
+                    }
+                    else
+                    {
+                        level_up = true;
+                        job_leveled[i] = true;
+                    }
+                }
+            }
+        }
+
+        for( uint8 i = JOB_WAR; i < MAX_JOBTYPE; i++ )
+        {
+            if( job_leveled[i])
+            {
+                PChar->jobs.exp[i] -= GetExpNEXTLevel(PChar->jobs.job[i]);
+                if (PChar->jobs.exp[i] >= GetExpNEXTLevel(PChar->jobs.job[i] + 1))
+                {
+                    PChar->jobs.exp[i] = GetExpNEXTLevel(PChar->jobs.job[i] + 1) - 1;
+                }
+                PChar->jobs.job[i] += 1;
+            }
+        }
+
+        if (level_up)
+        {
+            if (job_leveled[PChar->GetMJob()] && (PChar->m_LevelRestriction == 0 || PChar->m_LevelRestriction > PChar->GetMLevel()))
+            {
+                PChar->SetMLevel(PChar->jobs.job[PChar->GetMJob()]);
+                PChar->SetSLevel(PChar->jobs.job[PChar->GetSJob()]);
+            }
+
+            jobpointutils::RefreshGiftMods(PChar);
+            BuildingCharSkillsTable(PChar);
+            CalculateStats(PChar);
+            BuildingCharAbilityTable(PChar);
+            BuildingCharTraitsTable(PChar);
+            BuildingCharWeaponSkills(PChar);
+            if (PChar->PAutomaton != nullptr && PChar->PAutomaton != PChar->PPet)
+            {
+                puppetutils::LoadAutomatonStats(PChar);
+            }
+
+            PChar->PLatentEffectContainer->CheckLatentsJobLevel();
+
+            if (PChar->PParty != nullptr)
+            {
+                if (PChar->PParty->GetSyncTarget() == PChar)
+                {
+                    PChar->PParty->RefreshSync();
+                }
+                PChar->PParty->ReloadParty();
+            }
+
+            PChar->UpdateHealth();
+
+            PChar->health.hp = PChar->GetMaxHP();
+            PChar->health.mp = PChar->GetMaxMP();
+
+            SaveCharStats(PChar);
+            SaveCharJob(PChar, PChar->GetMJob());
+            SaveCharExp(PChar, PChar->GetMJob());
+
+            PChar->pushPacket(new CCharJobsPacket(PChar));
+            PChar->pushPacket(new CCharUpdatePacket(PChar));
+            PChar->pushPacket(new CCharSkillsPacket(PChar));
+            PChar->pushPacket(new CCharRecastPacket(PChar));
+            PChar->pushPacket(new CCharAbilitiesPacket(PChar));
+            PChar->pushPacket(new CMenuMeritPacket(PChar));
+            PChar->pushPacket(new CCharJobExtraPacket(PChar, true));
+            PChar->pushPacket(new CCharJobExtraPacket(PChar, true));
+            PChar->pushPacket(new CCharSyncPacket(PChar));
+
+            for( uint8 i = JOB_WAR; i < MAX_JOBTYPE; i++ )
+            {
+                if( job_leveled[i] )
+                {
+                    PChar->loc.zone->PushPacket( PChar, CHAR_INRANGE_SELF,
+                                                new CMessageCombatPacket( PChar, PMob, PChar->jobs.job[i], 0, 9 ));
+                    SaveCharJob( PChar, static_cast<JOBTYPE>(i) );
+                    SaveCharExp( PChar, static_cast<JOBTYPE>(i) );
+                }
+
+            }
+
+            PChar->pushPacket(new CCharStatsPacket(PChar));
+
+            luautils::OnPlayerLevelUp(PChar);
+            PChar->updatemask |= UPDATE_HP;
+            return;
+        }
+
+        SaveCharStats(PChar);
+
+        for( uint8 i = JOB_WAR; i < JOB_GEO; i++ )
+        {
+            if( should_distribute[i] )
+            {
+                // Save when we don't level too
+                SaveCharJob( PChar, static_cast<JOBTYPE >(i) );
+                SaveCharExp( PChar, static_cast<JOBTYPE >(i) );
+            }
+        }
+
+        PChar->pushPacket(new CCharStatsPacket(PChar));
+
+        if (onLimitMode)
+        {
+            PChar->pushPacket(new CMenuMeritPacket(PChar));
+        }
+
+        if (PMob != PChar) // Only mob kills count for gain EXP records
+        {
+            roeutils::event(ROE_EXPGAIN, PChar, RoeDatagram("exp", distributed_xp));
+        }
+    }
+
+    bool ShouldDistributeXp(CCharEntity* PChar, JOBTYPE job )
+    {
+        if (
+            PChar->GetMJob() == job ||
+            (PChar->jobs.distributed[job] != 0          &&
+             PChar->GetMLevel() <= PChar->jobs.job[job] &&
+             PChar->jobs.job[job] < PChar->jobs.distributed[job])
+        )
+            return true;
+        return false;
     }
 }; // namespace charutils
