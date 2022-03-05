@@ -28,7 +28,7 @@ function onTrigger(player, option, jobId, level)
     end
 
     if( option == "clear" ) then
-        player:setDistributedExp( 0, 0 )
+        player:setDistributeXp( 0, 0 )
     elseif( option == "set" ) then
         if( jobId == nil ) then
             error( player,"Must pass a <jobId>\n - Valid IDs: WAR, BLM, THF, etc..." )
@@ -51,8 +51,8 @@ function onTrigger(player, option, jobId, level)
                         "Passing a 0 will disable distributing to that job.")
                 return
             end
-            player:setDistributedExp( jobId, level )
+            player:setDistributeXp( jobId, level )
         end
     end
-    player:showDistributedExp()
+    player:showDistributeXp()
 end
