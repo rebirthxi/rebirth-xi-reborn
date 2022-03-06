@@ -861,7 +861,7 @@ local function calculateSkillUp(player)
     local skillRank = player:getSkillRank(xi.skill.DIG)
     local maxSkill = utils.clamp((skillRank + 1) * 100, 0, 1000)
     local realSkill = player:getCharSkillLevel(xi.skill.DIG)
-    local increment = 1
+    local increment = 12
 
     -- this probably needs correcting
     local roll = math.random(0, 100)
