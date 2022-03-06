@@ -11372,6 +11372,9 @@ void CLuaBaseEntity::addSimpleGambit(uint16 targ, uint16 cond, uint32 condition_
     auto* trust      = static_cast<CTrustEntity*>(m_PBaseEntity);
     auto* controller = static_cast<CTrustController*>(trust->PAI->GetController());
 
+    if (target == G_TARGET::SELF || target == G_TARGET::PARTY)
+        controller->m_IdleGambitsContainer->AddGambit(g);
+
     controller->m_GambitsContainer->AddGambit(g);
 }
 

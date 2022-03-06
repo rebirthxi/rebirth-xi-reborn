@@ -57,6 +57,7 @@ public:
 
     uint8 GetPartyPosition();
 
+    std::unique_ptr<gambits::CGambitsContainer> m_IdleGambitsContainer;
     std::unique_ptr<gambits::CGambitsContainer> m_GambitsContainer;
 
 private:
