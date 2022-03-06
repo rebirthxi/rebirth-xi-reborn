@@ -40,9 +40,9 @@ m:addOverride("xi.trust.canCast", function(caster, spell, not_allowed_trust_ids)
     end
 
     -- Trusts not allowed in an alliance
-    --if caster:checkSoloPartyAlliance() == 2 then
-    --    return xi.msg.basic.TRUST_NO_CAST_TRUST
-    --end
+    if caster:checkSoloPartyAlliance() == 2 then
+        return xi.msg.basic.TRUST_NO_CAST_TRUST
+    end
 
     -- Trusts only allowed in certain zones (Remove this for trusts everywhere)
     if not caster:canUseMisc(xi.zoneMisc.TRUST) then
@@ -63,11 +63,11 @@ m:addOverride("xi.trust.canCast", function(caster, spell, not_allowed_trust_ids)
     end
 
     -- Block summoning trusts if someone recently joined party (120s)
-    --local last_party_member_added_time = caster:getPartyLastMemberJoinedTime()
-    --if os.time() - last_party_member_added_time < 120 then
-    --    caster:messageSystem(xi.msg.system.TRUST_DELAY_NEW_PARTY_MEMBER)
-    --    return -1
-    --end
+    local last_party_member_added_time = caster:getPartyLastMemberJoinedTime()
+    if os.time() - last_party_member_added_time < 120 then
+        caster:messageSystem(xi.msg.system.TRUST_DELAY_NEW_PARTY_MEMBER)
+        return -1
+    end
 
     -- Trusts cannot be summoned if you have hate
     if caster:hasEnmity() then
