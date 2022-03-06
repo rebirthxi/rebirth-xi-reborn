@@ -1,6 +1,6 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
-CREATE TABLE IF NOT EXISTS `char_distribution_xp` (
+CREATE TABLE IF NOT EXISTS `char_distribute_xp` (
     `charid` int(10) unsigned NOT NULL,
     `war` tinyint(2) unsigned NOT NULL DEFAULT '0',
     `mnk` tinyint(2) unsigned NOT NULL DEFAULT '0',
