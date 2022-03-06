@@ -93,6 +93,24 @@ int32 time_server(time_point tick, CTaskMgr::CTask* PTask)
             roeutils::CycleDailyRecords();
             guildutils::UpdateGuildPointsPattern();
             lastTickedJstMidnight = tick;
+
+            std::vector<uint32> ids;
+            const char* Query = "SELECT charid FROM chars;";
+
+            Sql_Query(SqlHandle, Query);
+
+            while (Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+            {
+                ids.push_back(Sql_GetUIntData(SqlHandle, 0));
+            }
+
+            for (auto char_id : ids)
+            {
+                const char* Daily = "INSERT INTO char_vars (charid, varname, value)"
+                                                         "VALUES (%u, 'DailyBCs', 60)"
+                                                         "ON DUPLICATE key update value = VALUES(value);";
+                Sql_Query(SqlHandle, Daily, char_id);
+            }
         }
     }
 
