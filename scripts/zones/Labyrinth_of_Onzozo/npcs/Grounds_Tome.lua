@@ -7,6 +7,7 @@ require("scripts/globals/regimes")
 local entity = {}
 
 entity.onTrade = function(player, npc, trade)
+    xi.regime.bookOnTrade(player, npc, trade)
 end
 
 entity.onTrigger = function(player, npc)
