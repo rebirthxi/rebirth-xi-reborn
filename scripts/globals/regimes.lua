@@ -1049,6 +1049,9 @@ xi.regime.clearRegimeVars = function(player)
     end
 end
 
+xi.regime.bookOnTrade = function(player, npc, trade)
+end
+
 xi.regime.bookOnTrigger = function(player, regimeType)
     local info = regimeInfo[regimeType].zone[player:getZoneID()]
      -- checks if hunt is active, if so prompts player to cancel
