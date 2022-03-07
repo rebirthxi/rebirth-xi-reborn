@@ -1273,7 +1273,7 @@ xi.regime.bookOnEventFinish = function(player, option, regimeType)
 
             ['HASTE'] = function()
                 player:delStatusEffectSilent(xi.effect.HASTE)
-                player:addStatusEffect(xi.effect.HASTE, 1000, 0, 600)
+                player:addStatusEffect(xi.effect.HASTE, 1000, 0, 1800)
             end,
 
             ['DRIED_MEAT'] = function()
