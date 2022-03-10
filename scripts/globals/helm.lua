@@ -38,7 +38,8 @@ local helmInfo =
     {
         id = "HARVESTING",
         animation = xi.emote.HARVESTING,
-        mod = xi.mod.HARVESTING_RESULT,
+        resultMod = xi.mod.HARVESTING_RESULT,
+        breakMod = xi.mod.HARVESTING_TOOL_BREAK,
         settingRate = xi.settings.HARVESTING_RATE,
         settingBreak = xi.settings.HARVESTING_BREAK_CHANCE,
         message = "HARVESTING_IS_POSSIBLE_HERE",
@@ -330,7 +331,8 @@ local helmInfo =
     {
         id = "EXCAVATION",
         animation = xi.emote.EXCAVATION,
-        mod = nil,
+        resultMod = xi.mod.EXCAVATION_RESULT,
+        breakMod = xi.mod.EXCAVATION_TOOL_BREAK,
         settingRate = xi.settings.EXCAVATION_RATE,
         settingBreak = xi.settings.EXCAVATION_BREAK_CHANCE,
         message = "MINING_IS_POSSIBLE_HERE",
@@ -464,7 +466,8 @@ local helmInfo =
     {
         id = "LOGGING",
         animation = xi.emote.LOGGING,
-        mod = xi.mod.LOGGING_RESULT,
+        resultMod = xi.mod.LOGGING_RESULT,
+        breakMod = xi.mod.LOGGING_TOOL_BREAK,
         settingRate = xi.settings.LOGGING_RATE,
         settingBreak = xi.settings.LOGGING_BREAK_CHANCE,
         message = "LOGGING_IS_POSSIBLE_HERE",
@@ -891,7 +894,8 @@ local helmInfo =
     {
         id = "MINING",
         animation = xi.emote.EXCAVATION,
-        mod = xi.mod.MINING_RESULT,
+        resultMod = xi.mod.MINING_RESULT,
+        breakMod = xi.mod.MINING_TOOL_BREAK,
         settingRate = xi.settings.MINING_RATE,
         settingBreak = xi.settings.MINING_BREAK_CHANCE,
         message = "MINING_IS_POSSIBLE_HERE",
@@ -1327,12 +1331,7 @@ local rocks = {769, 771, 770, 772, 773, 774, 776, 775}
 -----------------------------------
 
 local function doesToolBreak(player, info)
-    local roll  = math.random(100)
-    local mod   = info.mod
-
-    if mod then
-        roll = roll + (player:getMod(mod) / 10)
-    end
+    local roll  = math.random(100) + (player:getMod(info.breakMod) / 10)
 
     if roll <= info.settingBreak then
         player:tradeComplete()
@@ -1344,9 +1343,10 @@ end
 
 local function pickItem(player, info)
     local zoneId = player:getZoneID()
+    local roll = math.random(100) - (player:getMod(info.resultMod) / 10)
 
     -- found nothing
-    if math.random(100) > info.settingRate then
+    if roll > info.settingRate then
         return 0
     end
 

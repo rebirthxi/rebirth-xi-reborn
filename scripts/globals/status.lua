@@ -1668,6 +1668,12 @@ xi.mod =
     -- The spares take care of finding the next ID to use so long as we don't forget to list IDs that have been freed up by refactoring.
     -- 570 - 825 used by WS DMG mods these are not spares.
     -- For Next ID, see modifier.h
+
+    EXCAVATION_RESULT        = 2000, -- Improves excavation results
+    HARVESTING_TOOL_BREAK	 = 2001, -- Reduces tool break chance
+    LOGGING_TOOL_BREAK		 = 2002,
+    MINING_TOOL_BREAK		 = 2003,
+    EXCAVATION_TOOL_BREAK	 = 2004,
 }
 
 xi.latent =
