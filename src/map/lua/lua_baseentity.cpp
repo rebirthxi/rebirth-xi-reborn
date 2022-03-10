@@ -2005,10 +2005,10 @@ bool CLuaBaseEntity::sendGuild(uint16 guildID, uint8 open, uint8 close, uint8 ho
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
     XI_DEBUG_BREAK_IF(open > close);
 
-    uint8 VanadielHour = (uint8)CVanaTime::getInstance()->getHour();
+//    uint8 VanadielHour = (uint8)CVanaTime::getInstance()->getHour();
     // uint8 VanadielDay = (uint8)CVanaTime::getInstance()->getWeekday();
 
-    GUILDSTATUS status = GUILD_OPEN;
+//    GUILDSTATUS status = GUILD_OPEN;
 
     /*
      * No more guild holidays since 2014
@@ -2017,23 +2017,19 @@ bool CLuaBaseEntity::sendGuild(uint16 guildID, uint8 open, uint8 close, uint8 ho
         status = GUILD_HOLYDAY;
     }
     */
-    if ((VanadielHour < open) || (VanadielHour >= close))
-    {
-        status = GUILD_CLOSE;
-    }
+//    if ((VanadielHour < open) || (VanadielHour >= close))
+//    {
+//        status = GUILD_CLOSE;
+//    }
 
     CItemContainer* PGuildShop = guildutils::GetGuildShop(guildID);
     auto*           PChar      = static_cast<CCharEntity*>(m_PBaseEntity);
 
     PChar->PGuildShop = PGuildShop;
-    PChar->pushPacket(new CGuildMenuPacket(status, open, close, holiday));
+    PChar->pushPacket(new CGuildMenuPacket(GUILD_OPEN, open, close, holiday));
+    PChar->pushPacket(new CGuildMenuBuyPacket(PChar, PGuildShop));
 
-    if (status == GUILD_OPEN)
-    {
-        PChar->pushPacket(new CGuildMenuBuyPacket(PChar, PGuildShop));
-    }
-
-    return status == GUILD_OPEN;
+    return true;
 }
 
 /************************************************************************
