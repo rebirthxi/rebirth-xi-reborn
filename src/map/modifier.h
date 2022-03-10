@@ -882,6 +882,12 @@ enum class Mod
     // 936
     //
     // SPARE = 1025, and onward
+
+    EXCAVATION_RESULT     = 2000, // Improves excavation results
+    HARVESTING_TOOL_BREAK = 2001, // Reduces tool break chance
+    LOGGING_TOOL_BREAK	  = 2002,
+    MINING_TOOL_BREAK	  = 2003,
+    EXCAVATION_TOOL_BREAK = 2004,
 };
 
 // temporary workaround for using enum class as unordered_map key until compilers support it
