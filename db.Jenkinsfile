@@ -27,6 +27,7 @@ pipeline {
                  docker exec -i rebirthxireborn-xidb-1 sh -c "mysql -u ${DB_USER} -p${DB_USER_PASSWD} xidb" < sql/qr_sql/black_mage_time_machine.sql
                  docker exec -i rebirthxireborn-xidb-1 sh -c "mysql -u ${DB_USER} -p${DB_USER_PASSWD} xidb" < sql/qr_sql/char_distribute_xp.sql
                  docker exec -i rebirthxireborn-xidb-1 sh -c "mysql -u ${DB_USER} -p${DB_USER_PASSWD} xidb" < sql/qr_sql/artifact_changes.sql
+                 docker exec -i rebirthxireborn-xidb-1 sh -c "mysql -u ${DB_USER} -p${DB_USER_PASSWD} xidb" < sql/qr_sql/nexus_cape.sql
               '''
            }
         }
