@@ -6,8 +6,8 @@ INSERT INTO item_mods VALUES (14098,  446, 1); -- Choral Slippers
 INSERT INTO item_mods VALUES (15361,  446, 2); -- Choral Slippers +1
 
 -- Black Mage
-INSERT INTO item_mods VALUES (14092, 1101, -20); -- Wizard's Sabots
-INSERT INTO item_mods VALUES (15355, 1101, -30); -- Wizard's Sabots +1
+INSERT INTO item_mods VALUES (14092, 2006, -20); -- Wizard's Sabots
+INSERT INTO item_mods VALUES (15355, 2006, -30); -- Wizard's Sabots +1
 
 -- Dragoon
 INSERT INTO item_mods VALUES (13974, 1102, 20); -- Drachen Finger Gauntlets
