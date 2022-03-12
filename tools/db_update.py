@@ -78,7 +78,7 @@ safe_files_to_load = [
     "sql/weapon_skills.sql",
     "sql/zone_weather.sql",
     "sql/zonelines.sql",
-    "sql/qr_sql/status_effects.sql",
+    "sql/qr_sql/out_of_combat_effect.sql",
     "sql/qr_sql/black_mage_time_machine.sql",
     "sql/qr_sql/char_distribute_xp.sql",
     "sql/qr_sql/artifact_changes.sql",
