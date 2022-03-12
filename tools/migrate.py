@@ -31,7 +31,6 @@ from migrations import convert_mission_status
 from migrations import convert_zilart_status
 from migrations import add_job_master_column_chars
 from migrations import currency2
-from migrations import extend_valid_targets
 from migrations import languages
 from migrations import add_field_chocobo_column
 from migrations import add_new_wardrobe_columns
@@ -61,7 +60,6 @@ migrations = [
     convert_zilart_status,
     add_job_master_column_chars,
     currency2,
-    extend_valid_targets,
     languages,
     add_field_chocobo_column,
     add_new_wardrobe_columns
