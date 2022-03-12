@@ -841,6 +841,7 @@ xi.effect =
     -- 804-1022
     -- PLACEHOLDER             = 1023 -- The client dat file seems to have only this many "slots", results of exceeding that are untested.
     OUT_OF_COMBAT_MOVE       = 900,
+    SUPER_JUMP_ATK           = 901,
 }
 
 -----------------------------------
@@ -1677,6 +1678,7 @@ xi.mod =
     EXCAVATION_TOOL_BREAK	 = 2004,
     ETUDE_EXTRA_BUFF         = 2005,
     ELE_SEAL_ENM             = 2006,
+    SUPER_JUMP_ATK_BUFF      = 2007,
 }
 
 xi.latent =

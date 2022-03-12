@@ -742,9 +742,10 @@ enum EFFECT
     // 804-1022
     // EFFECT_PLACEHOLDER           = 1023 // The client dat file seems to have only this many "slots", results of exceeding that are untested.
     EFFECT_OUT_OF_COMBAT_MOVE  = 900,
+    EFFECT_SUPER_JUMP_ATK      = 901,
 };
 
-#define MAX_EFFECTID 901 // 768 real + 32 custom
+#define MAX_EFFECTID 902 // 768 real + 32 custom
 
 /************************************************************************
  *                                                                       *

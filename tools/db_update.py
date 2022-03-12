@@ -82,6 +82,7 @@ safe_files_to_load = [
     "sql/qr_sql/black_mage_time_machine.sql",
     "sql/qr_sql/char_distribute_xp.sql",
     "sql/qr_sql/artifact_changes.sql",
+    "sql/qr_sql/artifact_status_effects.sql",
     "sql/qr_sql/nexus_cape.sql",
     "sql/qr_sql/helm_gear_mods.sql",
 ]
