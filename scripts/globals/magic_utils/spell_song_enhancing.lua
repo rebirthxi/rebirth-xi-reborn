@@ -185,6 +185,8 @@ xi.magic_utils.spell_song_enhancing.useEnhancingSong = function(caster, target, 
         caster:delStatusEffect(xi.effect.MARCATO)
     end
 
+    tier = tier + (caster:getMod(xi.mod.ETUDE_EXTRA_BUFF) * 2)
+
     -- Change message when higher effect already in place.
     if not target:addBardSong(caster, songEffect, power, paramFour, duration, caster:getID(), subEffect, tier) then
         spell:setMsg(xi.msg.basic.MAGIC_NO_EFFECT)

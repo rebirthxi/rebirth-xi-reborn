@@ -1,7 +1,7 @@
 
 -- Bard
-INSERT INTO item_mods VALUES (13857, 1100, 1); -- Choral Roundlet
-INSERT INTO item_mods VALUES (15234, 1100, 2); -- Choral Roundlet +1
+INSERT INTO item_mods VALUES (13857, 2005, 1); -- Choral Roundlet
+INSERT INTO item_mods VALUES (15234, 2005, 2); -- Choral Roundlet +1
 INSERT INTO item_mods VALUES (14098,  446, 1); -- Choral Slippers
 INSERT INTO item_mods VALUES (15361,  446, 2); -- Choral Slippers +1
 
