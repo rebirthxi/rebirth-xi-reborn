@@ -888,6 +888,7 @@ enum class Mod
     LOGGING_TOOL_BREAK	  = 2002,
     MINING_TOOL_BREAK	  = 2003,
     EXCAVATION_TOOL_BREAK = 2004,
+    ETUDE_EXTRA_BUFF      = 2005,
 };
 
 // temporary workaround for using enum class as unordered_map key until compilers support it
