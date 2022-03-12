@@ -1,0 +1,1 @@
+INSERT INTO `status_effects` VALUES (901,'super_jump_atk',768,0,0,0,0,0,0,0,0);
