@@ -893,6 +893,7 @@ enum class Mod
     COUNTER_DAMAGE_PERCENT = 2008,
     CAMOUFLAGE_SNEAK      = 2009,
     SEIGAN_STR_DOWN       = 2010,
+    TRICK_ATTACK_COOLDOWN = 2011,
 };
 
 // temporary workaround for using enum class as unordered_map key until compilers support it

@@ -32,8 +32,8 @@ INSERT INTO item_mods VALUES (15363,    8,  4); -- Myochin Sune-ate
 INSERT INTO item_mods VALUES (15363,   25,  6); -- Myochin Sune-ate
 
 -- Thief
-INSERT INTO item_mods VALUES (13966, 1106,  5); -- Rogue's Armlets
-INSERT INTO item_mods VALUES (14895, 1106, 10); -- Rogue's Armlets +1
+INSERT INTO item_mods VALUES (13966, 2011,  5); -- Rogue's Armlets
+INSERT INTO item_mods VALUES (14895, 2011, 10); -- Rogue's Armlets +1
 INSERT INTO item_mods VALUES (14219,  520, 10); -- Rogue's Culottes
 INSERT INTO item_mods VALUES (15566,  520, 15); -- Rogue's Culottes +1
 
