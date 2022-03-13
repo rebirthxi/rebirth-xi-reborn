@@ -20,8 +20,8 @@ INSERT INTO item_mods VALUES (14215, 2008, 10); -- Temple Hose
 INSERT INTO item_mods VALUES (15562, 2008, 20); -- Temple Hose +1
 
 -- Ranger
-INSERT INTO item_mods VALUES (14099, 1104, 30); -- Hunter's socks
-INSERT INTO item_mods VALUES (15362, 1104, 60); -- Hunter's socks +1
+INSERT INTO item_mods VALUES (14099, 2009, 30); -- Hunter's socks
+INSERT INTO item_mods VALUES (15362, 2009, 60); -- Hunter's socks +1
 
 -- Samurai
 INSERT INTO item_mods VALUES (13781, 1105, 20); -- Myochin Domaru

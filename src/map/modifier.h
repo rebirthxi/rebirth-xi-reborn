@@ -891,6 +891,7 @@ enum class Mod
     ELE_SEAL_ENM          = 2006,
     SUPER_JUMP_ATK_BUFF   = 2007,
     COUNTER_DAMAGE_PERCENT = 2008,
+    CAMOUFLAGE_SNEAK      = 2009,
 };
 
 // temporary workaround for using enum class as unordered_map key until compilers support it
