@@ -1691,7 +1691,7 @@ bool CBattleEntity::OnAttack(CAttackState& state, action_t& action)
 
                         float DamageRatio = battleutils::GetDamageRatio(PTarget, this, attack.IsCritical(), csJpAtkBonus);
                         auto  damage      = (int32)((PTarget->GetMainWeaponDmg() + naturalh2hDMG + battleutils::GetFSTR(PTarget, this, SLOT_MAIN)) * DamageRatio);
-
+                        damage *= 1.00f + (static_cast<float>(PTarget->getMod(Mod::COUNTER_DAMAGE_PERCENT)) / 100.0f);
                         actionTarget.spikesParam =
                             battleutils::TakePhysicalDamage(PTarget, this, attack.GetAttackType(), damage, false, SLOT_MAIN, 1, nullptr, true, false, true);
                         actionTarget.spikesMessage = 33;
