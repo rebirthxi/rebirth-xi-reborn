@@ -7,7 +7,7 @@ require("modules/module_utils")
 require("scripts/globals/status")
 -----------------------------------
 local m = Module:new("signet_sanction_exp_boost")
-m:setEnabled(true)
+m:setEnabled(false)
 
 m:addOverride("xi.globals.effects.signet.onEffectGain", function(target, effect)
     target:addLatent(xi.latent.SIGNET_BONUS, 0, xi.mod.DEF, 15)
