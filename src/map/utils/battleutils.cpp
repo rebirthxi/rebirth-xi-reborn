@@ -990,8 +990,21 @@ namespace battleutils
             }
         }
 
+        if(
+            auto seigan_mod = PAttacker->getMod(Mod::SEIGAN_STR_DOWN);
+            seigan_mod > 0                                                   &&
+            PAttacker->StatusEffectContainer->HasStatusEffect(EFFECT_SEIGAN) &&
+            seigan_mod > xirand::GetRandomNumber(100)
+        )
+        {
+            Action->additionalEffect = SUBEFFECT_DEFENSE_DOWN;
+            Action->addEffectMessage = 160; // ADD_EFFECT_STATUS
+            Action->addEffectParam   = EFFECT_STR_DOWN;
+
+            PDefender->StatusEffectContainer->AddStatusEffect( new CStatusEffect( EFFECT_STR_DOWN, 0, 33, 0, 30 ) );
+        }
         // Enspell overwrites weapon effects
-        if (PAttacker->getMod(Mod::ENSPELL) > 0 &&
+        else if (PAttacker->getMod(Mod::ENSPELL) > 0 &&
             (PAttacker->getMod(Mod::ENSPELL_CHANCE) == 0 || PAttacker->getMod(Mod::ENSPELL_CHANCE) > xirand::GetRandomNumber(100)))
         {
             static SUBEFFECT enspell_subeffects[8] = {
