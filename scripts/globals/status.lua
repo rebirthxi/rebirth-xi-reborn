@@ -1683,6 +1683,7 @@ xi.mod =
     CAMOUFLAGE_SNEAK         = 2009,
     SEIGAN_STR_DOWN          = 2010,
     TRICK_ATTACK_COOLDOWN    = 2011,
+    DIVINE_SEAL_ENM          = 2012,
 }
 
 xi.latent =
