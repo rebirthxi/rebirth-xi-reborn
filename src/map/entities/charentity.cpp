@@ -1040,6 +1040,12 @@ void CCharEntity::OnAbility(CAbilityState& state, action_t& action)
             meritRecastReduction += getMod(Mod::TRICK_ATTACK_COOLDOWN);
         }
 
+        // HACK: Going to hijack Merit Recast Reduction here to support jump cooldown
+        if( PAbility->getID() == ABILITY_JUMP )
+        {
+            meritRecastReduction += getMod(Mod::JUMP_COOLDOWN);
+        }
+
         auto* charge = ability::GetCharge(this, PAbility->getRecastId());
         if (charge && PAbility->getID() != ABILITY_SIC)
         {
