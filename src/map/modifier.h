@@ -896,6 +896,7 @@ enum class Mod
     TRICK_ATTACK_COOLDOWN = 2011,
     DIVINE_SEAL_ENM       = 2012,
     JUMP_COOLDOWN         = 2013,
+    REGEN_POTENCY         = 2014,
 };
 
 // temporary workaround for using enum class as unordered_map key until compilers support it
