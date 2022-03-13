@@ -1034,6 +1034,12 @@ void CCharEntity::OnAbility(CAbilityState& state, action_t& action)
             meritRecastReduction = PMeritPoints->GetMeritValue((MERIT_TYPE)PAbility->getMeritModID(), this);
         }
 
+        // HACK: Going to hijack Merit Recast Reduction here to support trick attack
+        if( PAbility->getID() == ABILITY_TRICK_ATTACK )
+        {
+            meritRecastReduction += getMod(Mod::TRICK_ATTACK_COOLDOWN);
+        }
+
         auto* charge = ability::GetCharge(this, PAbility->getRecastId());
         if (charge && PAbility->getID() != ABILITY_SIC)
         {
