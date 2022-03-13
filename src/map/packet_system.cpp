@@ -2909,7 +2909,7 @@ void SmallPacket0x04E(map_session_data_t* const PSession, CCharEntity* const PCh
         return;
     }
 
-    if (PChar->m_GMlevel == 0 && !PChar->loc.zone->CanUseMisc(MISC_AH))
+    if (PChar->m_GMlevel == 0 && PChar->loc.zone->GetType() != ZONE_TYPE::CITY)
     {
         ShowDebug("%s is trying to use the auction house in a disallowed zone [%s]", PChar->GetName(), PChar->loc.zone->GetName());
         return;
