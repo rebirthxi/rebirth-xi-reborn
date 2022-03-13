@@ -12,8 +12,8 @@ INSERT INTO item_mods VALUES (15355, 2006, -30); -- Wizard's Sabots +1
 -- Dragoon
 INSERT INTO item_mods VALUES (13974, 2007, 20); -- Drachen Finger Gauntlets
 INSERT INTO item_mods VALUES (14903, 2007, 30); -- Drachen Finger Gauntlets +1
-INSERT INTO item_mods VALUES (12649, 1108,  5); -- Drachen Mail
-INSERT INTO item_mods VALUES (14486, 1108,  7); -- Drachen Mail +1
+INSERT INTO item_mods VALUES (12649, 2013,  5); -- Drachen Mail
+INSERT INTO item_mods VALUES (14486, 2013,  7); -- Drachen Mail +1
 
 -- Monk
 INSERT INTO item_mods VALUES (14215, 2008, 10); -- Temple Hose
