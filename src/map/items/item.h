@@ -73,6 +73,23 @@ enum ITEM_FLAG
     ITEM_FLAG_RARE         = 0x8000
 };
 
+struct AugmentSrc
+{
+    uint16 augment_item_src = 0;
+    uint16 aug0_src = 0;
+    uint16 aug0_min = 0;
+    uint16 aug0_max = 0;
+    uint16 aug1_src = 0;
+    uint16 aug1_min = 0;
+    uint16 aug1_max = 0;
+    uint16 aug2_src = 0;
+    uint16 aug2_min = 0;
+    uint16 aug2_max = 0;
+    uint16 aug3_src = 0;
+    uint16 aug3_min = 0;
+    uint16 aug3_max = 0;
+};
+
 class CItem
 {
 public:
@@ -132,6 +149,7 @@ public:
 
     static constexpr uint32_t extra_size = 0x18;
     uint8                     m_extra[extra_size]; // any extra data pertaining to item (augments, furniture location, etc)
+    AugmentSrc                aug_src;
 
 protected:
     void setType(uint8);

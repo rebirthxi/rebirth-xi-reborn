@@ -319,6 +319,44 @@ auto CLuaItem::getSoulPlateData() -> sol::table
     return table;
 }
 
+auto CLuaItem::getAugSrc() -> sol::table
+{
+    auto table = luautils::lua.create_table();
+
+    table["augment_item_src"] = m_PLuaItem->aug_src.augment_item_src;
+    table["aug0_src"] = m_PLuaItem->aug_src.aug0_src;
+    table["aug0_min"] = m_PLuaItem->aug_src.aug0_min;
+    table["aug0_max"] = m_PLuaItem->aug_src.aug0_max;
+    table["aug1_src"] = m_PLuaItem->aug_src.aug1_src;
+    table["aug1_min"] = m_PLuaItem->aug_src.aug1_min;
+    table["aug1_max"] = m_PLuaItem->aug_src.aug1_max;
+    table["aug2_src"] = m_PLuaItem->aug_src.aug2_src;
+    table["aug2_min"] = m_PLuaItem->aug_src.aug2_min;
+    table["aug2_max"] = m_PLuaItem->aug_src.aug2_max;
+    table["aug3_src"] = m_PLuaItem->aug_src.aug3_src;
+    table["aug3_min"] = m_PLuaItem->aug_src.aug3_min;
+    table["aug3_max"] = m_PLuaItem->aug_src.aug3_max;
+
+    return table;
+}
+
+auto CLuaItem::getAugTable() -> sol::table
+{
+    auto table = luautils::lua.create_table();
+    auto* PItem = static_cast<CItemEquipment*>(m_PLuaItem);
+
+    for (uint8 i = 0; i < 4; i++)
+    {
+        uint16 augment = PItem->getAugment(i);
+        auto augmentId  = static_cast<uint16>(unpackBitsBE((uint8*)(&augment), 0, 11));
+        auto augmentVal = static_cast<uint8>(unpackBitsBE((uint8*)(&augment), 11, 5));
+
+        table[augmentId] = augmentVal;
+    }
+
+    return table;
+}
+
 //==========================================================//
 
 void CLuaItem::Register()
@@ -355,6 +393,8 @@ void CLuaItem::Register()
     SOL_REGISTER("isInstalled", CLuaItem::isInstalled);
     SOL_REGISTER("setSoulPlateData", CLuaItem::setSoulPlateData);
     SOL_REGISTER("getSoulPlateData", CLuaItem::getSoulPlateData);
+    SOL_REGISTER("getAugSrc", CLuaItem::getAugSrc);
+    SOL_REGISTER("getAugTable", CLuaItem::getAugTable);
 }
 
 std::ostream& operator<<(std::ostream& os, const CLuaItem& item)

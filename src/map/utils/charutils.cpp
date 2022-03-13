@@ -906,7 +906,20 @@ namespace charutils
                             "quantity,"   // 3
                             "bazaar,"     // 4
                             "signature, " // 5
-                            "extra "      // 6
+                            "extra, "          // 6
+                            "augment_src_item," // 7
+                            "aug0_src," // 8
+                            "aug0_min," // 9
+                            "aug0_max," // 10
+                            "aug1_src," // 11
+                            "aug1_min," // 12
+                            "aug1_max," // 13
+                            "aug2_src," // 14
+                            "aug2_min," // 15
+                            "aug2_max," // 16
+                            "aug3_src," // 17
+                            "aug3_min," // 18
+                            "aug3_max " // 19
                             "FROM char_inventory "
                             "WHERE charid = %u "
                             "ORDER BY FIELD(location,0,1,9,2,3,4,5,6,7,8,10,11,12)";
@@ -925,7 +938,19 @@ namespace charutils
                     PItem->setSlotID(sql->GetUIntData(2));
                     PItem->setQuantity(sql->GetUIntData(3));
                     PItem->setCharPrice(sql->GetUIntData(4));
-
+                    PItem->aug_src.augment_item_src = sql->GetUIntData(7);
+                    PItem->aug_src.aug0_src = sql->GetUIntData(8);
+                    PItem->aug_src.aug0_min = sql->GetUIntData(9);
+                    PItem->aug_src.aug0_max = sql->GetUIntData(10);
+                    PItem->aug_src.aug1_src = sql->GetUIntData(11);
+                    PItem->aug_src.aug1_min = sql->GetUIntData(12);
+                    PItem->aug_src.aug1_max = sql->GetUIntData(13);
+                    PItem->aug_src.aug2_src = sql->GetUIntData(14);
+                    PItem->aug_src.aug2_min = sql->GetUIntData(15);
+                    PItem->aug_src.aug2_max = sql->GetUIntData(16);
+                    PItem->aug_src.aug3_src = sql->GetUIntData(17);
+                    PItem->aug_src.aug3_min = sql->GetUIntData(18);
+                    PItem->aug_src.aug3_max = sql->GetUIntData(19);
                     size_t length = 0;
                     char*  extra  = nullptr;
                     sql->GetData(6, &extra, &length);
@@ -1291,8 +1316,21 @@ namespace charutils
                                 "itemId,"
                                 "quantity,"
                                 "signature,"
-                                "extra) "
-                                "VALUES(%u,%u,%u,%u,%u,'%s','%s')";
+                                "extra,"
+                                "augment_src_item,"
+                                "aug0_src,"
+                                "aug0_min,"
+                                "aug0_max,"
+                                "aug1_src,"
+                                "aug1_min,"
+                                "aug1_max,"
+                                "aug2_src,"
+                                "aug2_min,"
+                                "aug2_max,"
+                                "aug3_src,"
+                                "aug3_min,"
+                                "aug3_max) "
+                                "VALUES(%u,%u,%u,%u,%u,'%s','%s',%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u)";
 
             int8 signature[21];
             if (PItem->isType(ITEM_LINKSHELL))
@@ -1307,7 +1345,29 @@ namespace charutils
             char extra[sizeof(PItem->m_extra) * 2 + 1];
             sql->EscapeStringLen(extra, (const char*)PItem->m_extra, sizeof(PItem->m_extra));
 
-            if (sql->Query(Query, PChar->id, LocationID, SlotID, PItem->getID(), PItem->getQuantity(), signature, extra) == SQL_ERROR)
+            if (sql->Query(
+                Query,
+                PChar->id,
+                LocationID,
+                SlotID,
+                PItem->getID(),
+                PItem->getQuantity(),
+                signature,
+                extra,
+                PItem->aug_src.augment_item_src,
+                PItem->aug_src.aug0_src,
+                PItem->aug_src.aug0_min,
+                PItem->aug_src.aug0_max,
+                PItem->aug_src.aug1_src,
+                PItem->aug_src.aug1_min,
+                PItem->aug_src.aug1_max,
+                PItem->aug_src.aug2_src,
+                PItem->aug_src.aug2_min,
+                PItem->aug_src.aug2_max,
+                PItem->aug_src.aug3_src,
+                PItem->aug_src.aug3_min,
+                PItem->aug_src.aug3_max
+            ) == SQL_ERROR)
             {
                 ShowError("charplugin::AddItem: Cannot insert item to database");
                 PChar->getStorage(LocationID)->InsertItem(nullptr, SlotID);
@@ -6238,34 +6298,34 @@ namespace charutils
                                "FROM char_distribute_xp "
                                "WHERE charid = %u;";
 
-        int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id);
+        int32 ret = sql->Query(fmtQuery, PChar->id);
 
         if (ret != SQL_ERROR &&
-            Sql_NumRows(SqlHandle) != 0 &&
-            Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+            sql->NumRows() != 0 &&
+            sql->NextRow() == SQL_SUCCESS)
         {
-            PChar->jobs.distributed[JOB_WAR] = (uint8)Sql_GetIntData(SqlHandle, 0);
-            PChar->jobs.distributed[JOB_MNK] = (uint8)Sql_GetIntData(SqlHandle, 1);
-            PChar->jobs.distributed[JOB_WHM] = (uint8)Sql_GetIntData(SqlHandle, 2);
-            PChar->jobs.distributed[JOB_BLM] = (uint8)Sql_GetIntData(SqlHandle, 3);
-            PChar->jobs.distributed[JOB_RDM] = (uint8)Sql_GetIntData(SqlHandle, 4);
-            PChar->jobs.distributed[JOB_THF] = (uint8)Sql_GetIntData(SqlHandle, 5);
-            PChar->jobs.distributed[JOB_PLD] = (uint8)Sql_GetIntData(SqlHandle, 6);
-            PChar->jobs.distributed[JOB_DRK] = (uint8)Sql_GetIntData(SqlHandle, 7);
-            PChar->jobs.distributed[JOB_BST] = (uint8)Sql_GetIntData(SqlHandle, 8);
-            PChar->jobs.distributed[JOB_BRD] = (uint8)Sql_GetIntData(SqlHandle, 9);
-            PChar->jobs.distributed[JOB_RNG] = (uint8)Sql_GetIntData(SqlHandle, 10);
-            PChar->jobs.distributed[JOB_SAM] = (uint8)Sql_GetIntData(SqlHandle, 11);
-            PChar->jobs.distributed[JOB_NIN] = (uint8)Sql_GetIntData(SqlHandle, 12);
-            PChar->jobs.distributed[JOB_DRG] = (uint8)Sql_GetIntData(SqlHandle, 13);
-            PChar->jobs.distributed[JOB_SMN] = (uint8)Sql_GetIntData(SqlHandle, 14);
-            PChar->jobs.distributed[JOB_BLU] = (uint8)Sql_GetIntData(SqlHandle, 15);
-            PChar->jobs.distributed[JOB_COR] = (uint8)Sql_GetIntData(SqlHandle, 16);
-            PChar->jobs.distributed[JOB_PUP] = (uint8)Sql_GetIntData(SqlHandle, 17);
-            PChar->jobs.distributed[JOB_DNC] = (uint8)Sql_GetIntData(SqlHandle, 18);
-            PChar->jobs.distributed[JOB_SCH] = (uint8)Sql_GetIntData(SqlHandle, 19);
-            PChar->jobs.distributed[JOB_GEO] = (uint8)Sql_GetIntData(SqlHandle, 20);
-            PChar->jobs.distributed[JOB_RUN] = (uint8)Sql_GetIntData(SqlHandle, 21);
+            PChar->jobs.distributed[JOB_WAR] = (uint8)sql->GetIntData(0);
+            PChar->jobs.distributed[JOB_MNK] = (uint8)sql->GetIntData(1);
+            PChar->jobs.distributed[JOB_WHM] = (uint8)sql->GetIntData(2);
+            PChar->jobs.distributed[JOB_BLM] = (uint8)sql->GetIntData(3);
+            PChar->jobs.distributed[JOB_RDM] = (uint8)sql->GetIntData(4);
+            PChar->jobs.distributed[JOB_THF] = (uint8)sql->GetIntData(5);
+            PChar->jobs.distributed[JOB_PLD] = (uint8)sql->GetIntData(6);
+            PChar->jobs.distributed[JOB_DRK] = (uint8)sql->GetIntData(7);
+            PChar->jobs.distributed[JOB_BST] = (uint8)sql->GetIntData(8);
+            PChar->jobs.distributed[JOB_BRD] = (uint8)sql->GetIntData(9);
+            PChar->jobs.distributed[JOB_RNG] = (uint8)sql->GetIntData(10);
+            PChar->jobs.distributed[JOB_SAM] = (uint8)sql->GetIntData(11);
+            PChar->jobs.distributed[JOB_NIN] = (uint8)sql->GetIntData(12);
+            PChar->jobs.distributed[JOB_DRG] = (uint8)sql->GetIntData(13);
+            PChar->jobs.distributed[JOB_SMN] = (uint8)sql->GetIntData(14);
+            PChar->jobs.distributed[JOB_BLU] = (uint8)sql->GetIntData(15);
+            PChar->jobs.distributed[JOB_COR] = (uint8)sql->GetIntData(16);
+            PChar->jobs.distributed[JOB_PUP] = (uint8)sql->GetIntData(17);
+            PChar->jobs.distributed[JOB_DNC] = (uint8)sql->GetIntData(18);
+            PChar->jobs.distributed[JOB_SCH] = (uint8)sql->GetIntData(19);
+            PChar->jobs.distributed[JOB_GEO] = (uint8)sql->GetIntData(20);
+            PChar->jobs.distributed[JOB_RUN] = (uint8)sql->GetIntData(21);
         }
         else
         {
@@ -6285,7 +6345,7 @@ namespace charutils
                    "        DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)"
                    "ON DUPLICATE KEY UPDATE charid=charid;";
 
-        Sql_Query(SqlHandle, fmtQuery, PChar->id);
+        sql->Query(fmtQuery, PChar->id);
 
         switch(job)
         {
@@ -6363,9 +6423,9 @@ namespace charutils
                 break;
         }
         if (job == JOB_NON)
-            Sql_Query(SqlHandle, fmtQuery, PChar->id);
+            sql->Query(fmtQuery, PChar->id);
         else
-            Sql_Query(SqlHandle, fmtQuery, PChar->jobs.distributed[job], PChar->id);
+            sql->Query(fmtQuery, PChar->jobs.distributed[job], PChar->id);
     }
 
     void AddExperiencePoints(bool expFromRaise, CCharEntity* PChar, CBaseEntity* PMob, uint32 exp, EMobDifficulty mobCheck, bool isexpchain)
