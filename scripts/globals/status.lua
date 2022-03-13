@@ -1680,6 +1680,7 @@ xi.mod =
     SUPER_JUMP_ATK_BUFF      = 2007,
     COUNTER_DAMAGE_PERCENT   = 2008,
     CAMOUFLAGE_SNEAK         = 2009,
+    SEIGAN_STR_DOWN          = 2010,
 }
 
 xi.latent =

@@ -24,8 +24,8 @@ INSERT INTO item_mods VALUES (14099, 2009, 30); -- Hunter's socks
 INSERT INTO item_mods VALUES (15362, 2009, 60); -- Hunter's socks +1
 
 -- Samurai
-INSERT INTO item_mods VALUES (13781, 1105, 20); -- Myochin Domaru
-INSERT INTO item_mods VALUES (14484, 1105, 30); -- Myochin Domaru +1
+INSERT INTO item_mods VALUES (13781, 2010, 20); -- Myochin Domaru
+INSERT INTO item_mods VALUES (14484, 2010, 30); -- Myochin Domaru +1
 INSERT INTO item_mods VALUES (14100,    8,  2); -- Myochin Sune-ate
 INSERT INTO item_mods VALUES (14100,   25,  3); -- Myochin Sune-ate
 INSERT INTO item_mods VALUES (15363,    8,  4); -- Myochin Sune-ate
