@@ -1685,6 +1685,7 @@ xi.mod =
     TRICK_ATTACK_COOLDOWN    = 2011,
     DIVINE_SEAL_ENM          = 2012,
     JUMP_COOLDOWN            = 2013,
+    REGEN_POTENCY         = 2014,
 }
 
 xi.latent =

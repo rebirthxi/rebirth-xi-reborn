@@ -40,8 +40,8 @@ INSERT INTO item_mods VALUES (15566,  520, 15); -- Rogue's Culottes +1
 -- White Mage
 INSERT INTO item_mods VALUES (13855, 2012, -50);  -- Healer's Cap
 INSERT INTO item_mods VALUES (15227, 2012, -100); -- Healer's Cap +1
-INSERT INTO item_mods VALUES (14091, 1109,   2); -- Healer's Duckbills
-INSERT INTO item_mods VALUES (15354, 1109,   4); -- Healer's Duckbills +1
+INSERT INTO item_mods VALUES (14091, 2014,   2); -- Healer's Duckbills
+INSERT INTO item_mods VALUES (15354, 2014,   4); -- Healer's Duckbills +1
 
 -- Blue Mage
 INSERT INTO item_mods VALUES (14928,   12,  3); -- Magus Bazubands
