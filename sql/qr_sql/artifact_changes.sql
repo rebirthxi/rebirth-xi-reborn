@@ -16,8 +16,8 @@ INSERT INTO item_mods VALUES (12649, 1108,  5); -- Drachen Mail
 INSERT INTO item_mods VALUES (14486, 1108,  7); -- Drachen Mail +1
 
 -- Monk
-INSERT INTO item_mods VALUES (14215, 1103, 10); -- Temple Hose
-INSERT INTO item_mods VALUES (15562, 1103, 20); -- Temple Hose +1
+INSERT INTO item_mods VALUES (14215, 2008, 10); -- Temple Hose
+INSERT INTO item_mods VALUES (15562, 2008, 20); -- Temple Hose +1
 
 -- Ranger
 INSERT INTO item_mods VALUES (14099, 1104, 30); -- Hunter's socks

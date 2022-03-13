@@ -1678,6 +1678,7 @@ xi.mod =
     ETUDE_EXTRA_BUFF         = 2005,
     ELE_SEAL_ENM             = 2006,
     SUPER_JUMP_ATK_BUFF      = 2007,
+    COUNTER_DAMAGE_PERCENT   = 2008,
 }
 
 xi.latent =
