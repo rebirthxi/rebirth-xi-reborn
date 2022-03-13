@@ -3234,6 +3234,31 @@ bool CLuaBaseEntity::addItem(sol::variadic_args va)
                             ((CItemEquipment*)PItem)->PushAugment(augid, augval);
                         }
                     }
+
+                    sol::object augmentsSrcObj = table["arg_src"];
+                    if (augmentsSrcObj.is<sol::table>())
+                    {
+                        auto augmentsSrcTable = augmentsSrcObj.as<sol::table>();
+                        for (auto& entryPair : augmentsSrcTable)
+                        {
+                            auto pair = entryPair.second.as<sol::table>();
+                            std::string key = pair[0];
+                            uint16 val = pair[1];
+                            if( key == "augment_item_src" ) PItem->aug_src.augment_item_src = val;
+                            else if( key == "aug0_src" )    PItem->aug_src.aug0_src = val;
+                            else if( key == "aug0_min" )    PItem->aug_src.aug0_min = val;
+                            else if( key == "aug0_max" )    PItem->aug_src.aug0_max = val;
+                            else if( key == "aug1_src" )    PItem->aug_src.aug1_src = val;
+                            else if( key == "aug1_min" )    PItem->aug_src.aug1_min = val;
+                            else if( key == "aug1_max" )    PItem->aug_src.aug1_max = val;
+                            else if( key == "aug2_src" )    PItem->aug_src.aug2_src = val;
+                            else if( key == "aug2_min" )    PItem->aug_src.aug2_min = val;
+                            else if( key == "aug2_max" )    PItem->aug_src.aug2_max = val;
+                            else if( key == "aug3_src" )    PItem->aug_src.aug3_src = val;
+                            else if( key == "aug3_min" )    PItem->aug_src.aug3_min = val;
+                            else if( key == "aug3_max" )    PItem->aug_src.aug3_max = val;
+                        }
+                    }
                 }
 
                 sol::object exdataObj = table["exdata"];

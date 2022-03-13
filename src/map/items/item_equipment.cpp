@@ -22,6 +22,7 @@
 #include "item_equipment.h"
 
 #include "../map.h"
+#include "../entities/battleentity.h"
 #include <cstring>
 
 CItemEquipment::CItemEquipment(uint16 id)
@@ -309,7 +310,10 @@ void CItemEquipment::SetAugmentMod(uint16 type, uint8 value)
     {
         setSubType(ITEM_AUGMENTED);
         ref<uint8>(m_extra, 0x00) |= 0x02;
-        ref<uint8>(m_extra, 0x01) |= 0x03;
+
+        auto id = getID();
+        if (id != 16485 && id != 16481) // yat and yat +1 (probably shouldn't hard code this but fuck it)
+            ref<uint8>(m_extra, 0x01) |= 0x03;
     }
 
     // obtain augment info by querying the db
@@ -331,6 +335,9 @@ void CItemEquipment::SetAugmentMod(uint16 type, uint8 value)
         // otherwise increase modifier power using the multiplier
         // check if we should be adding to or taking away from the mod power (handle scripted augments properly)
         modValue = (modValue > 0 ? modValue + value : modValue - value) * (multiplier > 1 ? multiplier : 1);
+
+        if ((modId == Mod::MAIN_DMG_RATING || modId == Mod::RANGED_DMG_RATING) && (getSlotID() != SLOT_MAIN && getSlotID() != SLOT_HANDS))
+            break;
 
         if (!isPet)
         {

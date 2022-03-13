@@ -904,7 +904,20 @@ namespace charutils
                             "quantity,"   // 3
                             "bazaar,"     // 4
                             "signature, " // 5
-                            "extra "      // 6
+                            "extra, "          // 6
+                            "augment_src_item," // 7
+                            "aug0_src," // 8
+                            "aug0_min," // 9
+                            "aug0_max," // 10
+                            "aug1_src," // 11
+                            "aug1_min," // 12
+                            "aug1_max," // 13
+                            "aug2_src," // 14
+                            "aug2_min," // 15
+                            "aug2_max," // 16
+                            "aug3_src," // 17
+                            "aug3_min," // 18
+                            "aug3_max " // 19
                             "FROM char_inventory "
                             "WHERE charid = %u "
                             "ORDER BY FIELD(location,0,1,9,2,3,4,5,6,7,8,10,11,12)";
@@ -923,7 +936,19 @@ namespace charutils
                     PItem->setSlotID(Sql_GetUIntData(SqlHandle, 2));
                     PItem->setQuantity(Sql_GetUIntData(SqlHandle, 3));
                     PItem->setCharPrice(Sql_GetUIntData(SqlHandle, 4));
-
+                    PItem->aug_src.augment_item_src = Sql_GetUIntData(SqlHandle, 7);
+                    PItem->aug_src.aug0_src = Sql_GetUIntData(SqlHandle, 8);
+                    PItem->aug_src.aug0_min = Sql_GetUIntData(SqlHandle, 9);
+                    PItem->aug_src.aug0_max = Sql_GetUIntData(SqlHandle, 10);
+                    PItem->aug_src.aug1_src = Sql_GetUIntData(SqlHandle, 11);
+                    PItem->aug_src.aug1_min = Sql_GetUIntData(SqlHandle, 12);
+                    PItem->aug_src.aug1_max = Sql_GetUIntData(SqlHandle, 13);
+                    PItem->aug_src.aug2_src = Sql_GetUIntData(SqlHandle, 14);
+                    PItem->aug_src.aug2_min = Sql_GetUIntData(SqlHandle, 15);
+                    PItem->aug_src.aug2_max = Sql_GetUIntData(SqlHandle, 16);
+                    PItem->aug_src.aug3_src = Sql_GetUIntData(SqlHandle, 17);
+                    PItem->aug_src.aug3_min = Sql_GetUIntData(SqlHandle, 18);
+                    PItem->aug_src.aug3_max = Sql_GetUIntData(SqlHandle, 19);
                     size_t length = 0;
                     char*  extra  = nullptr;
                     Sql_GetData(SqlHandle, 6, &extra, &length);
@@ -1291,8 +1316,21 @@ namespace charutils
                                 "itemId,"
                                 "quantity,"
                                 "signature,"
-                                "extra) "
-                                "VALUES(%u,%u,%u,%u,%u,'%s','%s')";
+                                "extra,"
+                                "augment_src_item,"
+                                "aug0_src,"
+                                "aug0_min,"
+                                "aug0_max,"
+                                "aug1_src,"
+                                "aug1_min,"
+                                "aug1_max,"
+                                "aug2_src,"
+                                "aug2_min,"
+                                "aug2_max,"
+                                "aug3_src,"
+                                "aug3_min,"
+                                "aug3_max) "
+                                "VALUES(%u,%u,%u,%u,%u,'%s','%s',%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u)";
 
             int8 signature[21];
             if (PItem->isType(ITEM_LINKSHELL))
@@ -1307,7 +1345,30 @@ namespace charutils
             char extra[sizeof(PItem->m_extra) * 2 + 1];
             Sql_EscapeStringLen(SqlHandle, extra, (const char*)PItem->m_extra, sizeof(PItem->m_extra));
 
-            if (Sql_Query(SqlHandle, Query, PChar->id, LocationID, SlotID, PItem->getID(), PItem->getQuantity(), signature, extra) == SQL_ERROR)
+            if (Sql_Query(
+                SqlHandle,
+                Query,
+                PChar->id,
+                LocationID,
+                SlotID,
+                PItem->getID(),
+                PItem->getQuantity(),
+                signature,
+                extra,
+                PItem->aug_src.augment_item_src,
+                PItem->aug_src.aug0_src,
+                PItem->aug_src.aug0_min,
+                PItem->aug_src.aug0_max,
+                PItem->aug_src.aug1_src,
+                PItem->aug_src.aug1_min,
+                PItem->aug_src.aug1_max,
+                PItem->aug_src.aug2_src,
+                PItem->aug_src.aug2_min,
+                PItem->aug_src.aug2_max,
+                PItem->aug_src.aug3_src,
+                PItem->aug_src.aug3_min,
+                PItem->aug_src.aug3_max
+            ) == SQL_ERROR)
             {
                 ShowError("charplugin::AddItem: Cannot insert item to database");
                 PChar->getStorage(LocationID)->InsertItem(nullptr, SlotID);

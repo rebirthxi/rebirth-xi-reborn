@@ -85,6 +85,7 @@ safe_files_to_load = [
     "sql/qr_sql/artifact_status_effects.sql",
     "sql/qr_sql/nexus_cape.sql",
     "sql/qr_sql/helm_gear_mods.sql",
+    "sql/qr_sql/qr_augments.sql",
 ]
 
 for sql_file in safe_files_to_load:

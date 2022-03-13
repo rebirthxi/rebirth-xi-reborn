@@ -2152,8 +2152,10 @@ void SmallPacket0x04D(map_session_data_t* const PSession, CCharEntity* const PCh
                 return;
             }
 
-            const char* fmtQuery = "SELECT itemid, itemsubid, slot, quantity, sent, extra, sender, charname FROM delivery_box WHERE charid = %u AND box = %d "
-                                   "AND slot < 8 ORDER BY slot;";
+            const char* fmtQuery = "SELECT itemid, itemsubid, slot, quantity, sent, extra, sender, charname, "
+                                   "augment_src_item, aug0_src, aug0_min, aug0_max, aug1_src, aug1_min, aug1_max, "
+                                   "aug2_src, aug2_min, aug2_max, aug3_src, aug3_min, aug3_max"
+                                   " FROM delivery_box WHERE charid = %u AND box = %d AND slot < 8 ORDER BY slot;";
 
             int32 ret = Sql_Query(SqlHandle, fmtQuery, PChar->id, boxtype);
 
@@ -2181,6 +2183,20 @@ void SmallPacket0x04D(map_session_data_t* const PSession, CCharEntity* const PCh
                             char*  extra  = nullptr;
                             Sql_GetData(SqlHandle, 5, &extra, &length);
                             memcpy(PItem->m_extra, extra, (length > sizeof(PItem->m_extra) ? sizeof(PItem->m_extra) : length));
+
+                            PItem->aug_src.augment_item_src = Sql_GetIntData(SqlHandle, 8);
+                            PItem->aug_src.aug0_src = Sql_GetIntData(SqlHandle, 9);
+                            PItem->aug_src.aug0_min = Sql_GetIntData(SqlHandle, 10);
+                            PItem->aug_src.aug0_max = Sql_GetIntData(SqlHandle, 11);
+                            PItem->aug_src.aug1_src = Sql_GetIntData(SqlHandle, 12);
+                            PItem->aug_src.aug1_min = Sql_GetIntData(SqlHandle, 13);
+                            PItem->aug_src.aug1_max = Sql_GetIntData(SqlHandle, 14);
+                            PItem->aug_src.aug2_src = Sql_GetIntData(SqlHandle, 15);
+                            PItem->aug_src.aug2_min = Sql_GetIntData(SqlHandle, 16);
+                            PItem->aug_src.aug2_max = Sql_GetIntData(SqlHandle, 17);
+                            PItem->aug_src.aug3_src = Sql_GetIntData(SqlHandle, 18);
+                            PItem->aug_src.aug3_min = Sql_GetIntData(SqlHandle, 19);
+                            PItem->aug_src.aug3_max = Sql_GetIntData(SqlHandle, 20);
 
                             if (boxtype == 2)
                             {
@@ -2246,14 +2262,31 @@ void SmallPacket0x04D(map_session_data_t* const PSession, CCharEntity* const PCh
                     PUBoxItem->setQuantity(quantity);
                     PUBoxItem->setSlotID(PItem->getSlotID());
                     memcpy(PUBoxItem->m_extra, PItem->m_extra, sizeof(PUBoxItem->m_extra));
+                    PUBoxItem->aug_src.augment_item_src = PItem->aug_src.augment_item_src;
+                    PUBoxItem->aug_src.aug0_src = PItem->aug_src.aug0_src;
+                    PUBoxItem->aug_src.aug0_min = PItem->aug_src.aug0_min;
+                    PUBoxItem->aug_src.aug0_max = PItem->aug_src.aug0_max;
+                    PUBoxItem->aug_src.aug1_src = PItem->aug_src.aug1_src;
+                    PUBoxItem->aug_src.aug1_min = PItem->aug_src.aug1_min;
+                    PUBoxItem->aug_src.aug1_max = PItem->aug_src.aug1_max;
+                    PUBoxItem->aug_src.aug2_src = PItem->aug_src.aug2_src;
+                    PUBoxItem->aug_src.aug2_min = PItem->aug_src.aug2_min;
+                    PUBoxItem->aug_src.aug2_max = PItem->aug_src.aug2_max;
+                    PUBoxItem->aug_src.aug3_src = PItem->aug_src.aug3_src;
+                    PUBoxItem->aug_src.aug3_min = PItem->aug_src.aug3_min;
+                    PUBoxItem->aug_src.aug3_max = PItem->aug_src.aug3_max;
 
                     char extra[sizeof(PItem->m_extra) * 2 + 1];
                     Sql_EscapeStringLen(SqlHandle, extra, (const char*)PItem->m_extra, sizeof(PItem->m_extra));
 
                     ret = Sql_Query(SqlHandle,
-                                    "INSERT INTO delivery_box(charid, charname, box, slot, itemid, itemsubid, quantity, extra, senderid, sender) VALUES(%u, "
-                                    "'%s', 2, %u, %u, %u, %u, '%s', %u, '%s'); ",
-                                    PChar->id, PChar->GetName(), slotID, PItem->getID(), PItem->getSubID(), quantity, extra, charid, data[0x10]);
+                                    "INSERT INTO delivery_box(charid, charname, box, slot, itemid, itemsubid, quantity, extra, senderid, sender, augment_src_item,"
+                                    " aug0_src, aug0_min, aug0_max, aug1_src, aug1_min, aug1_max, aug2_src, aug2_min, aug2_max, aug3_src, aug3_min, aug3_max)"
+                                    " VALUES(%u, '%s', 2, %u, %u, %u, %u, '%s', %u, '%s', %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u); ",
+                                    PChar->id, PChar->GetName(), slotID, PItem->getID(), PItem->getSubID(), quantity, extra, charid, data[0x10],
+                                    PItem->aug_src.augment_item_src, PItem->aug_src.aug0_src, PItem->aug_src.aug0_min, PItem->aug_src.aug0_max,
+                                    PItem->aug_src.aug1_src, PItem->aug_src.aug1_min, PItem->aug_src.aug1_max, PItem->aug_src.aug2_src,
+                                    PItem->aug_src.aug2_min, PItem->aug_src.aug2_max, PItem->aug_src.aug3_src, PItem->aug_src.aug3_min, PItem->aug_src.aug3_max);
 
                     if (ret != SQL_ERROR && Sql_AffectedRows(SqlHandle) == 1 && charutils::UpdateItem(PChar, LOC_INVENTORY, invslot, -(int32)quantity))
                     {
@@ -2311,10 +2344,15 @@ void SmallPacket0x04D(map_session_data_t* const PSession, CCharEntity* const PCh
                                 Sql_EscapeStringLen(SqlHandle, extra, (const char*)PItem->m_extra, sizeof(PItem->m_extra));
 
                                 ret = Sql_Query(SqlHandle,
-                                                "INSERT INTO delivery_box(charid, charname, box, itemid, itemsubid, quantity, extra, senderid, sender) "
-                                                "VALUES(%u, '%s', 1, %u, %u, %u, '%s', %u, '%s'); ",
+                                                "INSERT INTO delivery_box(charid, charname, box, itemid, itemsubid, quantity, extra, senderid, sender, "
+                                                "augment_src_item, aug0_src, aug0_min, aug0_max, aug1_src, aug1_min, aug1_max, aug2_src, aug2_min, aug2_max, "
+                                                "aug3_src, aug3_min, aug3_max) VALUES(%u, '%s', 1, %u, %u, %u, '%s', %u, '%s', %u, %u, %u, %u, %u, %u, %u, %u,"
+                                                " %u, %u, %u, %u, %u); ",
                                                 charid, PItem->getReceiver(), PItem->getID(), PItem->getSubID(), PItem->getQuantity(), extra, PChar->id,
-                                                PChar->GetName());
+                                                PChar->GetName(), PItem->aug_src.augment_item_src, PItem->aug_src.aug0_src, PItem->aug_src.aug0_min,
+                                                PItem->aug_src.aug0_max, PItem->aug_src.aug1_src, PItem->aug_src.aug1_min, PItem->aug_src.aug1_max,
+                                                PItem->aug_src.aug2_src, PItem->aug_src.aug2_min, PItem->aug_src.aug2_max, PItem->aug_src.aug3_src,
+                                                PItem->aug_src.aug3_min,PItem->aug_src.aug3_max);
                                 if (ret != SQL_ERROR && Sql_AffectedRows(SqlHandle) == 1)
                                 {
                                     PItem->setSent(true);
@@ -2470,8 +2508,10 @@ void SmallPacket0x04D(map_session_data_t* const PSession, CCharEntity* const PCh
 
                 if (Sql_SetAutoCommit(SqlHandle, false) && Sql_TransactionStart(SqlHandle))
                 {
-                    std::string Query = "SELECT itemid, itemsubid, quantity, extra, sender, senderid FROM delivery_box WHERE charid = %u AND box = 1 AND slot "
-                                        ">= 8 ORDER BY slot ASC LIMIT 1;";
+                    std::string Query = "SELECT itemid, itemsubid, quantity, extra, sender, senderid, "
+                                        "augment_src_item, aug0_src, aug0_min, aug0_max, aug1_src, aug1_min, aug1_max, "
+                                        "aug2_src, aug2_min, aug2_max, aug3_src, aug3_min, aug3_max "
+                                        "FROM delivery_box WHERE charid = %u AND box = 1 AND slot >= 8 ORDER BY slot ASC LIMIT 1;";
 
                     int32 ret = Sql_Query(SqlHandle, Query.c_str(), PChar->id);
 
@@ -2490,6 +2530,20 @@ void SmallPacket0x04D(map_session_data_t* const PSession, CCharEntity* const PCh
                             char*  extra  = nullptr;
                             Sql_GetData(SqlHandle, 3, &extra, &length);
                             memcpy(PItem->m_extra, extra, (length > sizeof(PItem->m_extra) ? sizeof(PItem->m_extra) : length));
+
+                            PItem->aug_src.augment_item_src = Sql_GetIntData(SqlHandle, 6);
+                            PItem->aug_src.aug0_src = Sql_GetIntData(SqlHandle, 7);
+                            PItem->aug_src.aug0_min = Sql_GetIntData(SqlHandle, 8);
+                            PItem->aug_src.aug0_max = Sql_GetIntData(SqlHandle, 9);
+                            PItem->aug_src.aug1_src = Sql_GetIntData(SqlHandle, 10);
+                            PItem->aug_src.aug1_min = Sql_GetIntData(SqlHandle, 11);
+                            PItem->aug_src.aug1_max = Sql_GetIntData(SqlHandle, 12);
+                            PItem->aug_src.aug2_src = Sql_GetIntData(SqlHandle, 13);
+                            PItem->aug_src.aug2_min = Sql_GetIntData(SqlHandle, 14);
+                            PItem->aug_src.aug2_max = Sql_GetIntData(SqlHandle, 15);
+                            PItem->aug_src.aug3_src = Sql_GetIntData(SqlHandle, 16);
+                            PItem->aug_src.aug3_min = Sql_GetIntData(SqlHandle, 17);
+                            PItem->aug_src.aug3_max = Sql_GetIntData(SqlHandle, 18);
 
                             PItem->setSender(Sql_GetData(SqlHandle, 4));
                             if (PChar->UContainer->IsSlotEmpty(slotID))
@@ -2628,10 +2682,16 @@ void SmallPacket0x04D(map_session_data_t* const PSession, CCharEntity* const PCh
 
                             // Insert a return record into delivery_box
                             ret = Sql_Query(SqlHandle,
-                                            "INSERT INTO delivery_box(charid, charname, box, itemid, itemsubid, quantity, extra, senderid, sender) VALUES(%u, "
-                                            "'%s', 1, %u, %u, %u, '%s', %u, '%s'); ",
+                                            "INSERT INTO delivery_box(charid, charname, box, itemid, itemsubid, quantity, extra, senderid, sender, "
+                                            "augment_src_item, aug0_src, aug0_min, aug0_max, aug1_src, aug1_min, aug1_max, aug2_src, aug2_min, "
+                                            "aug2_max, aug3_src, aug3_min, aug3_max) VALUES(%u, '%s', 1, %u, %u, %u, '%s', %u, '%s', %u, %u, %u, "
+                                            "%u, %u, %u, %u, %u, %u, %u, %u, %u, %u); ",
+
                                             senderID, senderName.c_str(), PItem->getID(), PItem->getSubID(), PItem->getQuantity(), extra, PChar->id,
-                                            PChar->GetName());
+                                            PChar->GetName(), PItem->aug_src.augment_item_src, PItem->aug_src.aug0_src, PItem->aug_src.aug0_min,
+                                            PItem->aug_src.aug0_max, PItem->aug_src.aug1_src, PItem->aug_src.aug1_min, PItem->aug_src.aug1_max,
+                                            PItem->aug_src.aug2_src, PItem->aug_src.aug2_min, PItem->aug_src.aug2_max, PItem->aug_src.aug3_src,
+                                            PItem->aug_src.aug3_min, PItem->aug_src.aug3_max);
 
                             if (ret != SQL_ERROR && Sql_AffectedRows(SqlHandle) > 0)
                             {
@@ -4526,6 +4586,15 @@ void SmallPacket0x085(map_session_data_t* const PSession, CCharEntity* const PCh
         PChar->pushPacket(new CMessageStandardPacket(nullptr, itemID, quantity, MsgStd::Sell));
         PChar->pushPacket(new CInventoryFinishPacket());
         PChar->Container->setItem(PChar->Container->getSize() - 1, 0, -1, 0);
+
+        if( PItem->getID() == 16481 && PItem->aug_src.augment_item_src == 16481 ) // yat +1s
+        {
+            auto aug_points      = charutils::GetCharVar(PChar, "AugPoints");
+            const char* fmtQuery = "INSERT INTO char_vars SET charid = %u, varname = '%s', value = %i ON DUPLICATE KEY UPDATE value = %i;";
+
+            Sql_Query(SqlHandle, fmtQuery, PChar->id, "AugPoints", aug_points+1, aug_points+1);
+            PChar->pushPacket(new CChatMessagePacket(PChar, MESSAGE_NS_SAY, "You have received an augment point!", ""));
+        }
     }
 }
 
