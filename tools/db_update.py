@@ -89,6 +89,7 @@ safe_files_to_load = [
     "sql/qr_sql/beastman_bosses.sql",
     "sql/qr_sql/new_recipes.sql",
     "sql/qr_sql/qr_triggers.sql",
+    "sql/qr_sql/trust_changes.sql",
 ]
 
 for sql_file in safe_files_to_load:
