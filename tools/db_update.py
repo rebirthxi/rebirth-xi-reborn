@@ -87,6 +87,7 @@ safe_files_to_load = [
     "sql/qr_sql/helm_gear_mods.sql",
     "sql/qr_sql/qr_augments.sql",
     "sql/qr_sql/beastman_bosses.sql",
+    "sql/qr_sql/new_recipes.sql",
 ]
 
 for sql_file in safe_files_to_load:
