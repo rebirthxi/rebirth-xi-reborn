@@ -52,7 +52,7 @@ xi.settings =
     MAGIAN_TRIALS_TRADE_MULTIPLIER   = 1,
 
     -- VoidWalker
-    ENABLE_VOIDWALKER = 1,
+    ENABLE_VOIDWALKER = 0,
 
     -- TREASURE CASKETS
     -- Retail droprate = 0.1 (10%) with no other effects active
