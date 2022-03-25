@@ -89,11 +89,11 @@ local regimeInfo = {
                 event = 61,
                 page =
                 {
-                    { 6, 0, 0, 0, 1, 6, 270,  1},
-                    { 6, 0, 0, 0, 2, 6, 285,  2},
-                    { 5, 1, 0, 0, 4, 7, 300,  3},
-                    { 4, 2, 0, 0, 4, 8, 315,  4},
-                    { 6, 1, 0, 0, 4, 8, 330, 56},
+                    { 6,0,0,0, 1, 6, 270,  1, {{ chance = 100, item = 12440}, }}, -- Leather Bandana
+                    { 6,0,0,0, 2, 6, 285,  2, {{ chance = 100, item = 12568}, }}, -- Leather Vest
+                    { 5,1,0,0, 4, 7, 300,  3, {{ chance = 100, item = 12696}, }}, -- Leather Gloves
+                    { 4,2,0,0, 4, 8, 315,  4, {{ chance = 100, item = 12824}, }}, -- Leather Trousers
+                    { 6,1,0,0, 4, 8, 330, 56, {{ chance = 100, item = 12952}, }}, -- Leather HighBoots
                 },
             },
             [xi.zone.EAST_RONFAURE] =
@@ -101,11 +101,11 @@ local regimeInfo = {
                 event = 61,
                 page =
                 {
-                    { 6, 0, 0, 0, 1, 5, 270, 64},
-                    { 6, 0, 0, 0, 2, 5, 285, 65},
-                    { 7, 0, 0, 0, 2, 6, 300, 66},
-                    { 4, 2, 0, 0, 3, 6, 315, 67},
-                    { 4, 2, 0, 0, 4, 8, 330, 68},
+                    { 6,0,0,0, 1, 5, 270, 64, {{ chance = 100, item = 12440}, }}, -- Leather Bandana
+                    { 6,0,0,0, 2, 5, 285, 65, {{ chance = 100, item = 12568}, }}, -- Leather Vest
+                    { 7,0,0,0, 2, 6, 300, 66, {{ chance = 100, item = 12696}, }}, -- Leather Gloves
+                    { 4,2,0,0, 3, 6, 315, 67, {{ chance = 100, item = 12824}, }}, -- Leather Trousers
+                    { 4,2,0,0, 4, 8, 330, 68, {{ chance = 100, item = 12952}, }}, -- Leather HighBoots
                 },
             },
             [xi.zone.LA_THEINE_PLATEAU] =
@@ -113,11 +113,11 @@ local regimeInfo = {
                 event = 61,
                 page =
                 {
-                    { 3, 3, 0, 0, 8, 12, 330,  5},
-                    { 3, 5, 0, 0, 11, 13, 360, 69},
-                    { 8, 0, 0, 0, 12, 13, 390,  6},
-                    { 5, 3, 0, 0, 11, 14, 420, 70},
-                    { 5, 3, 0, 0, 10, 15, 450, 71},
+                    { 3,3,0,0, 8,12, 330,  5, {{ chance = 66, item = 12441}, }}, -- Lizard Helm
+                    { 3,5,0,0,11,13, 360, 69, {{ chance = 66, item = 12569}, }}, -- Lizard Jerkin
+                    { 8,0,0,0,12,13, 390,  6, {{ chance = 66, item = 12697}, }}, -- Lizard Gloves
+                    { 5,3,0,0,11,14, 420, 70, {{ chance = 66, item = 12825}, }}, -- Lizard Trousers
+                    { 5,3,0,0,10,15, 450, 71, {{ chance = 66, item = 12953}, }}, -- Lizard Ledelsens
                 },
             },
             [xi.zone.VALKURM_DUNES] =
@@ -125,11 +125,16 @@ local regimeInfo = {
                 event = 47,
                 page =
                 {
-                    { 7, 1, 0, 0, 15, 19, 475,  7},
-                    { 6, 2, 0, 0, 15, 22, 500,  8},
-                    { 5, 3, 0, 0, 18, 23, 525,  9},
-                    { 4, 4, 0, 0, 20, 23, 550, 10},
-                    { 4, 2, 0, 0, 22, 25, 575, 57},
+                    { 7,1,0,0,15,19, 475,  7, {{ chance = 10, item = 15161}, { chance = 10, item = 12458},   -- Noct Beret, Soil Hachimaki
+                                               { chance = 10, item = 15163}, { chance = 10, item = 15167}}}, -- Seer's Crown, Eisenschaller
+                    { 6,2,0,0,15,22, 500,  8, {{ chance = 10, item = 14422}, { chance = 10, item = 12586},   -- Noct Doublet, Soil Gi
+                                               { chance = 10, item = 14424}, { chance = 10, item = 14431}}}, -- Seer's Tunic, Eisenbrust
+                    { 5,3,0,0,18,23, 525,  9, {{ chance = 10, item = 14854}, { chance = 10, item = 12714},   -- Noct Gloves, Soil Tekko
+                                               { chance = 10, item = 14856}, { chance = 10, item = 14860}}}, -- Seer's Mitts, Eisenhentzes
+                    { 4,4,0,0,20,23, 550, 10, {{ chance = 10, item = 14323}, { chance = 10, item = 12842},   -- Noct Brais, Soil Sitabaki
+                                               { chance = 10, item = 14325}, { chance = 10, item = 14329}}}, -- Seer's Slack, Eisendiechlings
+                    { 4,2,0,0,22,25, 575, 57, {{ chance = 10, item = 15311}, { chance = 10, item = 12970},   -- Noct Gaiters, Soil Kyahan
+                                               { chance = 10, item = 15313}, { chance = 10, item = 15317}}}, -- Seer's Pumps, Eisenschuhs
                 },
             },
             [xi.zone.JUGNER_FOREST] =
@@ -137,11 +142,11 @@ local regimeInfo = {
                 event = 32,
                 page =
                 {
-                    { 8, 2, 0, 0, 15, 18, 480, 58},
-                    { 9, 0, 0, 0, 21, 22, 540, 11},
-                    { 8, 1, 0, 0, 21, 23, 570, 12},
-                    { 7, 2, 0, 0, 22, 25, 600, 13},
-                    { 6, 3, 0, 0, 24, 25, 630, 14},
+                    { 8,2,0,0,15,18, 480, 58, {{ chance = 45, item = 12442}, }}, -- Studded Bandana
+                    { 9,0,0,0,21,22, 540, 11, {{ chance = 45, item = 12570}, }}, -- Studded Vest
+                    { 8,1,0,0,21,23, 570, 12, {{ chance = 45, item = 12698}, }}, -- Studded Gloves
+                    { 7,2,0,0,22,25, 600, 13, {{ chance = 45, item = 12826}, }}, -- Studded Trousers
+                    { 6,3,0,0,24,25, 630, 14, {{ chance = 45, item = 12954}, }}, -- Studded Boots
                 },
             },
             [xi.zone.BATALLIA_DOWNS] =
@@ -161,11 +166,11 @@ local regimeInfo = {
                 event = 266,
                 page =
                 {
-                    { 6, 0, 0, 0, 1, 6, 270, 16},
-                    { 6, 0, 0, 0, 3, 6, 285, 17},
-                    { 5, 1, 0, 0, 3, 7, 300, 18},
-                    { 4, 2, 0, 0, 3, 8, 315, 19},
-                    { 3, 4, 0, 0, 3, 8, 330, 59},
+                    { 6,0,0,0, 1, 6, 270, 16, {{ chance = 100, item = 12449}, }}, -- Brass Cap
+                    { 6,0,0,0, 3, 6, 285, 17, {{ chance = 100, item = 12577}, }}, -- Brass Harness
+                    { 5,1,0,0, 3, 7, 300, 18, {{ chance = 100, item = 12705}, }}, -- Brass Mittens
+                    { 4,2,0,0, 3, 8, 315, 19, {{ chance = 100, item = 12833}, }}, -- Brass Subligar
+                    { 3,4,0,0, 3, 8, 330, 59, {{ chance = 100, item = 12961}, }}, -- Brass Leggings
                 },
             },
             [xi.zone.SOUTH_GUSTABERG] =
@@ -173,11 +178,11 @@ local regimeInfo = {
                 event = 61,
                 page =
                 {
-                    { 6, 0, 0, 0, 1, 6, 270, 76},
-                    { 7, 0, 0, 0, 2, 5, 285, 77},
-                    { 3, 3, 0, 0, 3, 6, 300, 78},
-                    { 7, 0, 0, 0, 3, 6, 315, 79},
-                    { 5, 2, 0, 0, 4, 8, 330, 80},
+                    { 6,0,0,0, 1, 6, 270, 76, {{ chance = 100, item = 12449}, }}, -- Brass Cap
+                    { 7,0,0,0, 2, 5, 285, 77, {{ chance = 100, item = 12577}, }}, -- Brass Harness
+                    { 3,3,0,0, 3, 6, 300, 78, {{ chance = 100, item = 12705}, }}, -- Brass Mittens
+                    { 7,0,0,0, 3, 6, 315, 79, {{ chance = 100, item = 12833}, }}, -- Brass Subligar
+                    { 5,2,0,0, 4, 8, 330, 80, {{ chance = 100, item = 12961}, }}, -- Brass Leggings
                 },
             },
             [xi.zone.KONSCHTAT_HIGHLANDS] =
@@ -185,11 +190,11 @@ local regimeInfo = {
                 event = 61,
                 page =
                 {
-                    { 4, 2, 0, 0, 8, 11, 340, 81},
-                    { 4, 2, 0, 0, 9, 12, 360, 82},
-                    { 3, 3, 0, 0, 10, 12, 330, 20},
-                    { 6, 0, 0, 0, 9, 15, 380, 83},
-                    { 2, 2, 2, 0, 12, 14, 400, 84},
+                    { 4,2,0,0, 8,11, 340, 81, {{ chance = 66, item = 12455}, }}, -- Beetle Mask
+                    { 4,2,0,0, 9,12, 360, 82, {{ chance = 66, item = 12583}, }}, -- Beetle Harness
+                    { 3,3,0,0,10,12, 330, 20, {{ chance = 66, item = 12711}, }}, -- Beetle Mittens
+                    { 6,0,0,0, 9,15, 380, 83, {{ chance = 66, item = 12835}, }}, -- Beetle Subligar
+                    { 2,2,2,0,12,14, 400, 84, {{ chance = 66, item = 12967}, }}, -- Beetle Leggings
                 },
             },
             [xi.zone.PASHHOW_MARSHLANDS] =
@@ -197,11 +202,11 @@ local regimeInfo = {
                 event = 28,
                 page =
                 {
-                    { 9, 0, 0, 0, 20, 21, 540, 21},
-                    { 8, 1, 0, 0, 20, 22, 570, 22},
-                    { 7, 2, 0, 0, 21, 23, 600, 23},
-                    { 6, 3, 0, 0, 22, 25, 630, 24},
-                    { 5, 4, 1, 0, 22, 25, 660, 60},
+                    { 9,0,0,0,20,21, 540, 21, {{ chance = 45, item = 12450}, }}, -- Padded Cap
+                    { 8,1,0,0,20,22, 570, 22, {{ chance = 45, item = 12578}, }}, -- Padded Armor
+                    { 7,2,0,0,21,23, 600, 23, {{ chance = 45, item = 12706}, }}, -- Iron Mittens
+                    { 6,3,0,0,22,25, 630, 24, {{ chance = 45, item = 12836}, }}, -- Iron Subligar
+                    { 5,4,1,0,22,25, 660, 60, {{ chance = 45, item = 12962}, }}, -- Leggings
                 },
             },
             [xi.zone.ROLANBERRY_FIELDS] =
@@ -269,11 +274,11 @@ local regimeInfo = {
                 event = 52,
                 page =
                 {
-                    { 6, 0, 0, 0, 1, 5, 270, 26},
-                    { 6, 0, 0, 0, 2, 5, 285, 27},
-                    { 5, 1, 0, 0, 3, 8, 300, 28},
-                    { 4, 2, 0, 0, 4, 8, 315, 29},
-                    { 4, 2, 0, 0, 4, 8, 330, 61},
+                    { 6,0,0,0, 1, 5, 270, 26, {{ chance = 100, item = 12608}, }}, -- Tunic
+                    { 6,0,0,0, 2, 5, 285, 27, {{ chance = 100, item = 12736}, }}, -- Mitts
+                    { 5,1,0,0, 3, 8, 300, 28, {{ chance = 100, item = 12864}, }}, -- Slacks
+                    { 4,2,0,0, 4, 8, 315, 29, {{ chance = 100, item = 12992}, }}, -- Solea
+                    { 4,2,0,0, 4, 8, 330, 61, {{ chance = 100, item = 12608}, }}, -- Tunic
                 },
             },
             [xi.zone.EAST_SARUTABARUTA] =
@@ -281,11 +286,11 @@ local regimeInfo = {
                 event = 61,
                 page =
                 {
-                    { 6, 0, 0, 0, 1, 6, 270, 89},
-                    { 6, 0, 0, 0, 1, 8, 285, 90},
-                    { 6, 0, 0, 0, 2, 6, 300, 91},
-                    { 4, 2, 0, 0, 3, 6, 315, 92},
-                    { 4, 3, 0, 0, 3, 6, 330, 93},
+                    { 6,0,0,0, 1, 6, 270, 89, {{ chance = 100, item = 12608}, }}, -- Tunic
+                    { 6,0,0,0, 1, 8, 285, 90, {{ chance = 100, item = 12736}, }}, -- Mitts
+                    { 6,0,0,0, 2, 6, 300, 91, {{ chance = 100, item = 12864}, }}, -- Slacks
+                    { 4,2,0,0, 3, 6, 315, 92, {{ chance = 100, item = 12992}, }}, -- Solea
+                    { 4,3,0,0, 3, 6, 330, 93, {{ chance = 100, item = 12608}, }}, -- Tunic
                 },
             },
             [xi.zone.TAHRONGI_CANYON] =
@@ -293,11 +298,11 @@ local regimeInfo = {
                 event = 61,
                 page =
                 {
-                    { 3, 3, 0, 0, 7, 12, 330, 30},
-                    { 8, 0, 0, 0, 11, 13, 450, 31},
-                    { 4, 2, 0, 0, 7, 11, 315, 94},
-                    { 3, 3, 0, 0, 8, 12, 370, 95},
-                    { 3, 4, 0, 0, 12, 16, 475, 96},
+                    { 3,3,0,0, 7,12, 330, 30, {{ chance = 66, item = 12473}, }}, -- Poet's Circlet
+                    { 8,0,0,0,11,13, 450, 31, {{ chance = 66, item = 12601}, }}, -- Linen Robe
+                    { 4,2,0,0, 7,11, 315, 94, {{ chance = 66, item = 12729}, }}, -- Linen Cuffs
+                    { 3,3,0,0, 8,12, 370, 95, {{ chance = 66, item = 12857}, }}, -- Linen Slops
+                    { 3,4,0,0,12,16, 475, 96, {{ chance = 66, item = 12985}, }}, -- Holly Clogs
                 },
             },
             [xi.zone.BUBURIMU_PENINSULA] =
@@ -305,11 +310,16 @@ local regimeInfo = {
                 event = 51,
                 page =
                 {
-                    { 7, 1, 0, 0, 15, 19, 475, 32},
-                    { 6, 2, 0, 0, 15, 23, 500, 33},
-                    { 5, 3, 0, 0, 20, 24, 525, 34},
-                    { 4, 4, 0, 0, 21, 24, 550, 35},
-                    { 4, 3, 0, 0, 22, 27, 575, 62},
+                    { 7,1,0,0,15,19, 475, 32, {{ chance = 10, item = 15161}, { chance = 10, item = 12458},   -- Noct Beret, Soil Hachimaki
+                                               { chance = 10, item = 15163}, { chance = 10, item = 15167}}}, -- Seer's Crown, Eisenschaller
+                    { 6,2,0,0,15,23, 500, 33, {{ chance = 10, item = 14422}, { chance = 10, item = 12586},   -- Noct Doublet, Soil Gi
+                                               { chance = 10, item = 14424}, { chance = 10, item = 14431}}}, -- Seer's Tunic, Eisenbrust
+                    { 5,3,0,0,20,24, 525, 34, {{ chance = 10, item = 14854}, { chance = 10, item = 12714},   -- Noct Gloves, Soil Tekko
+                                               { chance = 10, item = 14856}, { chance = 10, item = 14860}}}, -- Seer's Mitts, Eisenhentzes
+                    { 4,4,0,0,21,24, 550, 35, {{ chance = 10, item = 14323}, { chance = 10, item = 12842},   -- Noct Brais, Soil Sitabaki
+                                               { chance = 10, item = 14325}, { chance = 10, item = 14329}}}, -- Seer's Slack, Eisendiechlings
+                    { 4,3,0,0,22,27, 575, 62, {{ chance = 10, item = 15311}, { chance = 10, item = 12970},   -- Noct Gaiters, Soil Kyahan
+                                               { chance = 10, item = 15313}, { chance = 10, item = 15317}}}, -- Seer's Pumps, Eisenschuhs
                 },
             },
             [xi.zone.MERIPHATAUD_MOUNTAINS] =
@@ -317,11 +327,11 @@ local regimeInfo = {
                 event = 46,
                 page =
                 {
-                    { 9, 0, 0, 0, 20, 21, 540, 36},
-                    { 8, 1, 0, 0, 20, 22, 570, 37},
-                    { 7, 2, 0, 0, 21, 23, 600, 38},
-                    { 6, 3, 0, 0, 22, 25, 630, 39},
-                    { 3, 5, 0, 0, 25, 27, 660, 63},
+                    { 9,0,0,0,20,21, 540, 36, {{ chance = 45, item = 12474}, }}, -- Wool Hat
+                    { 8,1,0,0,20,22, 570, 37, {{ chance = 45, item = 12602}, }}, -- Wool Robe
+                    { 7,2,0,0,21,23, 600, 38, {{ chance = 45, item = 12730}, }}, -- Wool Cuffs
+                    { 6,3,0,0,22,25, 630, 39, {{ chance = 45, item = 12858}, }}, -- Wool Slops
+                    { 3,5,0,0,25,27, 660, 63, {{ chance = 45, item = 12858}, }}, -- Chestnut Sabots
                 },
             },
             [xi.zone.SAUROMUGUE_CHAMPAIGN] =
@@ -1453,6 +1463,23 @@ xi.regime.checkRegime = function(player, mob, regimeId, index, regimeType)
 
     player:addExp(reward)
 
+    local item_rewards = page[9]
+    if item_rewards ~= nil then
+        for _, item in pairs(item_rewards) do
+            if math.random(1,100) <= item.chance then
+                player:PrintToPlayer( "You have received a page item!", 0xE );
+                local ID = zones[player:getZoneID()]
+                if (player:getFreeSlotsCount() == 0) then
+                    player:messageSpecial( ID.text.ITEM_CANNOT_BE_OBTAINED, item.item );
+                else
+                    -- Give the GM the item...
+                    player:addItem( item.item );
+                    player:messageSpecial( ID.text.ITEM_OBTAINED, item.item );
+                end
+            end
+        end
+    end
+    
     -- repeating regimes
     if player:getCharVar("[regime]repeat") == 1 then
         for i = 1, 4 do
