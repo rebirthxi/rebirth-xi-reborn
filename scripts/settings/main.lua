@@ -34,7 +34,7 @@ xi.settings =
     GOV_REWARD_ALLIANCE   = 0, -- Allow Grounds of Valor rewards while being a member of an alliance. (default retail behavior: 1)
 
     -- Records of Eminence
-    ENABLE_ROE            = 1,
+    ENABLE_ROE            = 0,
     ENABLE_ROE_TIMED      = 1, -- Enable 4-hour timed records
     ENABLE_EXCHANGE_LIMIT = 1, -- Enable Maximum limit of sparks spent per Week (default retail behavior: 1)
 
