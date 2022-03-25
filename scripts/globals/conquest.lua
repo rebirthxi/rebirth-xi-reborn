@@ -1315,8 +1315,18 @@ xi.conquest.teleporterOnEventUpdate = function(player, csid, option, teleporterE
     end
 end
 
+local supplyKIs = {75,76,77,78,79,80,81,82,83,84,85,86,87,};
+
 xi.conquest.teleporterOnEventFinish = function(player, csid, option, teleporterEvent)
     if csid == teleporterEvent then
+        for _, v in ipairs(supplyKIs) do
+            if player:hasKeyItem(v) then
+                player:delKeyItem(v)
+                player:setCharVar("supplyQuest_started", 0)
+                player:setCharVar("supplyQuest_region", 0)
+                player:setCharVar("supplyQuest_fresh", 0)
+            end
+        end
         -- TELEPORT WITH GIL
         if option >= 5 and option <= 23 then
             local region = option - 5

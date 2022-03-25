@@ -143,6 +143,8 @@ xi.survivalGuide.onEventUpdate = function(player, csid, option)
     teleportMenuUpdate(player, option)
 end
 
+local supplyKIs = {75,76,77,78,79,80,81,82,83,84,85,86,87,};
+
 xi.survivalGuide.onEventFinish = function(player, eventId, option)
     if cutsceneID == eventId and bit.band(option, 0xFF) == optionMap.TELEPORT  then
         local selectedMenuId = bit.rshift(option, 16)
@@ -179,6 +181,14 @@ xi.survivalGuide.onEventFinish = function(player, eventId, option)
                 end
 
                 if canTeleport then
+                    for _, v in ipairs(supplyKIs) do
+                        if player:hasKeyItem(v) then
+                            player:delKeyItem(v)
+                            player:setCharVar("supplyQuest_started", 0)
+                            player:setCharVar("supplyQuest_region", 0)
+                            player:setCharVar("supplyQuest_fresh", 0)
+                        end
+                    end
                     player:setPos(guide.posX, guide.posY, guide.posZ, guide.posRot, guide.zoneId)
                 end
             end
