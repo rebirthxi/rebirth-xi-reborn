@@ -13,5 +13,32 @@ xi.qr_crafting.isRightRecipe = function(player, ingredients)
         print("Invalid recipe :(")
     end
 
-    return false
+    return true
+end
+
+xi.qr_crafting.synth_results = {
+    SYNTHESIS_FAIL    = 0,
+    SYNTHESIS_SUCCESS = 1,
+    SYNTHESIS_HQ      = 2,
+    SYNTHESIS_HQ2     = 3,
+    SYNTHESIS_HQ3     = 4
+}
+
+xi.qr_crafting.calcSynthResult = function(player, ingredients)
+    print("lua -> calcSynthResults")
+    return xi.qr_crafting.synth_results.SYNTHESIS_SUCCESS
+end
+
+xi.qr_crafting.doSynthFail = function(player, break_rate)
+    print("lua -> doSynthFail")
+    return 0.0
+end
+
+xi.qr_crafting.doSynthResult = function(player)
+    print("lua -> doSynthResult")
+    return 4099, 1
+end
+
+xi.qr_crafting.doSynthSkillUp = function(player, ingredients)
+    print("lua -> doSynthSkillUp")
 end

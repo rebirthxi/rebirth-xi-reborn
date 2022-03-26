@@ -316,7 +316,14 @@ namespace luautils
     uint16 SelectDailyItem(CLuaBaseEntity* PLuaBaseEntity, uint8 dial);
 
     // QR custom lua crafting
-    bool luaIsRightRecipe(CCharEntity* PChar);
+    bool isRightRecipe(CCharEntity* PChar);
+    void setIsLuaRecipe(CCharEntity* PChar);
+    uint8 calcSynthResult(CCharEntity* PChar);
+    double doSynthFail(CCharEntity* PChar, double current_break_rate);
+    std::tuple<uint16, uint8> doSynthResult(CCharEntity* PChar);
+    void  doSynthSkillUp(CCharEntity* PChar);
+    bool isLuaRecipe(CCharEntity* PChar);
+    sol::table getSynthIngredients(CCharEntity* PChar);
 }; // namespace luautils
 
 #endif // _LUAUTILS_H -

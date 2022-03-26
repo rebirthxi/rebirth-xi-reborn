@@ -122,8 +122,11 @@ namespace synthutils
 
         // check if it's a lua craft
         // set something in the container to indicate this
-        if (luautils::luaIsRightRecipe(PChar))
-            ShowError("SUCCESS!");
+        if (luautils::isRightRecipe(PChar))
+        {
+            luautils::setIsLuaRecipe(PChar);
+            return true;
+        }
 
         PChar->pushPacket(new CSynthMessagePacket(PChar, SYNTH_BADRECIPE));
         return false;
@@ -227,6 +230,9 @@ namespace synthutils
 
     uint8 calcSynthResult(CCharEntity* PChar)
     {
+        if (luautils::isLuaRecipe(PChar))
+            return luautils::calcSynthResult(PChar);
+
         uint8 result      = SYNTHESIS_SUCCESS; // We assume by default that we succed
         uint8 hqtier      = 0;
         uint8 finalhqtier = 4;
@@ -429,6 +435,12 @@ namespace synthutils
 
     int32 doSynthSkillUp(CCharEntity* PChar)
     {
+        if (luautils::isLuaRecipe(PChar))
+        {
+            luautils::doSynthSkillUp(PChar);
+            return 0;
+        }
+
         for (uint8 skillID = SKILL_WOODWORKING; skillID <= SKILL_COOKING; ++skillID) // Check for all skills involved in a recipe, to check for skill up
         {
             // Section 1: Checks
@@ -676,6 +688,9 @@ namespace synthutils
         // see: http://wiki.ffo.jp/html/18416.html
         lostItem += (double)modSynthFailRate * 0.01;
 
+        if (luautils::isLuaRecipe(PChar))
+            lostItem = luautils::doSynthFail(PChar, 0);
+
         invSlotID = PChar->CraftContainer->getInvSlotID(1);
 
         for (uint8 slotID = 1; slotID <= 8; ++slotID)
@@ -909,6 +924,8 @@ namespace synthutils
 
             invSlotID = PChar->CraftContainer->getInvSlotID(1);
 
+            // TODO: need to deal with this... what if we don't want to remove the item?
+            //       maybe take the itemID and except it in the list?
             for (uint8 slotID = 1; slotID <= 8; ++slotID)
             {
                 nextSlotID = (slotID != 8 ? PChar->CraftContainer->getInvSlotID(slotID + 1) : 0);
@@ -929,58 +946,81 @@ namespace synthutils
                 }
             }
 
-            // TODO: switch to the new AddItem function so as not to update the signature
-
-            invSlotID = charutils::AddItem(PChar, LOC_INVENTORY, itemID, quantity);
-
-            CItem* PItem = PChar->getStorage(LOC_INVENTORY)->GetItem(invSlotID);
-
-            if (PItem != nullptr)
+            if (luautils::isLuaRecipe(PChar))
             {
-                if ((PItem->getFlag() & ITEM_FLAG_INSCRIBABLE) && (PChar->CraftContainer->getItemID(0) > 0x1080))
+                const auto [lua_itemID, lua_quantity] = luautils::doSynthResult(PChar);
+
+                if (lua_itemID == 0 || lua_quantity == 0)
                 {
-                    int8 encodedSignature[12];
-                    PItem->setSignature(EncodeStringSignature((int8*)PChar->name.c_str(), encodedSignature));
-
-                    char signature_esc[31]; // max charname: 15 chars * 2 + 1
-                    Sql_EscapeStringLen(SqlHandle, signature_esc, PChar->name.c_str(), strlen(PChar->name.c_str()));
-
-                    char fmtQuery[] = "UPDATE char_inventory SET signature = '%s' WHERE charid = %u AND location = 0 AND slot = %u;\0";
-
-                    Sql_Query(SqlHandle, fmtQuery, signature_esc, PChar->id, invSlotID);
+                    return 0;
                 }
-                PChar->pushPacket(new CInventoryItemPacket(PItem, LOC_INVENTORY, invSlotID));
-            }
 
-            PChar->pushPacket(new CInventoryFinishPacket());
-            if (PChar->loc.zone->GetID() != 255 && PChar->loc.zone->GetID() != 0)
-            {
-                PChar->loc.zone->PushPacket(PChar, CHAR_INRANGE, new CSynthResultMessagePacket(PChar, SYNTH_SUCCESS, itemID, quantity));
-                PChar->pushPacket(new CSynthMessagePacket(PChar, SYNTH_SUCCESS, itemID, quantity));
+                PChar->pushPacket(new CInventoryFinishPacket());
+                if (PChar->loc.zone->GetID() != 255 && PChar->loc.zone->GetID() != 0)
+                {
+                    PChar->loc.zone->PushPacket(PChar, CHAR_INRANGE, new CSynthResultMessagePacket(PChar, SYNTH_SUCCESS, lua_itemID, lua_quantity));
+                    PChar->pushPacket(new CSynthMessagePacket(PChar, SYNTH_SUCCESS, lua_itemID, lua_quantity));
+                }
+                else
+                {
+                    PChar->pushPacket(new CSynthMessagePacket(PChar, SYNTH_SUCCESS, lua_itemID, lua_quantity));
+                }
             }
             else
             {
-                PChar->pushPacket(new CSynthMessagePacket(PChar, SYNTH_SUCCESS, itemID, quantity));
-            }
+                // TODO: switch to the new AddItem function so as not to update the signature
 
-            // Calculate what craft this recipe "belongs" to based on highest skill required
-            uint32 skillType = 0;
-            uint32 highestSkill = 0;
-            for (uint8 skillID = SKILL_WOODWORKING; skillID <= SKILL_COOKING; ++skillID)
-            {
-                uint8 skillRequired = PChar->CraftContainer->getQuantity(skillID - 40);
-                if (skillRequired > highestSkill)
+                invSlotID = charutils::AddItem(PChar, LOC_INVENTORY, itemID, quantity);
+
+                CItem* PItem = PChar->getStorage(LOC_INVENTORY)->GetItem(invSlotID);
+
+                if (PItem != nullptr)
                 {
-                    skillType = skillID;
-                    highestSkill = skillRequired;
+                    if ((PItem->getFlag() & ITEM_FLAG_INSCRIBABLE) && (PChar->CraftContainer->getItemID(0) > 0x1080))
+                    {
+                        int8 encodedSignature[12];
+                        PItem->setSignature(EncodeStringSignature((int8*)PChar->name.c_str(), encodedSignature));
+
+                        char signature_esc[31]; // max charname: 15 chars * 2 + 1
+                        Sql_EscapeStringLen(SqlHandle, signature_esc, PChar->name.c_str(), strlen(PChar->name.c_str()));
+
+                        char fmtQuery[] = "UPDATE char_inventory SET signature = '%s' WHERE charid = %u AND location = 0 AND slot = %u;\0";
+
+                        Sql_Query(SqlHandle, fmtQuery, signature_esc, PChar->id, invSlotID);
+                    }
+                    PChar->pushPacket(new CInventoryItemPacket(PItem, LOC_INVENTORY, invSlotID));
                 }
+
+                PChar->pushPacket(new CInventoryFinishPacket());
+                if (PChar->loc.zone->GetID() != 255 && PChar->loc.zone->GetID() != 0)
+                {
+                    PChar->loc.zone->PushPacket(PChar, CHAR_INRANGE, new CSynthResultMessagePacket(PChar, SYNTH_SUCCESS, itemID, quantity));
+                    PChar->pushPacket(new CSynthMessagePacket(PChar, SYNTH_SUCCESS, itemID, quantity));
+                }
+                else
+                {
+                    PChar->pushPacket(new CSynthMessagePacket(PChar, SYNTH_SUCCESS, itemID, quantity));
+                }
+
+                // Calculate what craft this recipe "belongs" to based on highest skill required
+                uint32 skillType    = 0;
+                uint32 highestSkill = 0;
+                for (uint8 skillID = SKILL_WOODWORKING; skillID <= SKILL_COOKING; ++skillID)
+                {
+                    uint8 skillRequired = PChar->CraftContainer->getQuantity(skillID - 40);
+                    if (skillRequired > highestSkill)
+                    {
+                        skillType    = skillID;
+                        highestSkill = skillRequired;
+                    }
+                }
+
+                RoeDatagram     roeItemId    = RoeDatagram("itemid", itemID);
+                RoeDatagram     roeSkillType = RoeDatagram("skillType", skillType);
+                RoeDatagramList roeSynthResult({ roeItemId, roeSkillType });
+
+                roeutils::event(ROE_EVENT::ROE_SYNTHSUCCESS, PChar, roeSynthResult);
             }
-
-            RoeDatagram roeItemId = RoeDatagram("itemid", itemID);
-            RoeDatagram roeSkillType = RoeDatagram("skillType", skillType);
-            RoeDatagramList roeSynthResult({roeItemId, roeSkillType});
-
-            roeutils::event(ROE_EVENT::ROE_SYNTHSUCCESS, PChar, roeSynthResult);
         }
 
         doSynthSkillUp(PChar);
