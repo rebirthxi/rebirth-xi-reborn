@@ -120,6 +120,11 @@ namespace synthutils
             }
         }
 
+        // check if it's a lua craft
+        // set something in the container to indicate this
+        if (luautils::luaIsRightRecipe(PChar))
+            ShowError("SUCCESS!");
+
         PChar->pushPacket(new CSynthMessagePacket(PChar, SYNTH_BADRECIPE));
         return false;
     }
@@ -231,6 +236,8 @@ namespace synthutils
         double random    = 0;
         double success   = 0;
         double synthDiff = 0;
+
+        // check if lua craft, if so, pass to lua function for handling result
 
         // Section 1: Break handling
         for (uint8 skillID = SKILL_WOODWORKING; skillID <= SKILL_COOKING; ++skillID)

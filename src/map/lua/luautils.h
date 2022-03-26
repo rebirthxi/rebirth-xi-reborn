@@ -314,6 +314,9 @@ namespace luautils
     void OnFurnitureRemoved(CCharEntity* PChar, CItemFurnishing* itemId);
 
     uint16 SelectDailyItem(CLuaBaseEntity* PLuaBaseEntity, uint8 dial);
+
+    // QR custom lua crafting
+    bool luaIsRightRecipe(CCharEntity* PChar);
 }; // namespace luautils
 
 #endif // _LUAUTILS_H -

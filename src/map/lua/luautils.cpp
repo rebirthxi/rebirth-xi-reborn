@@ -90,6 +90,10 @@
 #include "../vana_time.h"
 #include "../weapon_skill.h"
 
+// QR Custom Include
+#include "../trade_container.h"
+#include "../item_container.h"
+
 namespace luautils
 {
     sol::state lua;
@@ -4696,4 +4700,46 @@ namespace luautils
         CCharEntity* player = dynamic_cast<CCharEntity*>(PLuaBaseEntity->GetBaseEntity());
         return daily::SelectItem(player, dial);
     }
+
+    bool luaIsRightRecipe(CCharEntity* PChar)
+    {
+        auto isRightRecipe = lua["xi"]["qr_crafting"]["isRightRecipe"];
+        if (!isRightRecipe.valid())
+        {
+            ShowError("luautils::isRightRecipe: qr_crafting or isRightRecipe is not valid.");
+            return false;
+        }
+
+        auto ingredients = lua.create_table();
+        auto* inventory = PChar->getStorage(CONTAINER_ID::LOC_INVENTORY);
+
+        ingredients["crystal"] = PChar->CraftContainer->getItemID(0);
+        for (uint8 i = 1; i < 9; i++)
+        {
+            uint16 item_id = PChar->CraftContainer->getItemID(i);
+            if (item_id == 0)
+                continue;
+            auto ingredient = lua.create_table();
+
+            ingredient["item"] = CLuaItem(inventory->GetItem(PChar->CraftContainer->getInvSlotID(i)));
+            ingredient["quantity"] = PChar->CraftContainer->getQuantity(i);
+            ingredients.add(ingredient);
+        }
+
+        auto result = isRightRecipe(CLuaBaseEntity(PChar), ingredients);
+        if (!result.valid())
+        {
+            sol::error err = result;
+            ShowError("luautils::isRightRecipe: %s", err.what());
+            return false;
+        }
+
+        if (result.get_type(0) != sol::type::boolean)
+        {
+            ShowError("luautils::IsRightRecipe: result return is not boolean.");
+            return false;
+        }
+        return result.get<bool>(0);
+    }
+
 }; // namespace luautils
