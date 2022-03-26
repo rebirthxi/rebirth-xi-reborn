@@ -3280,11 +3280,10 @@ bool CLuaBaseEntity::addItem(sol::variadic_args va)
                     if (augmentsSrcObj.is<sol::table>())
                     {
                         auto augmentsSrcTable = augmentsSrcObj.as<sol::table>();
-                        for (auto& entryPair : augmentsSrcTable)
+                        for (const auto& entryPair : augmentsSrcTable)
                         {
-                            auto pair = entryPair.second.as<sol::table>();
-                            std::string key = pair[0];
-                            uint16 val = pair[1];
+                            std::string key = entryPair.first.as<std::string>();
+                            uint16 val = entryPair.second.as<uint16>();
                             if( key == "augment_item_src" ) PItem->aug_src.augment_item_src = val;
                             else if( key == "aug0_src" )    PItem->aug_src.aug0_src = val;
                             else if( key == "aug0_min" )    PItem->aug_src.aug0_min = val;
