@@ -2,8 +2,10 @@
 --- QR Augments
 --- * Lowbie Augments
 -----------------------------------
+require("scripts/globals/utils")
 require("scripts/globals/zone")
-
+require("scripts/globals/items")
+-----------------------------------
 xi.augments = xi.augments or {}
 
 xi.augments.sources = xi.augments.sources or {
@@ -159,7 +161,74 @@ xi.augments.page_pools = xi.augments.page_pools or {
 xi.augments.augment_items = xi.augments.augment_items or {
     LOWBIE_AUG = 16485,
     MID_AUG    = 16481,
+    COMBINER   = 9847,
 }
+
+xi.augments.recipes = xi.augments.recipes or {
+    is_augment_recipe = {
+        -- Bonding an Augment to an Item
+        [xi.items.EARTH_CRYSTAL] = function(ingredients)
+
+            -- All bonding recipes are bonder + aug + item with earth crystal
+            if #ingredients ~= 3 then
+                print("Wrong number of ingredients")
+                return false
+            end
+
+            local combiner = false
+            local lowbie   = false
+            local item
+
+            -- figure out what our three items are
+            -- ingredient should be {item=LuaItem
+            for _, ingredient in ipairs(ingredients) do
+                local item_id = ingredient.item:getID()
+                if item_id == xi.augments.augment_items.COMBINER then
+                    combiner = true
+                elseif item_id == xi.augments.augment_items.LOWBIE_AUG then
+                    lowbie = true
+                else
+                    item = ingredient.item
+                end
+            end
+
+            -- recipe needs at least these two to get further
+            if not combiner or not lowbie then
+                print("Combiner or lowbie")
+                return false
+            end
+
+            if not xi.augments.itemIsAugmentable(item) then
+                return false
+            end
+
+            return true
+        end
+    }
+}
+
+xi.augments.itemIsAugmentable = function(item)
+    -- Make sure it's not already augmented
+    if item:isSubType(4) then
+        print("Already augmented")
+        return false
+    end
+
+    -- Make sure it is armor or weapon
+    if not item:isType(0x08) and not item:isType(0x10) then
+        print("Not weapon or armor")
+        return false
+    end
+
+    -- Make sure it is not RARE or EX
+    local flags = item:getFlag()
+    if bit.band(flags, 16384) == 16384 or bit.band(flags, 32768) == 32768 then
+        print("It is rare or EX")
+        return false
+    end
+
+    return true
+end
 
 --{chances = {100}, pool = {1}}
 function xi.augments.RollAugments(augment_entry)
