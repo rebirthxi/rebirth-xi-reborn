@@ -90,6 +90,12 @@
 #include "../vana_time.h"
 #include "../weapon_skill.h"
 
+// QR Custom Include
+#include "../trade_container.h"
+#include "../item_container.h"
+#include "../packets/synth_animation.h"
+#include "../utils/synthutils.h"
+
 namespace luautils
 {
     sol::state lua;
@@ -4791,5 +4797,184 @@ namespace luautils
         }
 
         customMenuContext.erase(PChar->id);
+    }
+
+    bool isRightRecipe(CCharEntity* PChar)
+    {
+        auto luaIsRightRecipe = lua["xi"]["qr_crafting"]["isRightRecipe"];
+        if (!luaIsRightRecipe.valid())
+        {
+            ShowError("luautils::isRightRecipe: qr_crafting or isRightRecipe is not valid.");
+            return false;
+        }
+
+        auto ingredients = getSynthIngredients(PChar);
+
+        auto result = luaIsRightRecipe(CLuaBaseEntity(PChar), ingredients);
+        if (!result.valid())
+        {
+            sol::error err = result;
+            ShowError("luautils::isRightRecipe: %s", err.what());
+            return false;
+        }
+
+        if (result.get_type(0) != sol::type::boolean)
+        {
+            ShowError("luautils::isRightRecipe: result return is not boolean.");
+            return false;
+        }
+        return result.get<bool>(0);
+    }
+
+    void setIsLuaRecipe(CCharEntity* PChar)
+    {
+        PChar->CraftContainer->setItem(9, 0, 0xFF, 0);
+    }
+
+    uint8 calcSynthResult(CCharEntity* PChar)
+    {
+        auto luaCalcSynthResult = lua["xi"]["qr_crafting"]["calcSynthResult"];
+        if (!luaCalcSynthResult.valid())
+        {
+            ShowError("luautils::calcSynthResult: qr_crafting or calcSynthResult is not valid.");
+            return false;
+        }
+
+        auto ingredients = getSynthIngredients(PChar);
+
+        auto result = luaCalcSynthResult(CLuaBaseEntity(PChar), ingredients);
+        if (!result.valid())
+        {
+            sol::error err = result;
+            ShowError("luautils::calcSynthResults: %s", err.what());
+            return false;
+        }
+
+        if (result.get_type(0) != sol::type::number)
+        {
+            ShowError("luautils::calcSynthResults: result return is not a number.");
+            return false;
+        }
+
+        auto success = result.get<uint8>(0);
+        PChar->CraftContainer->setQuantity(0, success);
+
+        switch (success)
+        {
+            case synthutils::SYNTHESIS_FAIL:
+                success = RESULT_FAIL;
+                break;
+            case synthutils::SYNTHESIS_SUCCESS:
+                success = RESULT_SUCCESS;
+                break;
+            case synthutils::SYNTHESIS_HQ:
+                success = RESULT_HQ;
+                break;
+            case synthutils::SYNTHESIS_HQ2:
+                success = RESULT_HQ;
+                break;
+            case synthutils::SYNTHESIS_HQ3:
+                success = RESULT_HQ;
+                break;
+        }
+
+        return success;
+    }
+
+    double doSynthFail(CCharEntity* PChar, double current_break_rate)
+    {
+        auto luaDoSynthFail = lua["xi"]["qr_crafting"]["doSynthFail"];
+        if (!luaDoSynthFail.valid())
+        {
+            ShowError("luautils::doSynthFail: qr_crafting or doSynthFail is not valid.");
+            return current_break_rate;
+        }
+
+        auto result = luaDoSynthFail(CLuaBaseEntity(PChar));
+        if (!result.valid())
+        {
+            sol::error err = result;
+            ShowError("luautils::doSynthFail: %s", err.what());
+            return current_break_rate;
+        }
+
+        if (result.get_type(0) != sol::type::number)
+        {
+            ShowError("luautils::doSynthFail: result return is not a number.");
+            return current_break_rate;
+        }
+
+        return result.get<double>(0);
+    }
+
+    std::tuple<uint16, uint8, bool> doSynthResult(CCharEntity* PChar)
+    {
+        auto luaDoSynthResult = lua["xi"]["qr_crafting"]["doSynthResult"];
+        if (!luaDoSynthResult.valid())
+        {
+            ShowError("luautils::doSynthResult: qr_crafting or doSynthResult is not valid.");
+            return {0, 0, false};
+        }
+
+        auto ingredients = getSynthIngredients(PChar);
+
+        auto result = luaDoSynthResult(CLuaBaseEntity(PChar), ingredients);
+        if (!result.valid())
+        {
+            sol::error err = result;
+            ShowError("luautils::doSynthResults: %s", err.what());
+            return {0, 0, false};
+        }
+
+        if (result.get_type(0) != sol::type::number)
+        {
+            ShowError("luautils::doSynthResults: result return is not a number.");
+            return {0, 0, false};
+        }
+
+        return {result.get<uint16>(0), result.get<uint8>(1), result.get<bool>(2)};
+    }
+
+    void doSynthSkillUp(CCharEntity* PChar)
+    {
+        auto luaDoSynthSkillUp = lua["xi"]["qr_crafting"]["doSynthSkillUp"];
+        if (!luaDoSynthSkillUp.valid())
+        {
+            ShowError("luautils::doSynthFail: qr_crafting or doSynthSkillUp is not valid.");
+            return;
+        }
+
+        auto result = luaDoSynthSkillUp(CLuaBaseEntity(PChar));
+        if (!result.valid())
+        {
+            sol::error err = result;
+            ShowError("luautils::doSynthSkillUp: %s", err.what());
+            return;
+        }
+    }
+
+    bool isLuaRecipe(CCharEntity* PChar)
+    {
+        return PChar->CraftContainer->getItemID(9) == 0;
+    }
+
+    sol::table getSynthIngredients(CCharEntity* PChar)
+    {
+        auto ingredients = lua.create_table();
+        auto* inventory = PChar->getStorage(LOC_INVENTORY);
+
+        ingredients["crystal"] = PChar->CraftContainer->getItemID(0);
+        for (uint8 i = 1; i < 9; i++)
+        {
+            uint16 item_id = PChar->CraftContainer->getItemID(i);
+            if (item_id == 0)
+                continue;
+            auto ingredient = lua.create_table();
+
+            ingredient["item"] = CLuaItem(inventory->GetItem(PChar->CraftContainer->getInvSlotID(i)));
+            ingredient["quantity"] = PChar->CraftContainer->getQuantity(i);
+            ingredients.add(ingredient);
+        }
+        return ingredients;
     }
 }; // namespace luautils

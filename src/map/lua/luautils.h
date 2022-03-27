@@ -319,6 +319,16 @@ namespace luautils
     auto SetCustomMenuContext(CCharEntity* PChar, sol::table table) -> std::string;
     bool HasCustomMenuContext(CCharEntity* PChar);
     void HandleCustomMenu(CCharEntity* PChar, std::string selection);
+
+    // QR custom lua crafting
+    bool isRightRecipe(CCharEntity* PChar);
+    void setIsLuaRecipe(CCharEntity* PChar);
+    uint8 calcSynthResult(CCharEntity* PChar);
+    double doSynthFail(CCharEntity* PChar, double current_break_rate);
+    std::tuple<uint16, uint8, bool> doSynthResult(CCharEntity* PChar);
+    void  doSynthSkillUp(CCharEntity* PChar);
+    bool isLuaRecipe(CCharEntity* PChar);
+    sol::table getSynthIngredients(CCharEntity* PChar);
 }; // namespace luautils
 
 #endif // _LUAUTILS_H -
