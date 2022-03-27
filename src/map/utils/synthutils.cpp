@@ -926,33 +926,37 @@ namespace synthutils
 
             // TODO: need to deal with this... what if we don't want to remove the item?
             //       maybe take the itemID and except it in the list?
-            for (uint8 slotID = 1; slotID <= 8; ++slotID)
-            {
-                nextSlotID = (slotID != 8 ? PChar->CraftContainer->getInvSlotID(slotID + 1) : 0);
-                removeCount++;
-
-                if (invSlotID != nextSlotID)
-                {
-                    if (invSlotID != 0xFF)
-                    {
-                        auto* PItem = PChar->getStorage(LOC_INVENTORY)->GetItem(invSlotID);
-                        PItem->setSubType(ITEM_UNLOCKED);
-                        PItem->setReserve(PItem->getReserve() - removeCount);
-                        charutils::UpdateItem(PChar, LOC_INVENTORY, invSlotID, -(int32)removeCount);
-                    }
-                    invSlotID   = nextSlotID;
-                    nextSlotID  = 0;
-                    removeCount = 0;
-                }
-            }
 
             if (luautils::isLuaRecipe(PChar))
             {
-                const auto [lua_itemID, lua_quantity] = luautils::doSynthResult(PChar);
+                const auto [lua_itemID, lua_quantity, remove] = luautils::doSynthResult(PChar);
 
                 if (lua_itemID == 0 || lua_quantity == 0)
                 {
                     return 0;
+                }
+
+                for (uint8 slotID = 1; slotID <= 8; ++slotID)
+                {
+                    nextSlotID = (slotID != 8 ? PChar->CraftContainer->getInvSlotID(slotID + 1) : 0);
+                    removeCount++;
+
+                    if (invSlotID != nextSlotID)
+                    {
+                        if (invSlotID != 0xFF)
+                        {
+                            auto* PItem = PChar->getStorage(LOC_INVENTORY)->GetItem(invSlotID);
+                            PItem->setSubType(ITEM_UNLOCKED);
+                            PItem->setReserve(PItem->getReserve() - removeCount);
+                            if (remove || PItem->getID() != lua_itemID)
+                                charutils::UpdateItem(PChar, LOC_INVENTORY, invSlotID, -(int32)removeCount);
+                            else
+                                PChar->pushPacket(new CInventoryAssignPacket(PItem, INV_NORMAL));
+                        }
+                        invSlotID   = nextSlotID;
+                        nextSlotID  = 0;
+                        removeCount = 0;
+                    }
                 }
 
                 PChar->pushPacket(new CInventoryFinishPacket());
@@ -968,6 +972,26 @@ namespace synthutils
             }
             else
             {
+                for (uint8 slotID = 1; slotID <= 8; ++slotID)
+                {
+                    nextSlotID = (slotID != 8 ? PChar->CraftContainer->getInvSlotID(slotID + 1) : 0);
+                    removeCount++;
+
+                    if (invSlotID != nextSlotID)
+                    {
+                        if (invSlotID != 0xFF)
+                        {
+                            auto* PItem = PChar->getStorage(LOC_INVENTORY)->GetItem(invSlotID);
+                            PItem->setSubType(ITEM_UNLOCKED);
+                            PItem->setReserve(PItem->getReserve() - removeCount);
+                            charutils::UpdateItem(PChar, LOC_INVENTORY, invSlotID, -(int32)removeCount);
+                        }
+                        invSlotID   = nextSlotID;
+                        nextSlotID  = 0;
+                        removeCount = 0;
+                    }
+                }
+
                 // TODO: switch to the new AddItem function so as not to update the signature
 
                 invSlotID = charutils::AddItem(PChar, LOC_INVENTORY, itemID, quantity);

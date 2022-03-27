@@ -26,7 +26,7 @@ xi.qr_crafting.synth_results = {
 
 xi.qr_crafting.calcSynthResult = function(player, ingredients)
     print("lua -> calcSynthResults")
-    return xi.qr_crafting.synth_results.SYNTHESIS_SUCCESS
+    return xi.qr_crafting.synth_results.SYNTHESIS_FAIL
 end
 
 xi.qr_crafting.doSynthFail = function(player, break_rate)
@@ -34,9 +34,9 @@ xi.qr_crafting.doSynthFail = function(player, break_rate)
     return 0.0
 end
 
-xi.qr_crafting.doSynthResult = function(player)
+xi.qr_crafting.doSynthResult = function(player, ingredients)
     print("lua -> doSynthResult")
-    return 4099, 1
+    return 9847, 1, true
 end
 
 xi.qr_crafting.doSynthSkillUp = function(player, ingredients)

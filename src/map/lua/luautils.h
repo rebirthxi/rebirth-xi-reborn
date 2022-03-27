@@ -320,7 +320,7 @@ namespace luautils
     void setIsLuaRecipe(CCharEntity* PChar);
     uint8 calcSynthResult(CCharEntity* PChar);
     double doSynthFail(CCharEntity* PChar, double current_break_rate);
-    std::tuple<uint16, uint8> doSynthResult(CCharEntity* PChar);
+    std::tuple<uint16, uint8, bool> doSynthResult(CCharEntity* PChar);
     void  doSynthSkillUp(CCharEntity* PChar);
     bool isLuaRecipe(CCharEntity* PChar);
     sol::table getSynthIngredients(CCharEntity* PChar);

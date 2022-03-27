@@ -4811,30 +4811,32 @@ namespace luautils
         return result.get<double>(0);
     }
 
-    std::tuple<uint16, uint8> doSynthResult(CCharEntity* PChar)
+    std::tuple<uint16, uint8, bool> doSynthResult(CCharEntity* PChar)
     {
         auto luaDoSynthResult = lua["xi"]["qr_crafting"]["doSynthResult"];
         if (!luaDoSynthResult.valid())
         {
             ShowError("luautils::doSynthResult: qr_crafting or doSynthResult is not valid.");
-            return {0, 0};
+            return {0, 0, false};
         }
 
-        auto result = luaDoSynthResult(CLuaBaseEntity(PChar));
+        auto ingredients = getSynthIngredients(PChar);
+
+        auto result = luaDoSynthResult(CLuaBaseEntity(PChar), ingredients);
         if (!result.valid())
         {
             sol::error err = result;
             ShowError("luautils::doSynthResults: %s", err.what());
-            return {0, 0};
+            return {0, 0, false};
         }
 
         if (result.get_type(0) != sol::type::number)
         {
             ShowError("luautils::doSynthResults: result return is not a number.");
-            return {0, 0};
+            return {0, 0, false};
         }
 
-        return {result.get<uint16>(0), result.get<uint8>(1)};
+        return {result.get<uint16>(0), result.get<uint8>(1), result.get<bool>(2)};
     }
 
     void doSynthSkillUp(CCharEntity* PChar)
