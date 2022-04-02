@@ -1,34 +1,6 @@
 version: '3.9'
 
 services:
-  xidb:
-    image: xi-db:main
-    networks:
-      xi-network:
-        ipv4_address: 192.168.10.5
-    expose:
-      - "3306"
-    volumes:
-      - ${DB_MOUNT}:/var/lib/mysql
-    restart: unless-stopped
-
-  autobackup-xidb:
-    image: selim13/automysqlbackup
-    volumes:
-      - ${DB_BACKUP}:/backup
-    environment:
-      DBHOST: "xidb"
-      DBPORT: 3306
-      DBNAMES: "all"
-      USERNAME: "${DB_USER}"
-      PASSWORD: "${DB_USER_PASSWD}"
-      CRON_SCHEDULE: "0 0 * * *"
-      CREATE_DATABASE: "no"
-    networks:
-      xi-network:
-        ipv4_address: 192.168.10.4
-    restart: unless-stopped
-
   xiconnect:
     image: xi-run-time:main
     environment:
@@ -52,7 +24,7 @@ services:
     tty: true
     restart: unless-stopped
     command: >
-      bash -c "sleep 15; ./topaz_connect"
+      bash -c "./topaz_connect"
   xigame:
     image: xi-run-time:main
     environment:
@@ -71,7 +43,7 @@ services:
     tty: true
     restart: unless-stopped
     command: >
-      bash -c "sleep 15; ./topaz_game"
+      bash -c "./topaz_game"
   xisearch:
     image: xi-run-time:main
     environment:
@@ -87,7 +59,7 @@ services:
         ipv4_address: 192.168.10.3
     restart: unless-stopped
     command: >
-      bash -c "sleep 15; ./topaz_search"
+      bash -c "./topaz_search"
 
 networks:
   xi-network:

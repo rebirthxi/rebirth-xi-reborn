@@ -81,11 +81,11 @@ def main():
 
 def create_mysql_db_and_cursor():
     db = connect(
-        host=os.getenv('XI_DB_HOST') or "",
-        port=os.getenv('XI_DB_PORT') or 3306,
-        user=os.getenv('XI_DB_USER') or "",
-        passwd=os.getenv('XI_DB_USER_PASSWD') or "",
-        db=os.getenv('XI_DB_NAME') or "",
+        host=os.getenv('DB_HOST') or "localhost",
+        port=3306,
+        user=os.getenv('DB_USER') or "",
+        passwd=os.getenv('DB_USER_PASSWD') or "",
+        db=os.getenv('DB_NAME') or "",
         use_pure=True
     )
     cursor = db.cursor()
