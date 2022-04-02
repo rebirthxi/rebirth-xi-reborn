@@ -2195,19 +2195,19 @@ void SmallPacket0x04D(map_session_data_t* const PSession, CCharEntity* const PCh
                             sql->GetData(5, &extra, &length);
                             memcpy(PItem->m_extra, extra, (length > sizeof(PItem->m_extra) ? sizeof(PItem->m_extra) : length));
 
-                            PItem->aug_src.augment_item_src = Sql_GetIntData(SqlHandle, 8);
-                            PItem->aug_src.aug0_src = Sql_GetIntData(SqlHandle, 9);
-                            PItem->aug_src.aug0_min = Sql_GetIntData(SqlHandle, 10);
-                            PItem->aug_src.aug0_max = Sql_GetIntData(SqlHandle, 11);
-                            PItem->aug_src.aug1_src = Sql_GetIntData(SqlHandle, 12);
-                            PItem->aug_src.aug1_min = Sql_GetIntData(SqlHandle, 13);
-                            PItem->aug_src.aug1_max = Sql_GetIntData(SqlHandle, 14);
-                            PItem->aug_src.aug2_src = Sql_GetIntData(SqlHandle, 15);
-                            PItem->aug_src.aug2_min = Sql_GetIntData(SqlHandle, 16);
-                            PItem->aug_src.aug2_max = Sql_GetIntData(SqlHandle, 17);
-                            PItem->aug_src.aug3_src = Sql_GetIntData(SqlHandle, 18);
-                            PItem->aug_src.aug3_min = Sql_GetIntData(SqlHandle, 19);
-                            PItem->aug_src.aug3_max = Sql_GetIntData(SqlHandle, 20);
+                            PItem->aug_src.augment_item_src = sql->GetIntData(8);
+                            PItem->aug_src.aug0_src = sql->GetIntData(9);
+                            PItem->aug_src.aug0_min = sql->GetIntData(10);
+                            PItem->aug_src.aug0_max = sql->GetIntData(11);
+                            PItem->aug_src.aug1_src = sql->GetIntData(12);
+                            PItem->aug_src.aug1_min = sql->GetIntData(13);
+                            PItem->aug_src.aug1_max = sql->GetIntData(14);
+                            PItem->aug_src.aug2_src = sql->GetIntData(15);
+                            PItem->aug_src.aug2_min = sql->GetIntData(16);
+                            PItem->aug_src.aug2_max = sql->GetIntData(17);
+                            PItem->aug_src.aug3_src = sql->GetIntData(18);
+                            PItem->aug_src.aug3_min = sql->GetIntData(19);
+                            PItem->aug_src.aug3_max = sql->GetIntData(20);
 
                             if (boxtype == 2)
                             {
