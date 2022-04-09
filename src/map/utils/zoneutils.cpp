@@ -245,17 +245,15 @@ namespace zoneutils
     }
     /************************************************************************
      *                                                                       *
-     *  Uploading a list of NPCs to the specified zone                       *
+     *  Загружаем список NPC в указанную зону                                *
      *                                                                       *
      ************************************************************************/
 
     void LoadNPCList()
     {
         const char* Query = "SELECT \
-          content_tag, \
-          npcid, \
-          npc_list.name, \
-          npc_list.polutils_name, \
+          npcid,\
+          npc_list.name,\
           pos_rot,\
           pos_x,\
           pos_y,\
@@ -270,6 +268,7 @@ namespace zoneutils
           entityFlags,\
           look,\
           name_prefix, \
+          content_tag, \
           widescan \
         FROM npc_list INNER JOIN zone_settings \
         ON (npcid & 0xFFF000) >> 12 = zone_settings.zoneid \
@@ -283,13 +282,14 @@ namespace zoneutils
         {
             while (sql->NextRow() == SQL_SUCCESS)
             {
-                const char* contentTag = (const char*)sql->GetData(0);
+                const char* contentTag = (const char*)sql->GetData(16);
+
                 if (!luautils::IsContentEnabled(contentTag))
                 {
                     continue;
                 }
 
-                uint32 NpcID  = sql->GetUIntData(1);
+                uint32 NpcID  = sql->GetUIntData(0);
                 uint16 ZoneID = (NpcID - 0x1000000) >> 12;
 
                 if (GetZone(ZoneID)->GetType() != ZONE_TYPE::DUNGEON_INSTANCED)
@@ -298,31 +298,30 @@ namespace zoneutils
                     PNpc->targid     = NpcID & 0xFFF;
                     PNpc->id         = NpcID;
 
-                    PNpc->name.insert(0, (const char*)sql->GetData(2)); // Internal name
-                    PNpc->packetName.insert(0, (const char*)sql->GetData(3)); // Name sent to the client (when applicable)
+                    PNpc->name.insert(0, (const char*)sql->GetData(1));
 
-                    PNpc->loc.p.rotation = (uint8)sql->GetIntData(4);
-                    PNpc->loc.p.x        = sql->GetFloatData(5);
-                    PNpc->loc.p.y        = sql->GetFloatData(6);
-                    PNpc->loc.p.z        = sql->GetFloatData(7);
-                    PNpc->loc.p.moving   = (uint16)sql->GetUIntData(8);
+                    PNpc->loc.p.rotation = (uint8)sql->GetIntData(2);
+                    PNpc->loc.p.x        = sql->GetFloatData(3);
+                    PNpc->loc.p.y        = sql->GetFloatData(4);
+                    PNpc->loc.p.z        = sql->GetFloatData(5);
+                    PNpc->loc.p.moving   = (uint16)sql->GetUIntData(6);
 
-                    PNpc->m_TargID = (uint32)sql->GetUIntData(8) >> 16;
+                    PNpc->m_TargID = (uint32)sql->GetUIntData(6) >> 16; // вполне вероятно
 
-                    PNpc->speed    = (uint8)sql->GetIntData(9); // Overwrites baseentity.cpp's defined speed
-                    PNpc->speedsub = (uint8)sql->GetIntData(10); // Overwrites baseentity.cpp's defined speedsub
+                    PNpc->speed    = (uint8)sql->GetIntData(7); // Overwrites baseentity.cpp's defined speed
+                    PNpc->speedsub = (uint8)sql->GetIntData(8); // Overwrites baseentity.cpp's defined speedsub
 
-                    PNpc->animation    = (uint8)sql->GetIntData(11);
-                    PNpc->animationsub = (uint8)sql->GetIntData(12);
+                    PNpc->animation    = (uint8)sql->GetIntData(9);
+                    PNpc->animationsub = (uint8)sql->GetIntData(10);
 
-                    PNpc->namevis = (uint8)sql->GetIntData(13);
-                    PNpc->status  = static_cast<STATUS_TYPE>(sql->GetIntData(14));
-                    PNpc->m_flags = (uint32)sql->GetUIntData(15);
+                    PNpc->namevis = (uint8)sql->GetIntData(11);
+                    PNpc->status  = static_cast<STATUS_TYPE>(sql->GetIntData(12));
+                    PNpc->m_flags = (uint32)sql->GetUIntData(13);
 
-                    std::memcpy(&PNpc->look, sql->GetData(16), 20);
+                    PNpc->name_prefix = (uint8)sql->GetIntData(15);
+                    PNpc->widescan    = (uint8)sql->GetIntData(17);
 
-                    PNpc->name_prefix = (uint8)sql->GetIntData(17);
-                    PNpc->widescan    = (uint8)sql->GetIntData(18);
+                    memcpy(&PNpc->look, sql->GetData(14), 20);
 
                     GetZone(ZoneID)->InsertNPC(PNpc);
 
@@ -338,7 +337,7 @@ namespace zoneutils
 
     /************************************************************************
      *                                                                       *
-     *  Uploading a list of MOBs to the specified zone                       *
+     *  Загружаем список монстров в указанную зону                           *
      *                                                                       *
      ************************************************************************/
 
