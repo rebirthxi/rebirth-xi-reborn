@@ -86,7 +86,7 @@ void CTrustController::Tick(time_point tick)
     {
         DoCombatTick(tick);
     }
-    else if (!POwner->isDead())
+    else if (!POwner->isDead() && !POwner->PAI->IsCurrentState<CMagicState>())
     {
         DoRoamTick(tick);
     }
@@ -252,6 +252,10 @@ void CTrustController::DoRoamTick(time_point tick)
             POwner->PAI->PathFind->StepTo(PFollowTarget->loc.p, true);
         }
     }
+    else
+    {
+        m_IdleGambitsContainer->Tick(tick);
+    }
 
     if (POwner->CanRest() && m_Tick - POwner->LastAttacked > m_tickDelays.at(0) && m_Tick - m_CombatEndTime > m_tickDelays.at(0) &&
         m_Tick - m_LastHealTickTime > m_tickDelays.at(m_NumHealingTicks))
@@ -269,7 +273,6 @@ void CTrustController::DoRoamTick(time_point tick)
         }
     }
 
-    m_IdleGambitsContainer->Tick(tick);
 }
 
 void CTrustController::Declump(CCharEntity* PMaster, CBattleEntity* PTarget)
