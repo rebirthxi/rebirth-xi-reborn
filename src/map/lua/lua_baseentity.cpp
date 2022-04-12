@@ -4286,7 +4286,7 @@ uint8 CLuaBaseEntity::storeWithPorterMoogle(uint16 slipId, sol::table const& ext
  *  Function: getRetrievableItemsForSlip()
  *  Purpose : Returns listing of 'stored' items as Lua table
  *  Example : local extra = player:getRetrievableItemsForSlip(slipId)
- *  Notes   : See scripts/globals/porter_moogle_util.lua
+ *  Notes   : See scripts/globals/porter_moogle.lua
  ************************************************************************/
 
 sol::table CLuaBaseEntity::getRetrievableItemsForSlip(uint16 slipId)
@@ -4366,6 +4366,7 @@ uint8 CLuaBaseEntity::getRace()
 /************************************************************************
  *  Function: getGender()
  *  Purpose : Returns the integer value of the gender of the character
+ *  Female: 0, Male: 1
  *  Example : player:getGender()
  ************************************************************************/
 
