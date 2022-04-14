@@ -201,8 +201,27 @@ CEntityUpdatePacket::CEntityUpdatePacket(CBaseEntity* PEntity, ENTITYUPDATE type
 
     if (updatemask & UPDATE_HP || updatemask & UPDATE_NAME)
     {
-        auto nameOffset = (PEntity->look.size == MODEL_EQUIPED) ? 0x44 : 0x34;
-        auto name       = (PEntity->packetName.empty()) ? PEntity->name : PEntity->packetName;
-        std::memcpy(data + nameOffset, name.c_str(), std::min<size_t>(name.size(), PacketNameLength));
+        this->setSize(0x48);
+
+        auto name       = PEntity->name;
+        auto nameOffset = (PEntity->look.size == MODEL_EQUIPPED) ? 0x44 : 0x34;
+
+        if (PEntity->isRenamed ||
+            PEntity->objtype == TYPE_TRUST ||
+            PEntity->IsDynamicEntity())
+        {
+            name = PEntity->packetName;
+        }
+
+        auto maxLength = std::min<size_t>(name.size(), PacketNameLength);
+
+        if (PEntity->look.size == MODEL_DOOR ||
+            PEntity->look.size == MODEL_ELEVATOR ||
+            PEntity->look.size == MODEL_SHIP)
+        {
+            maxLength = 12;
+        }
+
+        std::memcpy(data + nameOffset, name.c_str(), maxLength);
     }
 }
