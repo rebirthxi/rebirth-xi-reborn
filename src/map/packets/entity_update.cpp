@@ -199,12 +199,28 @@ CEntityUpdatePacket::CEntityUpdatePacket(CBaseEntity* PEntity, ENTITYUPDATE type
         break;
     }
 
-    if (updatemask & UPDATE_HP || updatemask & UPDATE_NAME)
+    // If the entity has been renamed, we have to re-send the name during every update.
+    // Otherwise it will revert to it's default name (if applicable).
+    if (PEntity->isRenamed)
+    {
+        updatemask       |= UPDATE_NAME;
+        ref<uint8>(0x0A) |= updatemask;
+    }
+
+    // Send name data
+    if (updatemask & UPDATE_NAME)
     {
         this->setSize(0x48);
 
         auto name       = PEntity->name;
-        auto nameOffset = (PEntity->look.size == MODEL_EQUIPPED) ? 0x44 : 0x34;
+        auto nameOffset = (PEntity->look.size == MODEL_EQUIPED) ? 0x44 : 0x34;
+
+        // Mobs and NPC's targid's live in the range 0-1023
+        if (PEntity->targid < 1024 && PEntity->isRenamed)
+        {
+            ref<uint16>(0x34) = 0x01;
+            nameOffset        = 0x35;
+        }
 
         if (PEntity->isRenamed ||
             PEntity->objtype == TYPE_TRUST ||
@@ -223,5 +239,10 @@ CEntityUpdatePacket::CEntityUpdatePacket(CBaseEntity* PEntity, ENTITYUPDATE type
         }
 
         std::memcpy(data + nameOffset, name.c_str(), maxLength);
+
+        // Make sure the rest of the packet is empty (or garbage might appear)
+        auto start = data + nameOffset + maxLength;
+        auto size = static_cast<std::size_t>(this->getSize());
+        std::memset(start, 0U, size);
     }
 }
