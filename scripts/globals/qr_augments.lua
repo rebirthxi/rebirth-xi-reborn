@@ -164,48 +164,47 @@ xi.augments.augment_items = xi.augments.augment_items or {
     COMBINER   = 9847,
 }
 
-xi.augments.recipes = xi.augments.recipes or {
+xi.augments.recipes =  {
     is_augment_recipe = {
         -- Bonding an Augment to an Item
         [xi.items.EARTH_CRYSTAL] = function(ingredients)
 
             -- All bonding recipes are bonder + aug + item with earth crystal
             if #ingredients ~= 3 then
-                print("Wrong number of ingredients")
                 return false
             end
 
-            local combiner = false
-            local lowbie   = false
-            local item
-
-            -- figure out what our three items are
-            -- ingredient should be {item=LuaItem
-            for _, ingredient in ipairs(ingredients) do
-                local item_id = ingredient.item:getID()
-                if item_id == xi.augments.augment_items.COMBINER then
-                    combiner = true
-                elseif item_id == xi.augments.augment_items.LOWBIE_AUG then
-                    lowbie = true
-                else
-                    item = ingredient.item
-                end
-            end
+            local combiner = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.augment_items.COMBINER, 1)
+            local lowbie = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.augment_items.LOWBIE_AUG, 1)
+            local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
             -- recipe needs at least these two to get further
-            if not combiner or not lowbie then
-                print("Combiner or lowbie")
+            if not combiner or not lowbie or not item then
                 return false
             end
 
-            if not xi.augments.itemIsAugmentable(item) then
-                return false
-            end
-
-            return true
+            return xi.augments.itemIsAugmentable(item)
         end
     }
 }
+
+xi.augments.ingredientsHasItemIDAndQuantity = function(ingredients, item_id, quantity)
+    for _, ingredient in ipairs(ingredients) do
+        if item_id == ingredient.item:getID() and quantity == ingredient.quantity then
+            return ingredient.item
+        end
+    end
+    return nil
+end
+
+xi.augments.getItemToAugmentFromIngredients = function(ingredients)
+    for _, ingredient in ipairs(ingredients) do
+        if not utils.contains(ingredient.item:getID(), xi.augments.augment_items) then
+            return ingredient.item
+        end
+    end
+    return nil
+end
 
 xi.augments.itemIsAugmentable = function(item)
     -- Make sure it's not already augmented

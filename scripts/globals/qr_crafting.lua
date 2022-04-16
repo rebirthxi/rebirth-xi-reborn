@@ -19,7 +19,9 @@ xi.qr_crafting = xi.qr_crafting or {}
 --- Returns false if it is not
 ---
 xi.qr_crafting.isRightRecipe = function(player, ingredients)
-    return false
+    local crystalID = ingredients.crystal
+
+    return xi.augments.recipes.is_augment_recipe[crystalID](ingredients)
 end
 
 xi.qr_crafting.synth_results = {
@@ -37,7 +39,7 @@ xi.qr_crafting.synth_results = {
 --- Returns one of the options from synth_results
 ---
 xi.qr_crafting.calcSynthResult = function(player, ingredients)
-    return xi.qr_crafting.synth_results.SYNTHESIS_FAIL
+    return xi.qr_crafting.synth_results.SYNTHESIS_SUCCESS
 end
 
 ---
@@ -64,7 +66,13 @@ end
 ---             This is little remove mechanic supports custom crafts like augment merging where we don't want a new item,
 ---             but instead just want to add to an existing.
 xi.qr_crafting.doSynthResult = function(player, ingredients)
-    return 9847, 1, true
+    local aug = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.augment_items.LOWBIE_AUG, 1)
+    local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
+    local item_id = item:getID()
+
+    player:addItem({id=item_id, augments=aug:getAugTable(), aug_src=aug:getAugSrc(), signature=item:getSignature()})
+
+    return item_id, 1, true
 end
 
 ---
