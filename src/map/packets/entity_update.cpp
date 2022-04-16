@@ -231,12 +231,12 @@ CEntityUpdatePacket::CEntityUpdatePacket(CBaseEntity* PEntity, ENTITYUPDATE type
 
         auto maxLength = std::min<size_t>(name.size(), PacketNameLength);
 
-        if (PEntity->look.size == MODEL_DOOR ||
-            PEntity->look.size == MODEL_ELEVATOR ||
-            PEntity->look.size == MODEL_SHIP)
-        {
-            maxLength = 12;
-        }
+//        if (PEntity->look.size == MODEL_DOOR ||
+//            PEntity->look.size == MODEL_ELEVATOR ||
+//            PEntity->look.size == MODEL_SHIP)
+//        {
+//            maxLength = 12;
+//        }
 
         std::memcpy(data + nameOffset, name.c_str(), maxLength);
 
