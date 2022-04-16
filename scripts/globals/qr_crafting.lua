@@ -10,9 +10,9 @@ xi.qr_crafting = xi.qr_crafting or {}
 --- Functions determines if the given set of ingredients is valid.
 --- ingredients = {
 ---     crystal = crystalID
----     [1] = itemID1
+---     [1] = [item=CLuaItem, quantity=int]
 ---     ...
----     [8] = itemID8
+---     [8] = [item=CLuaItem, quantity=int]
 --- }
 ---
 --- Returns true if it is
