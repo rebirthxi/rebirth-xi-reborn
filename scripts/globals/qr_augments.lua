@@ -5,6 +5,7 @@
 require("scripts/globals/utils")
 require("scripts/globals/zone")
 require("scripts/globals/items")
+require("scripts/globals/qr_synth")
 -----------------------------------
 xi.augments = xi.augments or {}
 
@@ -164,37 +165,10 @@ xi.augments.ingredients = xi.augments.ingredients or {
     COMBINER   = 9847,
 }
 
-xi.augments.recipes =  {
-    is_augment_recipe = {
-        -- Bonding an Augment to an Item
-        [xi.items.EARTH_CRYSTAL] = function(ingredients)
+xi.augments.synthIsLowbieAugmentRecipe = function(ingredients)
+    local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
-            -- All bonding recipes are bonder + aug + item with earth crystal
-            if #ingredients ~= 3 then
-                return false
-            end
-
-            local combiner = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.ingredients.COMBINER, 1)
-            local lowbie = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.ingredients.LOWBIE_AUG, 1)
-            local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
-
-            -- recipe needs at least these two to get further
-            if not combiner or not lowbie or not item then
-                return false
-            end
-
-            return xi.augments.itemIsAugmentable(item)
-        end
-    }
-}
-
-xi.augments.ingredientsHasItemIDAndQuantity = function(ingredients, item_id, quantity)
-    for _, ingredient in ipairs(ingredients) do
-        if item_id == ingredient.item:getID() and quantity == ingredient.quantity then
-            return ingredient.item
-        end
-    end
-    return nil
+    return xi.augments.itemIsAugmentable(item)
 end
 
 xi.augments.getItemToAugmentFromIngredients = function(ingredients)
@@ -207,6 +181,11 @@ xi.augments.getItemToAugmentFromIngredients = function(ingredients)
 end
 
 xi.augments.itemIsAugmentable = function(item)
+    -- do a nil check (just cause)
+    if item == nil then
+        return false
+    end
+
     -- Make sure it's not already augmented
     if item:isSubType(4) then
         print("Already augmented")
@@ -227,6 +206,16 @@ xi.augments.itemIsAugmentable = function(item)
     end
 
     return true
+end
+
+xi.augments.synthResultLowbieAugmentBond = function(player, ingredients)
+    local aug = xi.synth.ingredientFromIngredients(ingredients, xi.augments.ingredients.LOWBIE_AUG)
+    local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
+    local item_id = item:getID()
+
+    player:addItem({id=item_id, augments=aug:getAugTable(), aug_src=aug:getAugSrc(), signature=item:getSignature()})
+
+    return item_id, 1, true
 end
 
 --{chances = {100}, pool = {1}}
