@@ -158,7 +158,7 @@ xi.augments.page_pools = xi.augments.page_pools or {
     [1] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}
 }
 
-xi.augments.augment_items = xi.augments.augment_items or {
+xi.augments.ingredients = xi.augments.ingredients or {
     LOWBIE_AUG = 16485,
     MID_AUG    = 16481,
     COMBINER   = 9847,
@@ -174,8 +174,8 @@ xi.augments.recipes =  {
                 return false
             end
 
-            local combiner = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.augment_items.COMBINER, 1)
-            local lowbie = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.augment_items.LOWBIE_AUG, 1)
+            local combiner = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.ingredients.COMBINER, 1)
+            local lowbie = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.ingredients.LOWBIE_AUG, 1)
             local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
             -- recipe needs at least these two to get further
@@ -199,7 +199,7 @@ end
 
 xi.augments.getItemToAugmentFromIngredients = function(ingredients)
     for _, ingredient in ipairs(ingredients) do
-        if not utils.contains(ingredient.item:getID(), xi.augments.augment_items) then
+        if not utils.contains(ingredient.item:getID(), xi.augments.ingredients) then
             return ingredient.item
         end
     end

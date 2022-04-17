@@ -66,7 +66,7 @@ end
 ---             This is little remove mechanic supports custom crafts like augment merging where we don't want a new item,
 ---             but instead just want to add to an existing.
 xi.qr_crafting.doSynthResult = function(player, ingredients)
-    local aug = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.augment_items.LOWBIE_AUG, 1)
+    local aug = xi.augments.ingredientsHasItemIDAndQuantity(ingredients, xi.augments.ingredients.LOWBIE_AUG, 1)
     local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
     local item_id = item:getID()
 
