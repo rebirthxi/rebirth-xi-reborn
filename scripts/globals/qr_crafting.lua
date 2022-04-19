@@ -24,11 +24,25 @@ xi.qr_crafting.recipe_index_key = "luaSynth"
 xi.qr_crafting.isRightRecipe = function(player, ingredients)
     local recipe_id = xi.synth.lookup(ingredients, xi.recipe.recipes)
 
-    if recipe_id ~= 0 then
-        player:setLocalVar(xi.qr_crafting.recipe_index_key, recipe_id)
+    -- Bail out if it didn't find a good recipe
+    if recipe_id == 0 then
+        return false
     end
 
-    return recipe_id ~= 0
+    -- Due to the item remove / adding order of this system
+    -- we need to enforce a strict number of inventory slots available
+    local recipe = xi.recipe.recipes[recipe_id]
+    if player:getFreeSlotsCount() < recipe.required_inventory_slots then
+        player:PrintToPlayer(string.format(
+            "The recipe is actually valid but you need %d inventory slots free.",
+            recipe.required_inventory_slots
+        ))
+        return false
+    end
+
+    player:setLocalVar(xi.qr_crafting.recipe_index_key, recipe_id)
+
+    return true
 end
 
 ---

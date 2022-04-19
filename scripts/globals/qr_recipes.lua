@@ -20,6 +20,7 @@ xi.recipe.results = {
 ---
 --- crystal: ID of the crystal used in the recipe
 --- total_ingredients: the totals items in the ingredients container
+--- required_inventory_slots: a player must have this many free inventory slots to do the synthesis
 --- ingredients: a table of either item IDs and their quantities or functions to test the ingredients
 --- break_rate_adjustment: is a function that takes an initial break rate and returns a new one
 --- calc_synth_rate: is a function that takes player, ingredients and returns whether the synth result is break, nq, hq1/2/3
@@ -30,6 +31,7 @@ xi.recipe.recipes = {
     [1] = {
         crystal = xi.items.EARTH_CRYSTAL,
         total_ingredients = 3,
+        required_inventory_slots = 1,
         ingredients = {
             {id=xi.augments.ingredients.COMBINER, quantity=1},
             {id=xi.augments.ingredients.LOWBIE_AUG, quantity=1},
