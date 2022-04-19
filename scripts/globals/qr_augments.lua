@@ -159,16 +159,23 @@ xi.augments.page_pools = xi.augments.page_pools or {
     [1] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}
 }
 
-xi.augments.ingredients = xi.augments.ingredients or {
+xi.augments.ingredients = {
     LOWBIE_AUG = 16485,
     MID_AUG    = 16481,
     COMBINER   = 9847,
+    SEPARATOR  = 9848,
 }
 
 xi.augments.synthIsLowbieAugmentRecipe = function(ingredients)
     local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
     return xi.augments.itemIsAugmentable(item)
+end
+
+xi.augments.synthIsCleansableRecipe = function(ingredients)
+    local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
+
+    return xi.augments.itemIsCleansable(item)
 end
 
 xi.augments.getItemToAugmentFromIngredients = function(ingredients)
@@ -208,12 +215,63 @@ xi.augments.itemIsAugmentable = function(item)
     return true
 end
 
+xi.augments.itemIsCleansable = function(item)
+    -- do a nil check (just cause)
+    if item == nil then
+        return false
+    end
+
+    -- Make sure it IS augmented
+    if not item:isSubType(4) then
+        return false
+    end
+
+    -- Make sure it is armor or weapon
+    if not item:isType(0x08) and not item:isType(0x10) then
+        return false
+    end
+
+    -- Don't allow to cleanse an augment from an augment...
+    local item_id = item:getID()
+    if item_id == xi.augments.ingredients.LOWBIE_AUG or item_id == xi.augments.ingredients.MID_AUG then
+        return false
+    end
+
+    -- Make sure it is cleansable (has an augment src)
+    local aug_src = item:getAugSrc()
+    if not aug_src then
+        return false
+    end
+
+    -- Make sure the augment item src is an augment and not something else
+    local aug_src_id = aug_src.augment_item_src
+    if aug_src_id ~= xi.augments.ingredients.LOWBIE_AUG and aug_src_id ~= xi.augments.ingredients.MID_AUG then
+        return false
+    end
+
+    return true
+end
+
 xi.augments.synthResultLowbieAugmentBond = function(player, ingredients)
     local aug = xi.synth.ingredientFromIngredients(ingredients, xi.augments.ingredients.LOWBIE_AUG)
     local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
     local item_id = item:getID()
 
     player:addItem({id=item_id, augments=aug:getAugTable(), aug_src=aug:getAugSrc(), signature=item:getSignature()})
+
+    return item_id, 1, true
+end
+
+xi.augments.synthCleanseAugmentSplit = function(player, ingredients)
+    local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
+    local item_id = item:getID()
+    local sig = item:getSignature()
+    local augments = item:getAugTable()
+    local aug_src = item:getAugSrc()
+
+    player:addItem({id=item_id, signature=sig})
+    player:addItem({id=aug_src.augment_item_src, augments=augments, aug_src=aug_src})
+    player:messageSpecial(zones[player:getZoneID()].text.ITEM_OBTAINED, aug_src.augment_item_src)
 
     return item_id, 1, true
 end

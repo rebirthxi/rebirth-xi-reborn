@@ -41,5 +41,19 @@ xi.recipe.recipes = {
         calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
         do_synth_result = xi.augments.synthResultLowbieAugmentBond,
         skill_up = function(player, ingredients) return; end
+    },
+    -- Augment Cleansing
+    [2] = {
+        crystal = 4100, -- lightning crystal? why this not in xi.items?
+        total_ingredients = 2,
+        required_inventory_slots = 2,
+        ingredients = {
+            {id=xi.augments.ingredients.SEPARATOR, quantity=1},
+            xi.augments.synthIsCleansableRecipe,
+        },
+        break_rate_adjustment = function(initial_break_rate) return 0.0; end,
+        calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
+        do_synth_result = xi.augments.synthCleanseAugmentSplit,
+        skill_up = function(player, ingredients) return;  end
     }
 }
