@@ -3317,7 +3317,7 @@ bool CLuaBaseEntity::addItem(sol::variadic_args va)
                         }
                     }
 
-                    sol::object augmentsSrcObj = table["arg_src"];
+                    sol::object augmentsSrcObj = table["aug_src"];
                     if (augmentsSrcObj.is<sol::table>())
                     {
                         auto augmentsSrcTable = augmentsSrcObj.as<sol::table>();
