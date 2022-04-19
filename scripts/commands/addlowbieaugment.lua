@@ -17,6 +17,9 @@ end
 
 function onTrigger(player)
     local augs, augs_src = xi.augments.RollAugments({chances = {100, 50}, pool = {1, 1}})
+
+    augs_src.augment_item_src = xi.augments.ingredients.LOWBIE_AUG
+
     player:addItem({id=xi.augments.ingredients.LOWBIE_AUG, augments=augs, aug_src=augs_src})
     player:messageSpecial(zones[player:getZoneID()].text.ITEM_OBTAINED, xi.augments.ingredients.LOWBIE_AUG)
 end
