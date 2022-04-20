@@ -93,6 +93,7 @@ safe_files_to_load = [
     "sql/qr_sql/lowbie_nm_drops.sql",
     "sql/qr_sql/sky_drop_pools.sql",
     "sql/qr_sql/sea_drop_pools.sql",
+    "sql/qr_sql/hnm_drop_pools.sql",
 ]
 
 for sql_file in safe_files_to_load:
