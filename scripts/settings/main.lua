@@ -123,8 +123,8 @@ xi.settings =
 
     -- Sets spawn type for: Behemoth, Fafnir, Adamantoise, King Behemoth, Nidhog, Aspidochelone.
     -- Use 0 for timed spawns, 1 for force pop only, 2 for both
-    LandKingSystem_NQ = 1,
-    LandKingSystem_HQ = 1,
+    LandKingSystem_NQ = 0,
+    LandKingSystem_HQ = 0,
 
     -- Multiplier to NM lottery spawn chance. (Default 1.0) eg. 0 = disable lottery spawns. -1 for always 100% chance.
     NM_LOTTERY_CHANCE = 1.0,
