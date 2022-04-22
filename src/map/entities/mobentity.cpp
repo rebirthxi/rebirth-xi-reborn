@@ -1144,38 +1144,38 @@ void CMobEntity::DropItems(CCharEntity* PChar)
                 }
             }
             // At LV 80 and above, you may get Avatarite if a Geode didn't drop
-            else if (GetMLevel() >= 80 && xirand::GetRandomNumber(100) < 20)
-            {
-                switch (element)
-                {
-                    case ELEMENT_FIRE:
-                        AddItemToPool(3520, ++dropCount); // Ifritite
-                        break;
-                    case ELEMENT_EARTH:
-                        AddItemToPool(3523, ++dropCount); // Titanite
-                        break;
-                    case ELEMENT_WATER:
-                        AddItemToPool(3525, ++dropCount); // Leviatite
-                        break;
-                    case ELEMENT_WIND:
-                        AddItemToPool(3522, ++dropCount); // Garudite
-                        break;
-                    case ELEMENT_ICE:
-                        AddItemToPool(3521, ++dropCount); // Shivite
-                        break;
-                    case ELEMENT_THUNDER:
-                        AddItemToPool(3524, ++dropCount); // Ramuite
-                        break;
-                    case ELEMENT_LIGHT:
-                        AddItemToPool(3526, ++dropCount); // Carbit
-                        break;
-                    case ELEMENT_DARK:
-                        AddItemToPool(3527, ++dropCount); // Fenrite
-                        break;
-                    default:
-                        break;
-                }
-            }
+//            else if (GetMLevel() >= 80 && xirand::GetRandomNumber(100) < 20)
+//            {
+//                switch (element)
+//                {
+//                    case ELEMENT_FIRE:
+//                        AddItemToPool(3520, ++dropCount); // Ifritite
+//                        break;
+//                    case ELEMENT_EARTH:
+//                        AddItemToPool(3523, ++dropCount); // Titanite
+//                        break;
+//                    case ELEMENT_WATER:
+//                        AddItemToPool(3525, ++dropCount); // Leviatite
+//                        break;
+//                    case ELEMENT_WIND:
+//                        AddItemToPool(3522, ++dropCount); // Garudite
+//                        break;
+//                    case ELEMENT_ICE:
+//                        AddItemToPool(3521, ++dropCount); // Shivite
+//                        break;
+//                    case ELEMENT_THUNDER:
+//                        AddItemToPool(3524, ++dropCount); // Ramuite
+//                        break;
+//                    case ELEMENT_LIGHT:
+//                        AddItemToPool(3526, ++dropCount); // Carbit
+//                        break;
+//                    case ELEMENT_DARK:
+//                        AddItemToPool(3527, ++dropCount); // Fenrite
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
         }
 
         uint8 effect = 0; // Begin Adding Crystals
