@@ -45,4 +45,7 @@ entity.onMobDespawn = function(mob)
     end
 end
 
+entity.onMobFight = function(mob, target)
+end
+
 return entity
