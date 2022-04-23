@@ -29,7 +29,7 @@
 enum MODELTYPE
 {
     MODEL_STANDARD = 0,
-    MODEL_EQUIPED  = 1,
+    MODEL_EQUIPPED  = 1,
     MODEL_DOOR     = 2,
     MODEL_ELEVATOR = 3,
     MODEL_SHIP     = 4,

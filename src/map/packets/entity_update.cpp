@@ -61,7 +61,7 @@ CEntityUpdatePacket::CEntityUpdatePacket(CBaseEntity* PEntity, ENTITYUPDATE type
             {
                 //ref<uint8>(0x28) = 0x45;
             }
-            if (PEntity->look.size == MODEL_EQUIPED || PEntity->look.size == MODEL_CHOCOBO)
+            if (PEntity->look.size == MODEL_EQUIPPED || PEntity->look.size == MODEL_CHOCOBO)
             {
                 updatemask = 0x57;
             }
@@ -205,7 +205,7 @@ CEntityUpdatePacket::CEntityUpdatePacket(CBaseEntity* PEntity, ENTITYUPDATE type
             ref<uint32>(0x30) = ::ref<uint32>(&PEntity->look, 0);
         }
         break;
-        case MODEL_EQUIPED:
+        case MODEL_EQUIPPED:
         case MODEL_CHOCOBO:
         {
             this->setSize(0x48);
