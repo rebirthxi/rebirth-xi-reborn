@@ -52,7 +52,7 @@ WHERE t.groupid = 10
 -- Tiamat
 
 -- Level up to 100 from 95
-UPDATE xidb.mob_groups t
+UPDATE mob_groups t
 SET t.minLevel = 100,
     t.maxLevel = 100
 WHERE t.groupid = 46
@@ -61,7 +61,7 @@ WHERE t.groupid = 46
 -- Vrtra
 
 -- Level up to 100 from 95
-UPDATE xidb.mob_groups t
+UPDATE mob_groups t
 SET t.minLevel = 100,
     t.maxLevel = 100
 WHERE t.groupid = 37
@@ -70,7 +70,7 @@ WHERE t.groupid = 37
 -- Jormungand
 
 -- Level up to 100 from
-UPDATE xidb.mob_groups t
+UPDATE mob_groups t
 SET t.minLevel = 100,
     t.maxLevel = 100
 WHERE t.groupid = 40
@@ -79,7 +79,7 @@ WHERE t.groupid = 40
 -- Cerberus
 
 -- Level up to 90 from 85
-UPDATE xidb.mob_groups t
+UPDATE mob_groups t
 SET t.minLevel = 90,
     t.maxLevel = 90
 WHERE t.groupid = 37
@@ -88,7 +88,7 @@ WHERE t.groupid = 37
 -- Khimaira
 
 -- Level up to 90 from 85
-UPDATE xidb.mob_groups t
+UPDATE mob_groups t
 SET t.minLevel = 90,
     t.maxLevel = 90
 WHERE t.groupid = 59
@@ -97,7 +97,7 @@ WHERE t.groupid = 59
 -- Hydra
 
 -- Level up to 85 from 80
-UPDATE xidb.mob_groups t
+UPDATE mob_groups t
 SET t.minLevel = 85,
     t.maxLevel = 85
 WHERE t.groupid = 38
