@@ -101,7 +101,7 @@ namespace moduleutils
     // problems.
 
     void LoadLuaModules();
-    void TryApplyLuaModules();
+    void TryApplyLuaModules(const std::string& potentialOverridePath);
     void ReportLuaModuleUsage();
 }; // namespace moduleutils
 

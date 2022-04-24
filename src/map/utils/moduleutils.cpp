@@ -163,12 +163,15 @@ namespace moduleutils
         }
     }
 
-    void TryApplyLuaModules()
+    void TryApplyLuaModules(const std::string& potentialOverridePath)
     {
         sol::state& lua = luautils::lua;
+
         for (auto& override : overrides)
         {
-            if (!override.applied)
+            // e.g. see if "xi.zones.Valley_Of_Sorrows.mobs.Peryton.onMobSpawn" contains "xi.zones.Valley_of_Sorrows.mobs.Peryton" as its base
+            // if true, we need to apply, or even re-apply, this override
+            if (!override.applied || override.overrideName.find(potentialOverridePath) == 0)
             {
                 sol::table table = lua["xi"].get<sol::table>();
 
@@ -185,7 +188,14 @@ namespace moduleutils
                     // Get parent table of the function at the end of the string
                     if (part == lastTable)
                     {
-                        ShowScript(fmt::format("Applying override: {}", override.overrideName));
+                        if (override.applied)
+                        {
+                            ShowScript(fmt::format("Re-Applying override: {}", override.overrideName));
+                        }
+                        else
+                        {
+                            ShowScript(fmt::format("Applying override: {}", override.overrideName));
+                        }
 
                         lua["applyOverride"](table, lastElem, override.func);
 
