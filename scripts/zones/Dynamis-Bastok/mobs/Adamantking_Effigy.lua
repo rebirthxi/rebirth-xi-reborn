@@ -6,6 +6,9 @@ require("scripts/globals/dynamis")
 -----------------------------------
 local entity = {}
 
+entity.onMobEngaged = function(mob, target)
+end
+
 entity.onMobSpawn = function(mob)
     xi.dynamis.refillStatueOnSpawn(mob)
 end
