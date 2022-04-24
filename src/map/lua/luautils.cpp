@@ -1637,9 +1637,9 @@ namespace luautils
 
         auto name = (const char*)PZone->GetName();
 
-        auto filename = fmt::format("./scripts/zones/{}/Zone.lua", name);
-
-        CacheLuaObjectFromFile(filename);
+//        auto filename = fmt::format("./scripts/zones/{}/Zone.lua", name);
+//
+//        CacheLuaObjectFromFile(filename);
 
         auto onZoneTick = lua["xi"]["zones"][name]["Zone"]["onZoneTick"];
         if (!onZoneTick.valid())
