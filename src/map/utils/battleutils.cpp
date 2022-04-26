@@ -5019,11 +5019,6 @@ namespace battleutils
         TracyZoneScoped;
         if (auto* mob = dynamic_cast<CMobEntity*>(PDefender))
         {
-            if (!mob->m_IsClaimable)
-            {
-                return;
-            }
-
             CBattleEntity* original = PAttacker;
             if (PAttacker->objtype != TYPE_PC)
             {
@@ -5041,6 +5036,12 @@ namespace battleutils
             {
                 mob->PEnmityContainer->UpdateEnmity(original, 0, 0, true, true);
             }
+
+            if (!mob->m_IsClaimable)
+            {
+                return;
+            }
+
             if (PAttacker)
             {
                 CCharEntity* attacker = static_cast<CCharEntity*>(PAttacker);
@@ -6115,12 +6116,15 @@ namespace battleutils
 
         bool found = false;
 
-        PMaster->ForAlliance([&PTarget, &found](CBattleEntity* PChar) {
+        // clang-format off
+        PMaster->ForAlliance([&PTarget, &found](CBattleEntity* PChar)
+        {
             if (PChar->id == PTarget->m_OwnerID.id)
             {
                 found = true;
             }
         });
+        // clang-format on
 
         return found;
     }
