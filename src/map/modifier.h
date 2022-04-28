@@ -579,6 +579,8 @@ enum class Mod
     CURATIVE_RECANTATION = 970,
     PRIMEVAL_ZEAL        = 971,
     FULL_CIRCLE          = 1025, // Increases the initial multiplier on MP returned via Full Circle
+    BOLSTER_EFFECT       = 1028, // Adds bonus duration as +N seconds
+    LIFE_CYCLE_EFFECT    = 1029, // Adds bonus HP% returned to the luopan when using Life Cycle
 
     ENSPELL           = 341, // stores the type of enspell active (0 if nothing)
     ENSPELL_DMG       = 343, // stores the base damage of the enspell before reductions
@@ -884,7 +886,7 @@ enum class Mod
     // 888
     // 936
     //
-    // SPARE = 1028, and onward
+    // SPARE = 1030, and onward
 
     EXCAVATION_RESULT     = 2000, // Improves excavation results
     HARVESTING_TOOL_BREAK = 2001, // Reduces tool break chance
