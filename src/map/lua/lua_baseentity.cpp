@@ -13729,6 +13729,20 @@ uint8 CLuaBaseEntity::getNumDistributeJobs()
     return count;
 }
 
+std::string CLuaBaseEntity::getLocalStringVar(const std::string& key)
+{
+    XI_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
+
+    return m_PBaseEntity->GetLocalStringVar(key);
+}
+
+void CLuaBaseEntity::setLocalStringVar(const std::string& key, const std::string& val)
+{
+    XI_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
+
+    m_PBaseEntity->SetLocalStringVar(key, val);
+}
+
 
 //==========================================================//
 
@@ -14485,7 +14499,8 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("setDistributeXp", CLuaBaseEntity::setDistributeXp);
     SOL_REGISTER("showDistributeXp", CLuaBaseEntity::showDistributeXp);
     SOL_REGISTER("getNumDistributeJobs", CLuaBaseEntity::getNumDistributeJobs);
-
+    SOL_REGISTER("getLocalStringVar", CLuaBaseEntity::getLocalStringVar);
+    SOL_REGISTER("setLocalStringVar", CLuaBaseEntity::setLocalStringVar);
 }
 
 

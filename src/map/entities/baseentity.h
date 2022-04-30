@@ -231,6 +231,8 @@ public:
     void   ResetLocalVars();
     uint32 GetLocalVar(const char* var);
     void   SetLocalVar(const char* var, uint32 val);
+    std::string GetLocalStringVar(const std::string& key);
+    void SetLocalStringVar(const std::string& key, const std::string& value);
 
     // pre-tick update
     virtual void Tick(time_point) = 0;
@@ -270,6 +272,7 @@ public:
 
 protected:
     std::map<std::string, uint32> m_localVars;
+    std::map<std::string, std::string> m_localStringVars;
 };
 
 #endif

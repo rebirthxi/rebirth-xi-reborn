@@ -814,6 +814,8 @@ public:
     void setDistributeXp(uint8 job, uint8 level);
     void showDistributeXp();
     uint8 getNumDistributeJobs();
+    std::string getLocalStringVar(const std::string& key);
+    void setLocalStringVar(const std::string& key, const std::string& val);
 
     /*
      * Back to the Regular Sand Ship Stuff

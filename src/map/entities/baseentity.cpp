@@ -174,6 +174,16 @@ void CBaseEntity::SetLocalVar(const char* var, uint32 val)
     m_localVars[var] = val;
 }
 
+std::string CBaseEntity::GetLocalStringVar(const std::string& key)
+{
+    return m_localStringVars[key];
+}
+
+void CBaseEntity::SetLocalStringVar(const std::string& key, const std::string& value)
+{
+    m_localStringVars[key] = value;
+}
+
 void CBaseEntity::SetModelId(uint16 modelid)
 {
     look.modelid = modelid;
