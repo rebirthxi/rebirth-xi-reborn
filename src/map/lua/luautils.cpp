@@ -119,6 +119,7 @@ namespace luautils
         ShowStatus("luautils::init:lua initializing");
 
         lua = sol::state();
+        TracyLuaRegister(lua.lua_state());
         lua.open_libraries();
 
         // Globally require bit library
@@ -1550,6 +1551,7 @@ namespace luautils
     uint8 GetSettingsVariable(const char* variable)
     {
         TracyZoneScoped;
+        TracyZoneCString(variable);
         return lua["xi"]["settings"][variable].valid() ? lua["xi"]["settings"][variable].get<uint8>() : 0;
     }
 

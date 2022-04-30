@@ -5976,6 +5976,8 @@ namespace charutils
     int32 GetCharVar(CCharEntity* PChar, const char* var)
     {
         TracyZoneScoped;
+        TracyZoneString(PChar->name);
+        TracyZoneCString(var);
 
         if (PChar == nullptr)
         {
@@ -6001,6 +6003,8 @@ namespace charutils
     void SetCharVar(CCharEntity* PChar, const char* var, int32 value)
     {
         TracyZoneScoped;
+        TracyZoneString(PChar->name);
+        TracyZoneString(fmt::format("{} -> {}", var, value));
         
         if (PChar == nullptr)
         {
