@@ -785,36 +785,17 @@ xi.caskets.onTrade = function(player, npc, trade)
     end
 end
 
-xi.caskets.onEventFinish = function(player, csid, option, npc)
-    local zoneId = player:getZoneID()
-    local ID = zones[zoneId]
-    local baseMessage = ID.text.PLAYER_OBTAINS_TEMP_ITEM
-    -----------------------------------
-    -- Basic chest var's
-    -----------------------------------
-    local chestObj          = player:getEventTarget()
-    local spawnStatus       = chestObj:getLocalVar("[caskets]SPAWNSTATUS")
-    local locked            = chestObj:getLocalVar("[caskets]LOCKED")
-    local lootType          = chestObj:getLocalVar("[caskets]LOOT_TYPE")
-    local lockedChoice      = bit.lshift(1, option -1)
-    local inputNumber       = bit.rshift(option, 16)
-
-    -----------------------------------
-    -- Chest Locked var's
-    -----------------------------------
+-----------------------------------
+-- Desc: Function handles what happens when a player examines a chest.
+-----------------------------------
+xi.caskets.playerExamineChest = function(player, option, chestObj, baseMessage)
+    local hintsVar          = chestObj:getLocalVar("[caskets]HINTS_TABLE")
     local correctNumber     = chestObj:getLocalVar("[caskets]CORRECT_NUM")
     local attemptsAllowed   = chestObj:getLocalVar("[caskets]ATTEMPTS")
     local failedAtempts     = chestObj:getLocalVar("[caskets]FAILED_ATEMPTS")
     local remainingAttempts = attemptsAllowed - failedAtempts
-
-    -- printf("option = %u ", option)
-    -----------------------------------
-    -- Minigame
-    -----------------------------------
-
-    local splitNumbers   = {}
-    local hintsVar       = chestObj:getLocalVar("[caskets]HINTS_TABLE")
-    local availableHints = {}
+    local splitNumbers      = {}
+    local availableHints    = {}
 
     if hintsVar ~= 0 then
         for hint in string.gmatch(tostring(hintsVar), "%d") do
@@ -826,166 +807,223 @@ xi.caskets.onEventFinish = function(player, csid, option, npc)
         table.insert(splitNumbers, tonumber(digit))
     end
 
-    if locked == 1 then
-        if option > 0 and spawnStatus ~= xi.caskets.casketInfo.spawnStatus.SPAWNED_CLOSED then -- prevent minigame from working if chest is opened.
+    if option == 258 then
+        local randText = tonumber(availableHints[math.random(#availableHints)])
+
+        if randText == 0 or randText == nil then
+            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.UNABLE_TO_GET_HINT, 0, 0, 0, 0)
             return
         end
-        -----------------------------------
-        -- Hints
-        -----------------------------------
-        if lockedChoice == 2 then -- Examine chest
-            if option == 258 then
-                local randText = tonumber(availableHints[math.random(#availableHints)])
 
-                if randText == 0 or randText == nil then
-                    player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.UNABLE_TO_GET_HINT, 0, 0, 0, 0)
-                    return
-                end
-
-                if randText == 1 then
-                    if xi.caskets.isEven(splitNumbers[1]) then
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_FIRST_EVEN_ODD, 0, 0, 0, 0)
-                        chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                    else
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_FIRST_EVEN_ODD, 1, 0, 0, 0)
-                        chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                    end
-                elseif randText == 2 then
-                    if xi.caskets.isEven(splitNumbers[2]) then
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_SECOND_EVEN_ODD, 0, 0, 0, 0)
-                        chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                    else
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_SECOND_EVEN_ODD, 1, 0, 0, 0)
-                        chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                    end
-                elseif randText == 3 then
-                    if splitNumbers[1] <= 6 then
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.FIRST_DIGIT_IS,
-                            splitNumbers[1],
-                            splitNumbers[1] +1,
-                            splitNumbers[1] +2, 0)
-                    elseif splitNumbers[1] == 9 then
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.FIRST_DIGIT_IS,
-                            splitNumbers[1] -2,
-                            splitNumbers[1] -1,
-                            splitNumbers[1], 0)
-                    else
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.FIRST_DIGIT_IS,
-                            splitNumbers[1] -1,
-                            splitNumbers[1],
-                            splitNumbers[1] +1, 0)
-                    end
-                    chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                elseif randText == 4 then
-                    if splitNumbers[2] <= 6 then
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.SECOND_DIGIT_IS,
-                            splitNumbers[2],
-                            splitNumbers[2] +1,
-                            splitNumbers[2] +2, 0)
-                    elseif splitNumbers[2] == 9 then
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.SECOND_DIGIT_IS,
-                            splitNumbers[2] -2,
-                            splitNumbers[2] -1,
-                            splitNumbers[2], 0)
-                    else
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.SECOND_DIGIT_IS,
-                            splitNumbers[2] -1,
-                            splitNumbers[2],
-                            splitNumbers[2] +1, 0)
-                    end
-                    chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                elseif randText == 5 then
-                    player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.ONE_OF_TWO_DIGITS_IS,
-                        splitNumbers[1], 0, 0, 0)
-                    chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                elseif randText == 6 then
-                    player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.ONE_OF_TWO_DIGITS_IS,
-                        splitNumbers[2], 0, 0, 0)
-                    chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                elseif randText == 7 then
-                    local highNum = 0
-                    local lowNum  = 0
-
-                    if splitNumbers[1] == 1 then
-                        lowNum  = 10
-                        highNum = 20 + math.random(1, 9)
-                    elseif splitNumbers[1] > 1 and splitNumbers[1] < 9 then
-                        lowNum  = splitNumbers[1] * 10 - 10 + math.random(1, 9)
-                        highNum = splitNumbers[1] * 10 + 10 + math.random(1, 9)
-                    elseif splitNumbers[1] == 9 then
-                        lowNum  = 80 + math.random(1, 9)
-                        highNum = 99
-                    end
-
-                    player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.COMBINATION_GREATER_LESS, lowNum, highNum, 0, 0)
-                    chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                else
-                    player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.UNABLE_TO_GET_HINT, 0, 0, 0, 0)
-                end
-                xi.caskets.checkRemainingAttempts(player, chestObj, remainingAttempts, correctNumber)
-                xi.caskets.removeHint(chestObj, randText)
+        if randText == 1 then
+            if xi.caskets.isEven(splitNumbers[1]) then
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_FIRST_EVEN_ODD, 0, 0, 0, 0)
+                chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
+            else
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_FIRST_EVEN_ODD, 1, 0, 0, 0)
+                chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
             end
-        -----------------------------------
-        -- Inputs
-        -----------------------------------
-        elseif lockedChoice == 1 then -- Input a number
-            if inputNumber > 9 and inputNumber < 100 then
-                if inputNumber == correctNumber then
-                    if locked == 0 then
-                        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.NO_COMBINATION, 0, 0, 0, 0)
-                    else
-                        xi.caskets.messageChest(player, "OPENED_LOCK", 0 , 0, 0, 0, chestObj)
-                        chestObj:setLocalVar("[caskets]LOCKED", 0)
+        elseif randText == 2 then
+            if xi.caskets.isEven(splitNumbers[2]) then
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_SECOND_EVEN_ODD, 0, 0, 0, 0)
+                chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
+            else
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_SECOND_EVEN_ODD, 1, 0, 0, 0)
+                chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
+            end
+        elseif randText == 3 then
+            if splitNumbers[1] <= 6 then
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.FIRST_DIGIT_IS,
+                        splitNumbers[1],
+                        splitNumbers[1] +1,
+                        splitNumbers[1] +2, 0)
+            elseif splitNumbers[1] == 9 then
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.FIRST_DIGIT_IS,
+                        splitNumbers[1] -2,
+                        splitNumbers[1] -1,
+                        splitNumbers[1], 0)
+            else
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.FIRST_DIGIT_IS,
+                        splitNumbers[1] -1,
+                        splitNumbers[1],
+                        splitNumbers[1] +1, 0)
+            end
+            chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
+        elseif randText == 4 then
+            if splitNumbers[2] <= 6 then
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.SECOND_DIGIT_IS,
+                        splitNumbers[2],
+                        splitNumbers[2] +1,
+                        splitNumbers[2] +2, 0)
+            elseif splitNumbers[2] == 9 then
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.SECOND_DIGIT_IS,
+                        splitNumbers[2] -2,
+                        splitNumbers[2] -1,
+                        splitNumbers[2], 0)
+            else
+                player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.SECOND_DIGIT_IS,
+                        splitNumbers[2] -1,
+                        splitNumbers[2],
+                        splitNumbers[2] +1, 0)
+            end
+            chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
+        elseif randText == 5 then
+            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.ONE_OF_TWO_DIGITS_IS,
+                    splitNumbers[1], 0, 0, 0)
+            chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
+        elseif randText == 6 then
+            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.ONE_OF_TWO_DIGITS_IS,
+                    splitNumbers[2], 0, 0, 0)
+            chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
+        elseif randText == 7 then
+            local highNum = 0
+            local lowNum  = 0
 
-                        if chestObj:getLocalVar("[caskets]SPAWNSTATUS") == xi.caskets.casketInfo.spawnStatus.SPAWNED_CLOSED then  -- is the chest shut?, then open it.
-                           chestObj:setAnimationSub(1)
-                           chestObj:setLocalVar("[caskets]SPAWNSTATUS", xi.caskets.casketInfo.spawnStatus.SPAWNED_OPEN)
-                           -- RoE Timed Record #4019 - Crack Tresure Caskets
-                           if player:getEminenceProgress(4019) then
-                               xi.roe.onRecordTrigger(player, 4019)
-                           end
-                        end
-                    end
-                else
-                    if inputNumber < correctNumber then
-                        if locked == 0 then
-                            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.NO_COMBINATION, 0, 0, 0, 0)
-                        else
-                            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_GREATER_LESS, inputNumber, 0, 0, 0, 0)
-                            chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                            xi.caskets.checkRemainingAttempts(player, chestObj, remainingAttempts, correctNumber)
-                        end
-                    elseif inputNumber > correctNumber then
-                        if locked == 0 then
-                            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.NO_COMBINATION, 0, 0, 0, 0)
-                        else
-                            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_GREATER_LESS, inputNumber, 1, 0, 0, 0)
-                            chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
-                            xi.caskets.checkRemainingAttempts(player, chestObj, remainingAttempts, correctNumber)
-                        end
-                    end
-                end
+            if splitNumbers[1] == 1 then
+                lowNum  = 10
+                highNum = 20 + math.random(1, 9)
+            elseif splitNumbers[1] > 1 and splitNumbers[1] < 9 then
+                lowNum  = splitNumbers[1] * 10 - 10 + math.random(1, 9)
+                highNum = splitNumbers[1] * 10 + 10 + math.random(1, 9)
+            elseif splitNumbers[1] == 9 then
+                lowNum  = 80 + math.random(1, 9)
+                highNum = 99
+            end
+
+            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.COMBINATION_GREATER_LESS, lowNum, highNum, 0, 0)
+            chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAtempts +1)
+        else
+            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.UNABLE_TO_GET_HINT, 0, 0, 0, 0)
+        end
+        xi.caskets.checkRemainingAttempts(player, chestObj, remainingAttempts, correctNumber)
+        xi.caskets.removeHint(chestObj, randText)
+    end
+end
+
+-----------------------------------
+-- Desc: Function handles what happens if the player inputs a correct number.
+-----------------------------------
+xi.caskets.playerInputCorrectNumber = function(player, chestObj, locked, baseMessage)
+    if locked == 0 then
+        player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.NO_COMBINATION, 0, 0, 0, 0)
+    else
+        xi.caskets.messageChest(player, "OPENED_LOCK", 0 , 0, 0, 0, chestObj)
+        chestObj:setLocalVar("[caskets]LOCKED", 0)
+
+        if chestObj:getLocalVar("[caskets]SPAWNSTATUS") == xi.caskets.casketInfo.spawnStatus.SPAWNED_CLOSED then  -- is the chest shut?, then open it.
+            chestObj:setAnimationSub(1)
+            chestObj:setLocalVar("[caskets]SPAWNSTATUS", xi.caskets.casketInfo.spawnStatus.SPAWNED_OPEN)
+            -- RoE Timed Record #4019 - Crack Tresure Caskets
+            if player:getEminenceProgress(4019) then
+                xi.roe.onRecordTrigger(player, 4019)
             end
         end
+    end
+end
+
+-----------------------------------
+-- Desc: Function handles what happens if the player inputs an incorrect number.
+-----------------------------------
+xi.caskets.playerInputIncorrectNumber = function(player, chestObj, locked, inputNumber, correctNumber, baseMessage)
+    local attemptsAllowed = chestObj:getLocalVar("[caskets]ATTEMPTS")
+    local failedAttempts = chestObj:getLocalVar("[caskets]FAILED_ATEMPTS")
+    local remainingAttempts = attemptsAllowed - failedAttempts
+
+    if inputNumber < correctNumber then
+        if locked == 0 then
+            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.NO_COMBINATION, 0, 0, 0, 0)
+        else
+            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_GREATER_LESS, inputNumber, 0, 0, 0, 0)
+            chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAttempts +1)
+            xi.caskets.checkRemainingAttempts(player, chestObj, remainingAttempts, correctNumber)
+        end
+    elseif inputNumber > correctNumber then
+        if locked == 0 then
+            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.NO_COMBINATION, 0, 0, 0, 0)
+        else
+            player:messageSpecial(baseMessage + xi.caskets.casketInfo.messageOffset.HUNCH_GREATER_LESS, inputNumber, 1, 0, 0, 0)
+            chestObj:setLocalVar("[caskets]FAILED_ATEMPTS", failedAttempts +1)
+            xi.caskets.checkRemainingAttempts(player, chestObj, remainingAttempts, correctNumber)
+        end
+    end
+end
+
+-----------------------------------
+-- Desc: Function handles the general option of a player inputting a number.
+-----------------------------------
+xi.caskets.playerInputNumber = function(player, option, chestObj, baseMessage)
+    local inputNumber = bit.rshift(option, 16)
+
+    if inputNumber > 9 and inputNumber < 100 then
+        local correctNumber = chestObj:getLocalVar("[caskets]CORRECT_NUM")
+        local locked = chestObj:getLocalVar("[caskets]LOCKED")
+
+        if inputNumber == correctNumber then
+            xi.caskets.playerInputCorrectNumber(player, chestObj, locked, baseMessage)
+        else
+            xi.caskets.playerInputIncorrectNumber(player, chestObj, locked, inputNumber, correctNumber, baseMessage)
+        end
+    end
+end
+
+-----------------------------------
+-- Desc: Function handles what should happen on a locked casket.
+-----------------------------------
+xi.caskets.onCasketLocked = function(player, option, chestObj, baseMessage)
+    local lockedChoice = bit.lshift(1, option -1)
+    local spawnStatus = chestObj:getLocalVar("[caskets]SPAWNSTATUS")
+
+    if option > 0 and spawnStatus ~= xi.caskets.casketInfo.spawnStatus.SPAWNED_CLOSED then -- prevent minigame from working if chest is opened.
+        return
+    end
+
+    if lockedChoice == 2 then -- Examine chest
+        xi.caskets.playerExamineChest(player, option, chestObj, baseMessage)
+    elseif lockedChoice == 1 then -- Input a number
+        xi.caskets.playerInputNumber(player, option, chestObj, baseMessage)
+    end
+end
+
+-----------------------------------
+-- Desc: Function handles the option of a player picking an item from a chest.
+-----------------------------------
+xi.caskets.onItemSelected = function(player, option, chestObj, lootType)
+    if lootType == 1 then
+        if option == 65537 then
+            xi.caskets.giveTempItem(player, chestObj, 1)
+        elseif option == 65538 then
+            xi.caskets.giveTempItem(player, chestObj, 2)
+        elseif option == 65539 then
+            xi.caskets.giveTempItem(player, chestObj, 3)
+        end
+    elseif lootType == 2 then
+        if option == 65537 then
+            xi.caskets.giveItem(player, chestObj, 1)
+        elseif option == 65538 then
+            xi.caskets.giveItem(player, chestObj, 2)
+        elseif option == 65539 then
+            xi.caskets.giveItem(player, chestObj, 3)
+        elseif option == 65540 then
+            xi.caskets.giveItem(player, chestObj, 4)
+        end
+    end
+end
+
+xi.caskets.onEventFinish = function(player, csid, option, npc)
+    local zoneId = player:getZoneID()
+    local ID = zones[zoneId]
+    local baseMessage = ID.text.PLAYER_OBTAINS_TEMP_ITEM
+
+    -----------------------------------
+    -- Basic chest var's
+    -----------------------------------
+    local chestObj          = player:getEventTarget()
+    local locked            = chestObj:getLocalVar("[caskets]LOCKED")
+    local lootType          = chestObj:getLocalVar("[caskets]LOOT_TYPE")
+
+    if locked == 1 then
+        xi.caskets.onCasketLocked(player, option, chestObj, baseMessage)
     elseif locked == 0 then
-        if lootType == 1 then
-            if option == 65537 then
-                xi.caskets.giveTempItem(player, chestObj, 1)
-            elseif option == 65538 then
-                xi.caskets.giveTempItem(player, chestObj, 2)
-            elseif option == 65539 then
-                xi.caskets.giveTempItem(player, chestObj, 3)
-            end
-        elseif lootType == 2 then
-            if option == 65537 then
-                xi.caskets.giveItem(player, chestObj, 1)
-            elseif option == 65538 then
-                xi.caskets.giveItem(player, chestObj, 2)
-            elseif option == 65539 then
-                xi.caskets.giveItem(player, chestObj, 3)
-            elseif option == 65540 then
-                xi.caskets.giveItem(player, chestObj, 4)
-            end
-        end
+        xi.caskets.onItemSelected(player, option, chestObj, lootType)
     end
 end
