@@ -9,7 +9,7 @@ require("scripts/globals/qr_synth")
 -----------------------------------
 xi.augments = xi.augments or {}
 
-xi.augments.sources = xi.augments.sources or {
+xi.augments.sources = {
     -- Lowbie Augments
     [1]   = {1,   0,   4}, -- HP range 1 - 10
     [2]   = {9,   0,   2}, -- MP range 1 - 5
@@ -39,7 +39,7 @@ xi.augments.sources = xi.augments.sources or {
     [26]  = {1796, 0,  0}, -- Pet Int +1
 }
 
-xi.augments.strings = xi.augments.strings or {
+xi.augments.strings = {
     [23] = "Accuracy",
     [27] = "Ranged Acc",
     [25] = "Attack",
@@ -155,7 +155,7 @@ xi.augments.strings = xi.augments.strings or {
     [1798] = "Pet: CHR",
 }
 
-xi.augments.page_pools = xi.augments.page_pools or {
+xi.augments.page_pools = {
     [1] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}
 }
 
