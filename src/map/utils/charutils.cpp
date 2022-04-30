@@ -3781,6 +3781,7 @@ namespace charutils
                                 exp *= (1.8f / pcinzone);
                                 break;
                         }
+                        exp *= 1.5f;
                     }
                     else if (PMember->StatusEffectContainer->HasStatusEffect(EFFECT_SANCTION) && region >= REGION_TYPE::WEST_AHT_URHGAN &&
                              region <= REGION_TYPE::ALZADAAL)
@@ -3809,6 +3810,7 @@ namespace charutils
                                 exp *= (1.8f / pcinzone);
                                 break;
                         }
+                        exp *= 3.0f;
                     }
                     else
                     {
