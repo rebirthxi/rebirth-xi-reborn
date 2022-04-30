@@ -4,7 +4,6 @@
 require("modules/module_utils")
 -----------------------------------
 local m = Module:new("seigan_duration_increase")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.abilities.seigan.onUseAbility", function(player, target, ability)
     if (target:isWeaponTwoHanded()) then

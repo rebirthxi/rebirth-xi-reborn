@@ -4,7 +4,6 @@
 require("modules/module_utils")
 -----------------------------------
 local m = Module:new("yonin_duration_increase")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.abilities.yonin.onUseAbility", function(player, target, ability)
     target:delStatusEffect(xi.effect.INNIN)

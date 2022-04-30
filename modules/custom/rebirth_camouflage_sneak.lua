@@ -6,7 +6,6 @@ require("modules/module_utils")
 require("scripts/globals/status")
 -----------------------------------
 local m = Module:new("rebirth_ele_seal_buff")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.abilities.camouflage.onUseAbility", function(player, target, ability)
     local mod_sneak = player:getMod(xi.mod.CAMOUFLAGE_SNEAK)

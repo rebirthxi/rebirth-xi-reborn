@@ -10,7 +10,6 @@ require("scripts/globals/status")
 require('scripts/globals/zone')
 -----------------------------------
 local m = Module:new("rebirth_nexus_cape")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.items.nexus_cape.onItemCheck", function(target)
     local result = xi.msg.basic.ITEM_UNABLE_TO_USE -- Default is fail.

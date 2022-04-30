@@ -4,7 +4,6 @@
 require("modules/module_utils")
 -----------------------------------
 local m = Module:new("hasso_duration_increase")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.abilities.hasso.onUseAbility", function(player, target, ability)
     local strboost = 0

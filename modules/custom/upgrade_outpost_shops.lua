@@ -9,7 +9,6 @@ require("scripts/globals/shop")
 
 -----------------------------------
 local m = Module:new("upgrade_outpost_shops")
-m:setEnabled(true)
 
 m:addOverride("xi.shop.outpost", function(player)
     local stock =

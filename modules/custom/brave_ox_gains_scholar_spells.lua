@@ -5,7 +5,6 @@ require("modules/module_utils")
 local ID = require("scripts/zones/Rabao/IDs")
 -----------------------------------
 local m = Module:new("brave_ox_spells")
-m:setEnabled(true)
 
 m:addOverride("xi.zones.Rabao.npcs.Brave_Ox.onTrigger", function(player, npc)
     local stock =

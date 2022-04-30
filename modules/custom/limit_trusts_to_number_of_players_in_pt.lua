@@ -6,7 +6,6 @@ require("modules/module_utils")
 local ID = require("scripts/zones/Rabao/IDs")
 -----------------------------------
 local m = Module:new("limit_trusts_to_one_per_player")
-m:setEnabled(true)
 
 local rovKIBattlefieldIDs = set{
     5,    -- Shattering Stars (WAR LB5)

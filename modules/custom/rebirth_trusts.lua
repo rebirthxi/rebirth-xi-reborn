@@ -9,7 +9,6 @@ require("scripts/globals/trust")
 require("scripts/globals/utils")
 -----------------------------------
 local m = Module:new("rebirth_trusts")
-m:setEnabled(true)
 
 ---
 --- Koru-Moru

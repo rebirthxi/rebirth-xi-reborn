@@ -7,7 +7,6 @@ require("scripts/globals/magic")
 -----------------------------------
 
 local m = Module:new("rebirth_leveling_incentives")
-m:setEnabled(true)
 
 m:addOverride("xi.player.onPlayerLevelUp", function(player)
     -- check AF

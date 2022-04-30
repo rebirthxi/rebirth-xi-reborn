@@ -5,7 +5,6 @@ require("modules/module_utils")
 require("scripts/globals/status")
 -----------------------------------
 local m = Module:new("rebirth_potency_buff")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.spells.white.regen.onSpellCast", function(caster, target, spell)
     local hp = math.ceil(5 * (1 + 0.01 * caster:getMod(xi.mod.REGEN_MULTIPLIER))) -- spell base times gear multipliers

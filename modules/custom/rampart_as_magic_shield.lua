@@ -6,7 +6,6 @@ require("modules/module_utils")
 require("scripts/globals/status")
 -----------------------------------
 local m = Module:new("rampart_as_magic_shield")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.effects.rampart.onEffectGain", function(target, effect)
     target:addMod(xi.mod.UDMGMAGIC, -10000)

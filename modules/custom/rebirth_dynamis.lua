@@ -7,7 +7,6 @@ require("scripts/globals/qr_dynamis/helpers")
 require("scripts/globals/qr_dynamis/data")
 -----------------------------------
 local m = Module:new("rebirth_dynamis")
-m:setEnabled(true)
 
 local noop_fun = function() return;  end
 

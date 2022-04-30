@@ -7,7 +7,6 @@ require("modules/module_utils")
 require("scripts/globals/status")
 -----------------------------------
 local m = Module:new("regime_trade_convenience_buffs")
-m:setEnabled(true)
 
 m:addOverride("xi.regime.bookOnTrade", function(player, npc, trade)
     if trade:getItemCount() ~= 1 or trade:getGil() ~= 100 then

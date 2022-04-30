@@ -7,7 +7,6 @@ require("scripts/globals/status")
 require("scripts/globals/msg")
 -----------------------------------
 local m = Module:new("out_of_combat_move")
-m:setEnabled(true)
 
 local ooc_move_gain = "%s's out of combat movement speed has returned."
 local ooc_move_lose = "%s's out of combat movement speed wears off."

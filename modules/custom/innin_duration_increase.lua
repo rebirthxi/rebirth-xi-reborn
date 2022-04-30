@@ -4,7 +4,6 @@
 require("modules/module_utils")
 -----------------------------------
 local m = Module:new("innin_duration_increase")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.abilities.innin.onUseAbility", function(player, target, ability)
     target:delStatusEffect(xi.effect.INNIN)

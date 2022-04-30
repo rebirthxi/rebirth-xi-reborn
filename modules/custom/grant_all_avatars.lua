@@ -5,7 +5,6 @@ require("modules/module_utils")
 require("scripts/globals/magic")
 -----------------------------------
 local m = Module:new("grant_all_avatars")
-m:setEnabled(true)
 
 m:addOverride("xi.player.onGameIn", function(player, firstLogin, zoning)
     if not zoning then

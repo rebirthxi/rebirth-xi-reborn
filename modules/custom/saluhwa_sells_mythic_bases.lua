@@ -6,7 +6,6 @@ local ID = require("scripts/zones/Aht_Urhgan_Whitegate/IDs")
 require("scripts/globals/shop")
 -----------------------------------
 local m = Module:new("saluhwa_sells_mythic_bases")
-m:setEnabled(true)
 
 m:addOverride("xi.zones.Aht_Urhgan_Whitegate.npcs.Saluhwa.onTrigger", function(player, npc)
     local stock =

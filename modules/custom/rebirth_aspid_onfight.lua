@@ -6,7 +6,6 @@ require("scripts/globals/status")
 require("scripts/globals/mobs")
 -----------------------------------
 local m = Module:new("rebirth_aspid_onMobFight")
-m:setEnabled(true)
 
 local aspid_states = {
     FIRST_SPAWNED = 6,

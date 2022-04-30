@@ -13,7 +13,6 @@ require("scripts/globals/status")
 require("scripts/globals/magic")
 -----------------------------------
 local m = Module:new("rebirth_etude_buff")
-m:setEnabled(true)
 
 xi.artifacts = xi.artifacts or {}
 xi.artifacts.brd = xi.artifacts.brd or {}

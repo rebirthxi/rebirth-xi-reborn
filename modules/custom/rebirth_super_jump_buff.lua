@@ -6,7 +6,6 @@ require("modules/module_utils")
 require("scripts/globals/status")
 -----------------------------------
 local m = Module:new("rebirth_super_jump_buff")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.abilities.super_jump.onUseAbility", function(player, target, ability)
     local super_jump_atk_mod = player:getMod(xi.mod.SUPER_JUMP_ATK_BUFF)

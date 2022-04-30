@@ -4,7 +4,6 @@
 require("modules/module_utils")
 -----------------------------------
 local m = Module:new("gravity_potency")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.spells.black.gravity.onSpellCast", function(caster, target, spell)
     local base_potency = 50

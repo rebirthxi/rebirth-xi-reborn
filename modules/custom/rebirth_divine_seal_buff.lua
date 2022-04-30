@@ -6,7 +6,6 @@ require("modules/module_utils")
 require("scripts/globals/status")
 -----------------------------------
 local m = Module:new("rebirth_divine_seal_buff")
-m:setEnabled(true)
 
 m:addOverride("xi.globals.abilities.divine_seal.onUseAbility", function(player, target, ability)
     local mod_enm = player:getMod(xi.mod.DIVINE_SEAL_ENM)

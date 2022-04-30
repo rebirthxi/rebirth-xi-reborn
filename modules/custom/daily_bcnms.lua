@@ -9,7 +9,6 @@ require("scripts/globals/quests")
 require("scripts/globals/utils")
 -----------------------------------
 local m = Module:new("daily_bcnms")
-m:setEnabled(true)
 
 local shamiSealItems =
 {-- Trade Item                     Seal ID, Retrieve Option,
