@@ -483,3 +483,28 @@ function utils.splitStr(s, sep)
     string.gsub(s, pattern, function(c) fields[#fields + 1] = c end)
     return fields
 end
+
+function utils.serializeTable(tab)
+    local tabstring = "return {"
+    for k, v in pairs( tab ) do
+        local kStr, vStr
+
+        --get string of key
+        if type(k) == "string" then
+            kStr = string.format("%q", k)
+        else
+            kStr = string.format("%d", k)
+        end
+
+        --get string of value
+        if type(v) == "string" then
+            vStr = string.format("%q", v)
+        else
+            vStr = string.format( "%d", v)
+        end
+
+        tabstring = tabstring .. string.format("[%s] = %s, ", kStr, vStr)
+    end
+    tabstring = tabstring .. "}"
+    return tabstring
+end
