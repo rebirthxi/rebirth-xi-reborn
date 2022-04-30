@@ -397,6 +397,90 @@ xi.caskets.setTempItems = function(npc, temp1, temp2, temp3)
 end
 
 -----------------------------------
+-- Desc: Function selects items from a table with the fallback being a potion.
+--       It then applies a resultFunction to that selection (this is typically used to
+--       potentially swap out regional items).
+-----------------------------------
+xi.caskets.selectItemsFromTable = function(possibleCountSelection, possibleItems, resultFunction)
+    local countOfDrops = possibleCountSelection[math.random(1, #possibleCountSelection)]
+    local selections = {0, 0, 0, 0} -- covers all cases, 3 drops and 4 drops
+
+    for i = 1, countOfDrops do
+        local sum = 0
+
+        for _, v in pairs(possibleItems) do
+            sum = sum + v[1]
+        end
+
+        local rand = math.random() * sum -- note: NOT math.random(sum). That will truncate the fractional part of sum
+        local selection = 0
+
+        for _, v in pairs(possibleItems) do
+            rand = rand - v[1]
+            if rand <= 0 then
+                selection = v[2]
+                break
+            end
+        end
+        if selection == 0 or selection == nil then
+            selections[i] = 4112 -- default to potion
+        else
+            local index, resultSelection = resultFunction(selection, i)
+
+            selections[index] = resultSelection
+        end
+    end
+
+    return selections
+end
+
+-----------------------------------
+-- Desc: Function returns a table of the temp items this casket (npc) is going to be filled with.
+-----------------------------------
+xi.caskets.getTempItems = function(npc, zoneId)
+    local randomTable  = {1, 3, 1, 2, 1, 2, 1, 1, 3, 1, 2, 1}
+    local tempDrops = xi.casket_loot.casketItems[zoneId].temps
+
+    if xi.caskets.casketInfo.splitZones[zoneId] then
+        local mobLvl = npc:getLocalVar("[caskets]MOBLVL")
+        if mobLvl > 50 then
+            tempDrops = xi.casket_loot.casketItems[zoneId].tempsHi
+        else
+            tempDrops = xi.casket_loot.casketItems[zoneId].tempsLow
+        end
+    end
+
+    return xi.caskets.selectItemsFromTable(randomTable, tempDrops, function(originalSelection, index)
+        return index, originalSelection;
+    end)
+end
+
+-----------------------------------
+-- Desc: Function returns a table of the items this casket (npc) is going to be filled with.
+-----------------------------------
+xi.caskets.getCasketItems = function(npc, zoneId)
+    local randomTable  = {1, 4, 1, 3, 1, 1, 2, 1, 3, 1, 2, 1}
+    local drops = xi.casket_loot.casketItems[zoneId].items
+
+    if xi.caskets.casketInfo.splitZones[zoneId] then
+        local mobLvl = npc:getLocalVar("[caskets]MOBLVL")
+        if mobLvl > 50 then
+            drops = xi.casket_loot.casketItems[zoneId].itemsHi
+        else
+            drops = xi.casket_loot.casketItems[zoneId].itemsLow
+        end
+    end
+
+    return xi.caskets.selectItemsFromTable(randomTable, drops, function(originalSelection, index)
+        if math.random() < 0.05 then
+            return 1, xi.casket_loot.casketItems[zoneId].regionalItems[math.random(1, #xi.casket_loot.casketItems[zoneId].regionalItems)]
+        else
+            return index, originalSelection
+        end
+    end)
+end
+
+-----------------------------------
 -- Grab random drops from zone item or temp tables depending on type of chest
 -----------------------------------
 xi.caskets.getDrops = function(npc, dropType, zoneId)
@@ -410,93 +494,14 @@ xi.caskets.getDrops = function(npc, dropType, zoneId)
     -- Temp drops
     -----------------------------------
     if chestType == "tempItems" then
-        local temps        = {0, 0, 0}
-        local tempCount    = 1
-        local randomTable  = {1, 3, 1, 2, 1, 2, 1, 1, 3, 1, 2, 1}
-        local tempDrops = xi.casket_loot.casketItems[zoneId].temps
+        local temps = xi.caskets.getTempItems(npc, zoneId)
 
-        if xi.caskets.casketInfo.splitZones[zoneId] then
-            local mobLvl = npc:getLocalVar("[caskets]MOBLVL")
-            if mobLvl > 50 then
-                tempDrops = xi.casket_loot.casketItems[zoneId].tempsHi
-            else
-                tempDrops = xi.casket_loot.casketItems[zoneId].tempsLow
-            end
-        end
-
-        tempCount = randomTable[math.random(1, #randomTable)]
-
-        for i = 1, tempCount do
-            local sum = 0
-
-            for k, v in pairs(tempDrops) do
-                sum = sum + v[1]
-            end
-
-            local rand = math.random() * sum -- note: NOT math.random(sum). That will truncate the fractional part of sum
-            local temp = 0
-
-            for k, v in pairs(tempDrops) do
-                rand = rand - v[1]
-                if rand <= 0 then
-                   temp = v[2]
-                   break
-                end
-            end
-            if temp == 0 or temp == nil then
-                temps[i] = 4112 -- default to potion
-            else
-                temps[i] = temp
-            end
-        end
         xi.caskets.setTempItems(npc, temps[1], temps[2], temps[3])
     -----------------------------------
     -- Item drops
     -----------------------------------
     elseif chestType == "items" then
-        local items        = {0, 0, 0, 0}
-        local itemCount    = 1
-        local randomTable  = {1, 4, 1, 3, 1, 1, 2, 1, 3, 1, 2, 1}
-        local drops = xi.casket_loot.casketItems[zoneId].items
-
-        if xi.caskets.casketInfo.splitZones[zoneId] then
-            local mobLvl = npc:getLocalVar("[caskets]MOBLVL")
-            if mobLvl > 50 then
-                drops = xi.casket_loot.casketItems[zoneId].itemsHi
-            else
-                drops = xi.casket_loot.casketItems[zoneId].itemsLow
-            end
-        end
-
-        itemCount = randomTable[math.random(1, #randomTable)]
-
-        for i = 1, itemCount do
-            local sum = 0
-
-            for k, v in pairs(drops) do
-                sum = sum + v[1]
-            end
-
-            local rand = math.random() * sum -- note: NOT math.random(sum). That will truncate the fractional part of sum
-            local item = 0
-
-            for k, v in pairs(drops) do
-                rand = rand - v[1]
-                if rand <= 0 then
-                   item = v[2]
-                   break
-                end
-            end
-            if item == 0 or item == nil then
-                items[i] = 4112 -- default to potion
-            else
-                if math.random() < 0.05 then
-                    items[1] = xi.casket_loot.casketItems[zoneId].regionalItems[math.random(1, #xi.casket_loot.casketItems[zoneId].regionalItems)]
-                else
-                    items[i] = item
-                end
-            end
-        end
+        local items = xi.caskets.getCasketItems(npc, zoneId)
 
         xi.caskets.setItems(npc, items[1], items[2], items[3], items[4])
     -----------------------------------
