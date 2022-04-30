@@ -3757,66 +3757,58 @@ namespace charutils
 
                     if (PMember->StatusEffectContainer->HasStatusEffect(EFFECT_SIGNET) && region >= REGION_TYPE::RONFAURE && region <= REGION_TYPE::JEUNO)
                     {
-                        float xp_mod = 1.5f;
-
                         switch (pcinzone)
                         {
                             case 1:
-                                xp_mod += 1.00f;
+                                exp *= 1.00f;
                                 break;
                             case 2:
-                                xp_mod += 0.75f;
+                                exp *= 0.75f;
                                 break;
                             case 3:
-                                xp_mod += 0.55f;
+                                exp *= 0.55f;
                                 break;
                             case 4:
-                                xp_mod += 0.45f;
+                                exp *= 0.45f;
                                 break;
                             case 5:
-                                xp_mod += 0.39f;
+                                exp *= 0.39f;
                                 break;
                             case 6:
-                                xp_mod += 0.35f;
+                                exp *= 0.35f;
                                 break;
                             default:
-                                xp_mod += (1.8f / pcinzone);
+                                exp *= (1.8f / pcinzone);
                                 break;
                         }
-
-                        exp *= xp_mod;
                     }
                     else if (PMember->StatusEffectContainer->HasStatusEffect(EFFECT_SANCTION) && region >= REGION_TYPE::WEST_AHT_URHGAN &&
                              region <= REGION_TYPE::ALZADAAL)
                     {
-                        float xp_mod = 3.0f;
-
                         switch (pcinzone)
                         {
                             case 1:
-                                xp_mod += 1.00f;
+                                exp *= 1.00f;
                                 break;
                             case 2:
-                                xp_mod += 0.75f;
+                                exp *= 0.75f;
                                 break;
                             case 3:
-                                xp_mod += 0.55f;
+                                exp *= 0.55f;
                                 break;
                             case 4:
-                                xp_mod += 0.45f;
+                                exp *= 0.45f;
                                 break;
                             case 5:
-                                xp_mod += 0.39f;
+                                exp *= 0.39f;
                                 break;
                             case 6:
-                                xp_mod += 0.35f;
+                                exp *= 0.35f;
                                 break;
                             default:
-                                xp_mod += (1.8f / pcinzone);
+                                exp *= (1.8f / pcinzone);
                                 break;
                         }
-
-                        exp *= xp_mod;
                     }
                     else
                     {
