@@ -155,6 +155,91 @@ xi.augments.strings = {
     [1798] = "Pet: CHR",
 }
 
+xi.augments.item_strings = {
+    [16481] = "Augment Dagger",
+    [13450] = "Diamond Ring",
+    [13087] = "Jeweled Collar",
+    [13925] = "Rasetsu Jinpachi",
+    [13212] = "Tarutaru Sash",
+    [14644] = "Dark Ring",
+    [16128] = "Wivre Hairpin",
+    [12324] = "Tower Shield",
+    [12420] = "Adaman Barbuta",
+}
+
+xi.augments.regional_item_augments = {
+    --augid, min, max
+    -- diamond ring, wiki order
+    [13450] = {
+        { 769, 0, 4 },
+        { 516, 0, 2 },
+        { 517, 0, 2 },
+        { 180, 0, 2 },
+        { 53, 0, 4  },
+    },
+    -- jeweled collar, wiki order
+    [13087] = {
+        { 516, 0, 3 },
+        { 518, 0, 3 },
+        { 517, 0, 3 },
+        { 140, 0, 2 },
+        { 141, 0, 1 },
+    },
+    -- rasetsu jinpachi, wiki order
+    [13925] = {
+        { 182, 0, 4 },
+        { 183, 0, 2 },
+        { 768, 0, 3 },
+        { 198, 1, 4 },
+        { 31, 1, 9  },
+    },
+    -- tarutaru sash, wiki order
+    [13212] = {
+        { 1, 2, 10  },
+        { 516, 0, 3 },
+        { 517, 0, 2 },
+        { 518, 0, 2 },
+        { 148, 0, 2 },
+        { 147, 0, 0 },
+    },
+    -- dark rings, wiki order
+    [14644] = {
+        { 56, 0, 5 },
+        { 54, 0, 5 },
+        { 55, 0, 5 },
+        { 42, 0, 2 },
+        { 53, 0, 4 },
+        { 33, 1, 3 },
+    },
+    -- wivre hairpin, wiki order
+    [16128] = {
+        { 771, 0, 9 },
+        { 773, 0, 7 },
+        { 769, 0, 7 },
+        { 775, 2, 9 },
+        { 9, 12, 15 },
+        { 138, 0, 0 },
+    },
+    -- tower shield, wiki order
+    [12324] = {
+        { 153, 0, 1 },
+        { 188, 0, 4 },
+        { 180, 0, 3 },
+        { 181, 0, 4 },
+        { 1, 1, 16  },
+        { 39, 0, 1  },
+    },
+    -- adaman barbuta, wiki order
+    [12420] = {
+        { 53, 0, 2  },
+        { 188, 0, 4 },
+        { 774, 2, 8 },
+        { 329, 1, 4 },
+        { 1, 15, 15 },
+        { 137, 0, 2 },
+    },
+}
+
 xi.augments.page_pools = {
     [1] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}
 }
@@ -305,4 +390,57 @@ function xi.augments.RollAugments(augment_entry)
     end
 
     return augments, augment_src
+end
+
+xi.augments.RollRegionalItemAugment = function(itemId)
+    local augments = {}
+    -- 100, 50, 25 for rolls 1, 2, 3
+    if xi.augments.regional_item_augments[itemId] ~= nil then
+        local augment_pool = xi.augments.regional_item_augments[itemId]
+
+        -- Select First Augment
+        local selection = math.random(1, #augment_pool)
+        local augment   = augment_pool[selection]
+        local augmentId = augment[1]
+        local value     = math.random(augment[2], augment[3])
+
+        augments[augmentId] = value
+
+        -- Should we select a second augment?
+        if math.random() < 0.5 then
+            selection = math.random(1, #augment_pool)
+            augment   = augment_pool[selection]
+            augmentId = augment[1]
+            value     = math.random(augment[2], augment[3])
+
+            if augments[augmentId] == nil then
+                -- If the augment is not on the item, add it
+                augments[augmentId] = value
+            else
+                -- If the augment is already on the item, take the better version
+                if augments[augmentId] < value then
+                    augments[augmentId] = value
+                end
+            end
+        end
+
+        -- Should we select a third augment?
+        if math.random() < 0.25 then
+            selection = math.random(1, #augment_pool)
+            augment   = augment_pool[selection]
+            augmentId = augment[1]
+            value     = math.random(augment[2], augment[3])
+
+            if augments[augmentId] == nil then
+                -- If the augment is not on the item, add it
+                augments[augmentId] = value
+            else
+                -- If the augment is already on the item, take the better version
+                if augments[augmentId] < value then
+                    augments[augmentId] = value
+                end
+            end
+        end
+    end
+    return augments
 end
