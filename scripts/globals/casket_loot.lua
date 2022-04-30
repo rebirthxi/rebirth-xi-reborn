@@ -2098,7 +2098,7 @@ xi.casket_loot.casketItems =
     },
     [xi.zone.THE_BOYAHDA_TREE] =
     {
-        regionalItems = {10948}, -- Carver's Torque
+        regionalItems = {13450, 10948}, -- Diamond Ring | Carver's Torque
         temps =
         {
         -----------------------------------
@@ -2226,7 +2226,7 @@ xi.casket_loot.casketItems =
     },
     [xi.zone.UPPER_DELKFUTTS_TOWER] =
     {
-        regionalItems = {}, -- Nothing for the moment
+        regionalItems = {16128}, -- Wivre Hairpin
         temps =
         {
         -----------------------------------
@@ -2326,7 +2326,7 @@ xi.casket_loot.casketItems =
     },
     [xi.zone.DEN_OF_RANCOR] =
     {
-        regionalItems = {10950}, -- Goldsm. Torque
+        regionalItems = {10950, 13212}, -- Goldsm. Torque | Tarutaru Sash
         temps =
         {
         -----------------------------------
@@ -2820,7 +2820,7 @@ xi.casket_loot.casketItems =
     },
     [xi.zone.KUFTAL_TUNNEL] =
     {
-        regionalItems = {}, -- Nothing for now
+        regionalItems = {13087}, -- Jeweled Collar
         temps =
         {
         -----------------------------------
@@ -2889,7 +2889,7 @@ xi.casket_loot.casketItems =
     },
     [xi.zone.SEA_SERPENT_GROTTO] =
     {
-        regionalItems = {}, -- Nothing for now
+        regionalItems = {13925}, -- Rasetsu Jinpachi
         temps =
         {
         -----------------------------------
@@ -3029,7 +3029,7 @@ xi.casket_loot.casketItems =
     },
     [xi.zone.THE_SHRINE_OF_RUAVITAU] =
     {
-        regionalItems = {10951}, -- Weaver's Torque
+        regionalItems = {14644, 10951}, -- Dark Ring | Weaver's Torque
         temps =
         {
         -----------------------------------
@@ -3735,7 +3735,7 @@ xi.casket_loot.casketItems =
     },
     [xi.zone.THE_ELDIEME_NECROPOLIS] =
     {
-        regionalItems = {}, -- Nothing for now
+        regionalItems = {12324}, -- Tower Shield
         temps =
         {
         -----------------------------------
@@ -3927,7 +3927,7 @@ xi.casket_loot.casketItems =
     },
     [xi.zone.CRAWLERS_NEST] =
     {
-        regionalItems = {}, -- Nothing for now
+        regionalItems = {12420}, -- Adaman Barbuta
         temps =
         {
         -----------------------------------
