@@ -461,6 +461,11 @@ namespace gambits
                         target = POwner->GetBattleTarget();
                     }
 
+                    if (target == nullptr)
+                    {
+                        continue;
+                    }
+
                     if (action.select == G_SELECT::SPECIFIC)
                     {
                         controller->Ability(target->targid, PAbility->getID());
