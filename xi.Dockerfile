@@ -25,6 +25,7 @@ FROM dev-env as build
 ADD ./cmake /app/cmake
 ADD ./ext /app/ext
 ADD ./src /app/src
+ADD ./modules /app/modules
 ADD ./CMakeLists.txt /app
 
 WORKDIR /app
