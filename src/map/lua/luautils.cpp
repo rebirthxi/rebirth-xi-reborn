@@ -421,8 +421,11 @@ namespace luautils
                 });
                 return outStr + " }";
             }
+            default:
+            {
+                return "UNKNOWN";
+            }
         }
-        return "UNKNOWN";
     }
 
     void print(sol::variadic_args va)
@@ -430,7 +433,7 @@ namespace luautils
         TracyZoneScoped;
 
         std::string outString;
-        for (int i = 0; i < va.size(); ++i)
+        for (std::size_t i = 0; i < va.size(); ++i)
         {
             auto entry = luaToString(va[i]);
             // TODO: Use fmt::join if we ever update fmt

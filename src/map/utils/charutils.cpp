@@ -3012,7 +3012,7 @@ namespace charutils
     void TrySkillUP(CCharEntity* PChar, SKILLTYPE SkillID, uint8 lvl, bool forceSkillUp, bool useSubSkill)
     {
         // This usually happens after a crash
-        XI_DEBUG_BREAK_IF(SkillID >= MAX_SKILLTYPE); // выход за пределы допустимых умений
+        XI_DEBUG_BREAK_IF((unsigned int)SkillID >= MAX_SKILLTYPE); // выход за пределы допустимых умений
 
         if (((PChar->WorkingSkills.rank[SkillID] != 0) && !(PChar->WorkingSkills.skill[SkillID] & 0x8000)) || useSubSkill)
         {
@@ -3724,7 +3724,9 @@ namespace charutils
         PMob->m_HiPartySize = pcinzone;
         PMob->m_HiPCLvl     = maxlevel;
 
-        PChar->ForAlliance([&PMob, &region, &minlevel, &maxlevel, &pcinzone](CBattleEntity* PPartyMember) {
+        // clang-format off
+        PChar->ForAlliance([&PMob, &region, &maxlevel, &pcinzone](CBattleEntity* PPartyMember)
+        {
             CCharEntity* PMember = dynamic_cast<CCharEntity*>(PPartyMember);
             if (!PMember || PMember->isDead())
             {
@@ -4126,6 +4128,7 @@ namespace charutils
                 }
             }
         });
+        // clang-format on
     }
 
     /************************************************************************
