@@ -4256,7 +4256,7 @@ namespace charutils
 
         capacityPoints = (uint32)(capacityPoints * map_config.exp_rate);
 
-        uint16 currentCapacity = PChar->PJobPoints->GetCapacityPoints();
+        // uint16 currentCapacity = PChar->PJobPoints->GetCapacityPoints();
 
         if (capacityPoints > 0)
         {
@@ -6005,7 +6005,7 @@ namespace charutils
         TracyZoneScoped;
         TracyZoneString(PChar->name);
         TracyZoneString(fmt::format("{} -> {}", var, value));
-        
+
         if (PChar == nullptr)
         {
             ShowError("SetCharVar was requested for a nullptr PChar");
@@ -6029,7 +6029,7 @@ namespace charutils
     void ClearCharVarsWithPrefix(CCharEntity* PChar, std::string prefix)
     {
         TracyZoneScoped;
-    
+
         if (PChar == nullptr)
         {
             return;
@@ -6377,11 +6377,11 @@ namespace charutils
     {
         CItemEquipment* PItem = nullptr;
 
-        if (PItem = PChar->getEquip((SLOTTYPE)SLOTTYPE::SLOT_RANGED))
+        if (PItem == PChar->getEquip((SLOTTYPE)SLOTTYPE::SLOT_RANGED))
         {
             return PItem->getILvl();
         }
-        else if (PItem = PChar->getEquip((SLOTTYPE)SLOTTYPE::SLOT_AMMO))
+        else if (PItem == PChar->getEquip((SLOTTYPE)SLOTTYPE::SLOT_AMMO))
         {
             return PItem->getILvl();
         }
