@@ -1281,16 +1281,19 @@ namespace luautils
                 {
                     return true;
                 }
+                break;
             case 1: // Waning (decending)
                 if (phase >= 95 && phase <= 100)
                 {
                     return true;
                 }
+                break;
             case 2: // Waxing (increasing)
                 if (phase >= 90 && phase <= 100)
                 {
                     return true;
                 }
+                break;
         }
 
         return false;
@@ -1471,7 +1474,7 @@ namespace luautils
                 {
                     for (auto column : magianColumns)
                     {
-                        table[column] = (int32)sql->GetIntData(field++);
+                        table[column] = sql->GetIntData(field++);
                     }
                 }
             }
@@ -1489,7 +1492,7 @@ namespace luautils
                         int32 field{ 0 };
                         for (auto column : magianColumns)
                         {
-                            inner_table[column] = (int32)sql->GetIntData(field++);
+                            inner_table[column] = sql->GetIntData(field++);
                         }
                     }
                 }
@@ -3422,7 +3425,7 @@ namespace luautils
 
         if (criticalHit)
         {
-            luautils::OnCriticalHit((CBattleEntity*)PMob, (CBattleEntity*)PChar);
+            luautils::OnCriticalHit((CBattleEntity*)PMob, PChar);
         }
 
         return std::make_tuple(dmg, tpHitsLanded, extraHitsLanded);
@@ -3454,7 +3457,7 @@ namespace luautils
         uint16 retVal = result.get_type(0) == sol::type::number ? result.get<uint16>(0) : 0;
         if (retVal > 0)
         {
-            return static_cast<uint16>(retVal);
+            return retVal;
         }
 
         return 0;
@@ -3674,7 +3677,7 @@ namespace luautils
         auto result1 = result.get_type(1) == sol::type::number ? result.get<int32>(1) : 0;
         if (result1 != 0)
         {
-            *PMsgTarget = (CBaseEntity*)PTarget;
+            *PMsgTarget = PTarget;
         }
 
         return result0 ? result0 : 0; // Default to no Message
@@ -4079,7 +4082,7 @@ namespace luautils
 
         if (ret != SQL_ERROR && sql->NumRows() != 0 && sql->NextRow() == SQL_SUCCESS)
         {
-            value = (int32)sql->GetIntData(0);
+            value = sql->GetIntData(0);
         }
 
         return value;

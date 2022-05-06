@@ -1777,7 +1777,7 @@ namespace battleutils
                 skill = cap;
             }
 
-            float ratio = (float)cap / skill;
+            float ratio = cap / skill;
             check *= ratio;
 
             // prevent from spilling over 100 - resulting in players never being interupted
@@ -1790,7 +1790,7 @@ namespace battleutils
             meritReduction = ((CCharEntity*)PDefender)->PMeritPoints->GetMeritValue(MERIT_SPELL_INTERUPTION_RATE, (CCharEntity*)PDefender);
         }
 
-        float interruptRate = ((float)((100.0f - (meritReduction + (float)PDefender->getMod(Mod::SPELLINTERRUPT))) / 100.0f));
+        float interruptRate = ((100.0f - (meritReduction + (float)PDefender->getMod(Mod::SPELLINTERRUPT))) / 100.0f);
         check *= interruptRate;
         uint8 chance = xirand::GetRandomNumber(100);
 
@@ -1851,7 +1851,7 @@ namespace battleutils
         if (PDefender->objtype == TYPE_PC)
         {
             CCharEntity*    PChar = (CCharEntity*)PDefender;
-            CItemEquipment* PItem = (CItemEquipment*)PChar->getEquip(SLOT_SUB);
+            CItemEquipment* PItem = PChar->getEquip(SLOT_SUB);
 
             if (PItem)
             {
@@ -1985,7 +1985,7 @@ namespace battleutils
         {
             // assuming this is like parry
             float gbase = (float)PDefender->GetSkill(SKILL_GUARD) + PDefender->getMod(Mod::GUARD);
-            float skill = (float)gbase + ((float)gbase * (PDefender->getMod(Mod::GUARD_PERCENT) / 100));
+            float skill = gbase + gbase * (PDefender->getMod(Mod::GUARD_PERCENT) / 100);
 
             if (PWeapon)
             {
@@ -2271,7 +2271,7 @@ namespace battleutils
                 // account for attacker's subtle blow which reduces the baseTP gain for the defender
                 float sBlow1    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW), -50.0f, 50.0f);
                 float sBlow2    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW_II), -50.0f, 50.0f);
-                float sBlowMult = ((100.0f - std::clamp((float)(sBlow1 + sBlow2), -75.0f, 75.0f)) / 100.0f);
+                float sBlowMult = ((100.0f - std::clamp(sBlow1 + sBlow2, -75.0f, 75.0f)) / 100.0f);
 
                 // mobs hit get basetp+30 whereas pcs hit get basetp/3
                 if (PDefender->objtype == TYPE_PC || (PDefender->objtype == TYPE_PET && PDefender->PMaster && PDefender->PMaster->objtype == TYPE_PC))
@@ -2416,7 +2416,7 @@ namespace battleutils
             // account for attacker's subtle blow which reduces the baseTP gain for the defender
             float sBlow1    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW), -50.0f, 50.0f);
             float sBlow2    = std::clamp((float)PAttacker->getMod(Mod::SUBTLE_BLOW_II), -50.0f, 50.0f);
-            float sBlowMult = ((100.0f - std::clamp((float)(sBlow1 + sBlow2), -75.0f, 75.0f)) / 100.0f);
+            float sBlowMult = ((100.0f - std::clamp((sBlow1 + sBlow2), -75.0f, 75.0f) / 100.0f));
 
             // mobs hit get basetp+30 whereas pcs hit get basetp/3
             if (PDefender->objtype == TYPE_PC)
@@ -2747,7 +2747,7 @@ namespace battleutils
         if (dDexAbs > 39)
         {
             // 40-50: (dDEX-35)
-            critRate = dDexAbs - (int32)35;
+            critRate = dDexAbs - 35;
         }
         else if (dDexAbs > 29)
         {
@@ -2770,7 +2770,7 @@ namespace battleutils
         }
 
         // Crit rate delta from stats caps at +-15
-        return std::min(critRate, static_cast<int32>(15)) * sign;
+        return std::min(critRate, 15) * sign;
     }
 
     /************************************************************************
@@ -2833,7 +2833,7 @@ namespace battleutils
 
         critRate = dAgiAbs/10;
 
-        return std::min(critRate, static_cast<int32>(15)) * sign;
+        return std::min(critRate, 15) * sign;
     }
 
     /************************************************************************
@@ -3784,11 +3784,11 @@ namespace battleutils
                 PSCEffect->SetStartTime(server_clock::now());
                 //   ShowDebug("duration: %d", PSCEffect->GetDuration());
                 PSCEffect->SetDuration(PSCEffect->GetDuration() - 1000);
-                PSCEffect->SetTier(GetSkillchainTier((SKILLCHAIN_ELEMENT)skillchain));
+                PSCEffect->SetTier(GetSkillchainTier(skillchain));
                 PSCEffect->SetPower(skillchain);
                 PSCEffect->SetSubPower(std::min(PSCEffect->GetSubPower() + 1, 5)); // Linked, limited to 5
 
-                return (SUBEFFECT)GetSkillchainSubeffect((SKILLCHAIN_ELEMENT)skillchain);
+                return (SUBEFFECT)GetSkillchainSubeffect(skillchain);
             }
 
             PSCEffect->SetStartTime(server_clock::now());
@@ -4143,7 +4143,7 @@ namespace battleutils
 
                 if (charutils::hasTrait(PChar, TRAIT_NINJA_TOOL_EXPERT))
                 {
-                    meritBonus = PChar->PMeritPoints->GetMeritValue(MERIT_NINJA_TOOL_EXPERTISE, (CCharEntity*)PChar);
+                    meritBonus = PChar->PMeritPoints->GetMeritValue(MERIT_NINJA_TOOL_EXPERTISE, PChar);
                 }
 
                 uint16 chance = (PChar->getMod(Mod::NINJA_TOOL) + meritBonus);
@@ -4374,14 +4374,14 @@ namespace battleutils
     void TransferEnmity(CBattleEntity* PHateReceiver, CBattleEntity* PHateGiver, CMobEntity* PMob, uint8 percentToTransfer)
     {
         // Ensure the players have a battle target..
-        if (PMob == nullptr || ((CMobEntity*)PMob)->PEnmityContainer == nullptr)
+        if (PMob == nullptr || (PMob)->PEnmityContainer == nullptr)
         {
             return;
         }
 
         // CBaseEntity* PMob = CharHateGiver->GetEntity(mobID, TYPE_MOB);
 
-        ((CMobEntity*)PMob)->PEnmityContainer->LowerEnmityByPercent(PHateGiver, percentToTransfer, PHateReceiver);
+        PMob->PEnmityContainer->LowerEnmityByPercent(PHateGiver, percentToTransfer, PHateReceiver);
     }
 
     /************************************************************************

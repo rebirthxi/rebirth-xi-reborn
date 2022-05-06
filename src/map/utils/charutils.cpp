@@ -600,7 +600,7 @@ namespace charutils
 
         if (ret != SQL_ERROR && sql->NumRows() != 0 && sql->NextRow() == SQL_SUCCESS)
         {
-            PChar->jobs.unlocked = (uint32)sql->GetUIntData(0);
+            PChar->jobs.unlocked = sql->GetUIntData(0);
             PChar->jobs.genkai   = (uint8)sql->GetUIntData(1);
 
             PChar->jobs.job[JOB_WAR] = (uint8)sql->GetIntData(2);
@@ -673,7 +673,7 @@ namespace charutils
 
         if (ret != SQL_ERROR && sql->NumRows() != 0 && sql->NextRow() == SQL_SUCCESS)
         {
-            PChar->nameflags.flags = (uint32)sql->GetUIntData(0);
+            PChar->nameflags.flags = sql->GetUIntData(0);
 
             PChar->SetMJob(sql->GetUIntData(1));
             PChar->SetSJob(sql->GetUIntData(2));
@@ -821,7 +821,7 @@ namespace charutils
             PChar->m_GMlevel             = (uint8)sql->GetUIntData(0);
             PChar->m_mentorUnlocked      = sql->GetUIntData(1) > 0;
             PChar->m_jobMasterDisplay    = sql->GetUIntData(2) > 0;
-            PChar->menuConfigFlags.flags = (uint32)sql->GetUIntData(3);
+            PChar->menuConfigFlags.flags = sql->GetUIntData(3);
         }
 
         ret = sql->Query("SELECT field_chocobo FROM char_pet WHERE charid = %u;", PChar->id);
@@ -830,7 +830,7 @@ namespace charutils
             sql->NumRows() != 0 &&
             sql->NextRow() == SQL_SUCCESS)
         {
-            PChar->m_FieldChocobo = static_cast<uint32>(sql->GetUIntData(0));
+            PChar->m_FieldChocobo = sql->GetUIntData(0);
         }
 
         charutils::LoadInventory(PChar);
@@ -1010,7 +1010,7 @@ namespace charutils
                 // now find each item in the container
                 for (uint8 y = 0; y < MAX_CONTAINER_SIZE; ++y)
                 {
-                    CItem* PItem = (CItem*)PItemContainer->GetItem(y);
+                    CItem* PItem = PItemContainer->GetItem(y);
 
                     // check if the item is valid and can have an augment applied to it
                     if (PItem != nullptr && ((PItem->isType(ITEM_EQUIPMENT) || PItem->isType(ITEM_WEAPON)) && !PItem->isSubType(ITEM_CHARGED)))
@@ -1852,7 +1852,7 @@ namespace charutils
 
     void RemoveSub(CCharEntity* PChar)
     {
-        CItemEquipment* PItem = (CItemEquipment*)PChar->getEquip(SLOT_SUB);
+        CItemEquipment* PItem = PChar->getEquip(SLOT_SUB);
 
         if (PItem != nullptr && PItem->isType(ITEM_EQUIPMENT))
         {
@@ -1958,7 +1958,7 @@ namespace charutils
                             case SKILL_GREAT_KATANA:
                             case SKILL_STAFF:
                             {
-                                CItemEquipment* armor = (CItemEquipment*)PChar->getEquip(SLOT_SUB);
+                                CItemEquipment* armor = PChar->getEquip(SLOT_SUB);
                                 if ((armor != nullptr) && armor->isType(ITEM_EQUIPMENT))
                                 {
                                     if (armor->isType(ITEM_WEAPON))
@@ -2021,6 +2021,7 @@ namespace charutils
                                 {
                                     UnequipItem(PChar, SLOT_MAIN, false);
                                 }
+                                break;
                             }
                             case SKILL_DAGGER:
                             case SKILL_SWORD:
@@ -2211,7 +2212,7 @@ namespace charutils
                 }
                 else
                 {
-                    switch (((CItemWeapon*)PItem)->getSkillType())
+                    switch (PItem->getSkillType())
                     {
                         case SKILL_HAND_TO_HAND:
                             PChar->mainlook.sub = appearanceModel + 0x1000;
@@ -2428,8 +2429,8 @@ namespace charutils
                         }
                     }
 
-                    PChar->addEquipModifiers(&PItem->modList, ((CItemEquipment*)PItem)->getReqLvl(), equipSlotID);
-                    PChar->PLatentEffectContainer->AddLatentEffects(PItem->latentList, ((CItemEquipment*)PItem)->getReqLvl(), equipSlotID);
+                    PChar->addEquipModifiers(&PItem->modList, PItem->getReqLvl(), equipSlotID);
+                    PChar->PLatentEffectContainer->AddLatentEffects(PItem->latentList, PItem->getReqLvl(), equipSlotID);
                     PChar->PLatentEffectContainer->CheckLatentsEquip(equipSlotID);
                     PChar->addPetModifiers(&PItem->petModList);
 
@@ -2603,7 +2604,7 @@ namespace charutils
 
         // add in melee ws
         PItem                       = dynamic_cast<CItemWeapon*>(PChar->getEquip(SLOT_MAIN));
-        uint8       skill           = PItem ? PItem->getSkillType() : SKILL_HAND_TO_HAND;
+        uint8       skill           = PItem ? PItem->getSkillType() : (uint8)SKILL_HAND_TO_HAND;
         const auto& WeaponSkillList = battleutils::GetWeaponSkills(skill);
         for (auto&& PSkill : WeaponSkillList)
         {
@@ -5650,7 +5651,7 @@ namespace charutils
     {
         for (uint8 slotID = 0; slotID < 16; ++slotID)
         {
-            CItemEquipment* PItem = (CItemEquipment*)PChar->getEquip((SLOTTYPE)slotID);
+            CItemEquipment* PItem = PChar->getEquip((SLOTTYPE)slotID);
             if (PItem)
             {
                 PChar->addEquipModifiers(&PItem->modList, PItem->getReqLvl(), slotID);
@@ -6365,7 +6366,7 @@ namespace charutils
 
     uint8 getMainhandItemLevel(CCharEntity* PChar)
     {
-        CItemEquipment* PItem = PChar->getEquip((SLOTTYPE)SLOTTYPE::SLOT_MAIN);
+        CItemEquipment* PItem = PChar->getEquip(SLOTTYPE::SLOT_MAIN);
 
         if (PItem)
         {
@@ -6378,13 +6379,13 @@ namespace charutils
     // Return Ranged Weapon Item Level; If ranged slot exists use that, else use Ammo
     uint8 getRangedItemLevel(CCharEntity* PChar)
     {
-        CItemEquipment* PItem = PChar->getEquip((SLOTTYPE)SLOTTYPE::SLOT_RANGED);
+        CItemEquipment* PItem = PChar->getEquip(SLOTTYPE::SLOT_RANGED);
         if (PItem)
         {
             return PItem->getILvl();
         }
 
-        PItem = PChar->getEquip((SLOTTYPE)SLOTTYPE::SLOT_AMMO);
+        PItem = PChar->getEquip(SLOTTYPE::SLOT_AMMO);
         if (PItem)
         {
             return PItem->getILvl();
