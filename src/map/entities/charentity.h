@@ -409,6 +409,8 @@ public:
 
     CItemEquipment* getEquip(SLOTTYPE slot);
 
+    time_point nextComputeTime;
+
     void ReloadPartyInc();
     void ReloadPartyDec();
     bool ReloadParty() const;
