@@ -409,7 +409,7 @@ public:
 
     CItemEquipment* getEquip(SLOTTYPE slot);
 
-    time_point nextComputeTime;
+    bool requestedInfoSync = false;
 
     void ReloadPartyInc();
     void ReloadPartyDec();
