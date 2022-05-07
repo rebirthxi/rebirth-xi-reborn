@@ -252,6 +252,12 @@ std::optional<CLuaBaseEntity> CLuaZone::insertDynamicEntity(sol::table table)
             cacheEntry["onTrigger"] = onTrigger;
         }
 
+        auto onEventFinish = table["onEventFinish"].get_or<sol::function>(sol::lua_nil);
+        if (onEventFinish.valid())
+        {
+            cacheEntry["onEventFinish"] = onEventFinish;
+        }
+
         m_pLuaZone->InsertNPC(PNpc);
     }
     else if (auto* PMob = dynamic_cast<CMobEntity*>(PEntity))
