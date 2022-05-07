@@ -13743,6 +13743,34 @@ void CLuaBaseEntity::setLocalStringVar(const std::string& key, const std::string
     m_PBaseEntity->SetLocalStringVar(key, val);
 }
 
+sol::table CLuaBaseEntity::getNpcScore()
+{
+    XI_DEBUG_BREAK_IF(m_PBaseEntity == nullptr);
+    XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_NPC);
+
+    auto *PNpc = static_cast<CNpcEntity*>(m_PBaseEntity);
+    auto score = luautils::lua.create_table();
+
+    score["Name"] = PNpc->name;
+    score["NamePrefix"] = PNpc->name_prefix;
+    score["ID"] = PNpc->id;
+    score["TargID"] = PNpc->targid;
+    score["Flags"] = PNpc->m_flags;
+    score["Widescan"] = PNpc->widescan;
+    score["Triggerable"] = PNpc->m_triggerable;
+    score["Status"] = PNpc->status;
+    score["Look"] = PNpc->look;
+    score["MainLook"] = PNpc->mainlook;
+    score["Animation"] = PNpc->animation;
+    score["AnimationSub"] = PNpc->animationsub;
+    score["Namevis"] = PNpc->namevis;
+    score["Allegiance"] = PNpc->allegiance;
+    score["UpdateMask"] = PNpc->updatemask;
+    score["IsRenamed"] = PNpc->isRenamed;
+
+
+    return score;
+}
 
 //==========================================================//
 
@@ -14501,6 +14529,7 @@ void CLuaBaseEntity::Register()
     SOL_REGISTER("getNumDistributeJobs", CLuaBaseEntity::getNumDistributeJobs);
     SOL_REGISTER("getLocalStringVar", CLuaBaseEntity::getLocalStringVar);
     SOL_REGISTER("setLocalStringVar", CLuaBaseEntity::setLocalStringVar);
+    SOL_REGISTER("getNpcScore", CLuaBaseEntity::getNpcScore);
 }
 
 

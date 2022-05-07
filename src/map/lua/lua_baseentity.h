@@ -817,6 +817,8 @@ public:
     std::string getLocalStringVar(const std::string& key);
     void setLocalStringVar(const std::string& key, const std::string& val);
 
+    sol::table getNpcScore();
+
     /*
      * Back to the Regular Sand Ship Stuff
      */
