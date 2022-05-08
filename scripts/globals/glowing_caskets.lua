@@ -33,7 +33,7 @@ xi.glowingCaskets.insertGlowingCaskets = function(zone)
                 xi.glowingCaskets.onTrade(player, npc, trade)
             end,
             onEventFinish = function(player, csid, option, npc)
-                print(string.format("csid: %d option: %d", csid, option))
+                xi.glowingCaskets.onEventFinish(player, csid, option, npc)
             end
         })
         glowingCasket:hideName(true)
@@ -143,6 +143,12 @@ xi.glowingCaskets.setAugmentInfo = function(casket, augs, augment_srcs)
     casket:setLocalStringVar("AugmentSrcs", utils.serializeTable(augment_srcs))
 end
 
+xi.glowingCaskets.getAugmentInfo = function(casket)
+    return
+        loadstring(casket:getLocalStringVar("Augments"))(),
+        loadstring(casket:getLocalStringVar("AugmentSrcs"))()
+end
+
 xi.glowingCaskets.unsuccessfullyOpenedCasket = function(player, casket)
     xi.glowingCaskets.despawnCasket(casket)
     player:PrintToPlayer("You have unsuccessfully opened the glownig casket...", xi.msg.channel.NS_SAY)
@@ -234,9 +240,39 @@ xi.glowingCaskets.getAvailableCasket = function(mob)
 end
 
 xi.glowingCaskets.sendOpenChestMenu = function(player, npc)
-    player:startEvent(1000, 13450, 0, 0, 0, 0, 0, 0, 0)
+    player:startEvent(1000, xi.augments.ingredients.MID_AUG, 0, 0, 0, 0, 0, 0, 0)
 end
 
---xi.glowingCaskets.getCasketID = function(casket)
---
---end
+-----------------------------------
+--- onEventFinish
+-----------------------------------
+
+xi.glowingCaskets.onEventFinish = function(player, csid, option, npc)
+    if option == 65537 then
+        if xi.glowingCaskets.giveAugmentItem(player, npc) then
+            xi.glowingCaskets.despawnCasket(npc)
+        end
+    end
+end
+
+xi.glowingCaskets.giveAugmentItem = function(player, casket)
+    if casket:getStatus() == xi.status.DISAPPEAR then
+        return false
+    end
+
+    local ID = zones[casket:getZoneID()]
+    if player:getFreeSlotsCount() == 0 then
+        player:messageSpecial(ID.text.ITEM_CANNOT_BE_OBTAINED, xi.augments.ingredients.MID_AUG)
+        return false
+    end
+
+    local augs, augment_srcs = xi.glowingCaskets.getAugmentInfo(casket)
+    print(augs)
+    local success = player:addItem({id=xi.augments.ingredients.MID_AUG, augments=augs, aug_src=augment_srcs})
+
+    if success then
+        player:messageSpecial(ID.text.ITEM_OBTAINED, xi.augments.ingredients.MID_AUG)
+    end
+
+    return success
+end
