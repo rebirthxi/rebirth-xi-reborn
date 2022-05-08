@@ -256,9 +256,14 @@ xi.glowingCaskets.spawnCasket = function(player, casket, position)
     casket:setStatus(xi.status.NORMAL)
     casket:entityAnimationPacket("deru")
 
+    local spawnID = math.random(0, 100000)
+    casket:setLocalVar("SpawnID", spawnID)
+
     -- set despawn timer (in milliseconds)
     casket:timer(180000, function(npc)
-        xi.glowingCaskets.despawnCasket(npc)
+        if npc:getLocalVar("SpawnID") == spawnID then
+            xi.glowingCaskets.despawnCasket(npc)
+        end
     end)
 
     xi.qr_utils.sendMsgToPlayerAlliance(player, "A casket glowing with strange light has been revealed.", xi.msg.channel.NS_SAY)
