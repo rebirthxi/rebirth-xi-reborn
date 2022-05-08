@@ -69,10 +69,13 @@ xi.glowingCaskets.sendOpenChanceToPlayer = function(player, chance)
 end
 
 xi.glowingCaskets.shouldSpawnGlowingChest = function(player, mob)
-    local casket = xi.glowingCaskets.getAvailableCasket(mob)
+    local zoneID = player:getZoneID()
+    if xi.zone_lights.zones[zoneID] ~= nil then
+        local casket = xi.glowingCaskets.getAvailableCasket(mob)
 
-    if casket ~= nil then
-        return true, casket
+        if casket ~= nil then
+            return true, casket
+        end
     end
 
     return false, nil
