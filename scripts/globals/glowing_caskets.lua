@@ -12,7 +12,7 @@ xi.glowingCaskets.openChanceMax = 90
 xi.glowingCaskets.IsOpenString = "IsOpen"
 xi.glowingCaskets.baseSpawnChance = 20
 xi.glowingCaskets.baseSpawnBonusChance = 60
-xi.glowingCaskets.failureChanceIncrease = 5
+xi.glowingCaskets.failureChanceIncrease = 10
 xi.glowingCaskets.successChanceDecrease = 5
 
 xi.glowingCaskets.insertGlowingCaskets = function(zone)
@@ -187,7 +187,7 @@ xi.glowingCaskets.shouldSpawnGlowingChest = function(player, mob)
         local spawnChance = xi.glowingCaskets.getPlayerSpawnChance(player)
 
         if casket ~= nil and spawnChance > math.random(0, 100) then
-            xi.glowingCaskets.increasePlayerCasketOpenedCount(player)
+            xi.glowingCaskets.increasePlayerCasketSpawned(player)
             return true, casket
         end
     end
@@ -222,7 +222,7 @@ xi.glowingCaskets.getPlayerCasketsOpenedCount = function(player)
     return player:getCharVar("GlowingCasketsOpened")
 end
 
-xi.glowingCaskets.increasePlayerCasketOpenedCount = function(player)
+xi.glowingCaskets.increasePlayerCasketSpawned = function(player)
     player:setCharVar("GlowingCasketsOpened", xi.glowingCaskets.getPlayerCasketsOpenedCount(player) + 1)
 end
 
