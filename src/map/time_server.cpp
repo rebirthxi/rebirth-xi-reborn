@@ -117,6 +117,12 @@ int32 time_server(time_point tick, CTaskMgr::CTask* PTask)
                                                          "ON DUPLICATE key update value = VALUES(value);";
                 sql->Query(Daily, char_id);
             }
+
+            {
+                const char* ResetCasketBonus = "DELETE FROM char_vars WHERE varname = 'GlowingCasketsOpened';";
+
+                sql->Query(ResetCasketBonus);
+            }
         }
     }
 
