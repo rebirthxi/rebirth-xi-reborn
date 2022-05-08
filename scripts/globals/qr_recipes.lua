@@ -35,11 +35,11 @@ xi.recipe.recipes = {
         ingredients = {
             {id=xi.augments.ingredients.COMBINER, quantity=1},
             {id=xi.augments.ingredients.LOWBIE_AUG, quantity=1},
-            xi.augments.synthIsLowbieAugmentRecipe
+            xi.augments.synthIsAugmentRecipe
         },
         break_rate_adjustment = function(initial_break_rate) return 0.0; end,
         calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
-        do_synth_result = xi.augments.synthResultLowbieAugmentBond,
+        do_synth_result = xi.augments.synthResultAugmentBond(xi.augments.ingredients.LOWBIE_AUG),
         skill_up = function(player, ingredients) return; end
     },
     -- Augment Cleansing
@@ -55,5 +55,21 @@ xi.recipe.recipes = {
         calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
         do_synth_result = xi.augments.synthCleanseAugmentSplit,
         skill_up = function(player, ingredients) return;  end
+    },
+    -- Mid Tier Augment Bonding to Item
+    [3] = {
+        crystal = xi.items.EARTH_CRYSTAL,
+        total_ingredients = 3,
+        required_inventory_slots = 1,
+        ingredients = {
+            {id=xi.augments.ingredients.COMBINER, quantity=1},
+            {id=xi.augments.ingredients.MID_AUG, quantity=1},
+            xi.augments.synthIsAugmentRecipe,
+            xi.augments.itemIsOverLevel(35)
+        },
+        break_rate_adjustment = function(initial_break_rate) return 0.0; end,
+        calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
+        do_synth_result = xi.augments.synthResultAugmentBond(xi.augments.ingredients.MID_AUG),
+        skill_up = function(player, ingredients) return; end
     }
 }

@@ -424,7 +424,7 @@ xi.augments.ingredients = {
     SEPARATOR  = 9848,
 }
 
-xi.augments.synthIsLowbieAugmentRecipe = function(ingredients)
+xi.augments.synthIsAugmentRecipe = function(ingredients)
     local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
     return xi.augments.itemIsAugmentable(item)
@@ -510,14 +510,24 @@ xi.augments.itemIsCleansable = function(item)
     return true
 end
 
-xi.augments.synthResultLowbieAugmentBond = function(player, ingredients)
-    local aug = xi.synth.ingredientFromIngredients(ingredients, xi.augments.ingredients.LOWBIE_AUG)
-    local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
-    local item_id = item:getID()
+xi.augments.itemIsOverLevel = function(level)
+    return function(ingredients)
+        local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
-    player:addItem({id=item_id, augments=aug:getAugTable(), aug_src=aug:getAugSrc(), signature=item:getSignature()})
+        return item:getReqLvl() > 35
+    end
+end
 
-    return item_id, 1, true
+xi.augments.synthResultAugmentBond = function(ingredient)
+    return function(player, ingredients)
+        local aug = xi.synth.ingredientFromIngredients(ingredients, ingredient)
+        local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
+        local item_id = item:getID()
+
+        player:addItem({id=item_id, augments=aug:getAugTable(), aug_src=aug:getAugSrc(), signature=item:getSignature()})
+
+        return item_id, 1, true
+    end
 end
 
 xi.augments.synthCleanseAugmentSplit = function(player, ingredients)
