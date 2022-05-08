@@ -10,6 +10,10 @@ xi.glowingCaskets = xi.glowingCaskets or {}
 xi.glowingCaskets.openChanceMin = 10
 xi.glowingCaskets.openChanceMax = 90
 xi.glowingCaskets.IsOpenString = "IsOpen"
+xi.glowingCaskets.baseSpawnChance = 20
+xi.glowingCaskets.baseSpawnBonusChance = 60
+xi.glowingCaskets.failureChanceIncrease = 5
+xi.glowingCaskets.successChanceDecrease = 5
 
 xi.glowingCaskets.insertGlowingCaskets = function(zone)
     local zoneId = zone:getID()
@@ -127,6 +131,8 @@ xi.glowingCaskets.successfullyOpenedCasket = function(player, casket)
 
     xi.glowingCaskets.setAugmentInfo(casket, augs, augment_srcs)
     xi.glowingCaskets.printAugmentInfoToParty(player, augs)
+    xi.glowingCaskets.resetPlayerFailureCount(player)
+    xi.glowingCaskets.increasePlayerCasketOpenedCount(player)
 
     local msgToAlliance = string.format("%s successfully opened a glowing casket!", player:getName())
     xi.qr_utils.sendMsgToPlayersAllianceButNotThePlayer(player, msgToAlliance, xi.msg.channel.PARTY)
@@ -164,6 +170,8 @@ xi.glowingCaskets.unsuccessfullyOpenedCasket = function(player, casket)
     xi.glowingCaskets.despawnCasket(casket)
     player:PrintToPlayer("You have unsuccessfully opened the glownig casket...", xi.msg.channel.NS_SAY)
 
+    xi.glowingCaskets.increasePlayerFailureCount(player)
+
     local msgToAlliance = string.format("%s failed to open a glowing casket...", player:getName())
     xi.qr_utils.sendMsgToPlayersAllianceButNotThePlayer(player, msgToAlliance, xi.msg.channel.PARTY)
 end
@@ -177,13 +185,59 @@ xi.glowingCaskets.shouldSpawnGlowingChest = function(player, mob)
     local zoneID = player:getZoneID()
     if xi.zone_lights.zones[zoneID] ~= nil then
         local casket = xi.glowingCaskets.getAvailableCasket(mob)
+        local spawnChance = xi.glowingCaskets.getPlayerSpawnChance(player)
 
-        if casket ~= nil then
+        if casket ~= nil and spawnChance > math.random(0, 100) then
             return true, casket
         end
     end
 
     return false, nil
+end
+
+xi.glowingCaskets.getPlayerSpawnChance = function(player)
+    local chance = xi.glowingCaskets.baseSpawnChance +
+                   xi.glowingCaskets.getPlayerBonusChance(player) +
+                   xi.glowingCaskets.getPlayerOpenFailureBonus(player)
+
+    return utils.clamp(chance, xi.glowingCaskets.baseSpawnBonusChance, 100)
+end
+
+xi.glowingCaskets.getPlayerBonusChance = function(player)
+    local openedCount = xi.glowingCaskets.getPlayerCasketsOpenedCount(player)
+    local openedPenalty = xi.glowingCaskets.successChanceDecrease * openedCount
+
+    local adjustedBonus = xi.glowingCaskets.baseSpawnBonusChance - openedPenalty
+
+    return utils.clamp(adjustedBonus, 0, xi.glowingCaskets.baseSpawnBonusChance)
+end
+
+xi.glowingCaskets.getPlayerOpenFailureBonus = function(player)
+    local failureCount = xi.glowingCaskets.getPlayerFailureCount(player)
+
+    return xi.glowingCaskets.failureChanceIncrease * failureCount
+end
+
+xi.glowingCaskets.getPlayerCasketsOpenedCount = function(player)
+    return player:getCharVar("GlowingCasketsOpened")
+end
+
+xi.glowingCaskets.increasePlayerCasketOpenedCount = function(player)
+    player:setCharVar("GlowingCasketsOpened", xi.glowingCaskets.getPlayerCasketsOpenedCount(player) + 1)
+end
+
+xi.glowingCaskets.getPlayerFailureCount = function(player)
+    return player:getCharVar("GlowingCasketsFailed")
+end
+
+xi.glowingCaskets.increasePlayerFailureCount = function(player)
+    local count = xi.glowingCaskets.getPlayerFailureCount(player)
+
+    player:setCharVar("GlowingCasketsFailed", count + 1)
+end
+
+xi.glowingCaskets.resetPlayerFailureCount = function(player)
+    player:setCharVar("GlowingCasketsFailed", 0)
 end
 
 xi.glowingCaskets.spawnCasket = function(player, casket, position)
