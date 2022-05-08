@@ -132,7 +132,6 @@ xi.glowingCaskets.successfullyOpenedCasket = function(player, casket)
     xi.glowingCaskets.setAugmentInfo(casket, augs, augment_srcs)
     xi.glowingCaskets.printAugmentInfoToParty(player, augs)
     xi.glowingCaskets.resetPlayerFailureCount(player)
-    xi.glowingCaskets.increasePlayerCasketOpenedCount(player)
 
     local msgToAlliance = string.format("%s successfully opened a glowing casket!", player:getName())
     xi.qr_utils.sendMsgToPlayersAllianceButNotThePlayer(player, msgToAlliance, xi.msg.channel.PARTY)
@@ -188,6 +187,7 @@ xi.glowingCaskets.shouldSpawnGlowingChest = function(player, mob)
         local spawnChance = xi.glowingCaskets.getPlayerSpawnChance(player)
 
         if casket ~= nil and spawnChance > math.random(0, 100) then
+            xi.glowingCaskets.increasePlayerCasketOpenedCount(player)
             return true, casket
         end
     end
