@@ -14,8 +14,8 @@ function onTrigger(player)
 
     local msg = "Glowing Casket Spawn Chances:"
     msg = msg .. string.format("\n- Base: %d", baseCasketSpawnRate)
-    msg = msg .. string.format("\n- Unopened: %d", playerBonusChance)
-    msg = msg .. string.format("\n- Failure: %d", playerFailureBonusChance)
+    msg = msg .. string.format("\n- SpawnedBonus: %d", playerBonusChance)
+    msg = msg .. string.format("\n- FailureBonus: %d", playerFailureBonusChance)
     msg = msg .. string.format("\n- Total: %d", baseCasketSpawnRate + playerBonusChance + playerFailureBonusChance)
 
     player:PrintToPlayer(msg, xi.msg.channel.NS_SAY)
