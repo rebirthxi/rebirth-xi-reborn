@@ -6,6 +6,9 @@ require("scripts/globals/qr_utils")
 xi = xi or {}
 xi.glowingCaskets = xi.glowingCaskets or {}
 
+xi.glowingCaskets.openChanceMin = 10
+xi.glowingCaskets.openChanceMax = 90
+
 xi.glowingCaskets.insertGlowingCaskets = function(zone)
     local zoneId = zone:getID()
     local ID = zones[zoneId]
@@ -22,7 +25,7 @@ xi.glowingCaskets.insertGlowingCaskets = function(zone)
             z = 0.0,
             rotation = 0,
             onTrigger = function(player, npc)
-                xi.glowingCaskets.sendOpenChestMenu(player, npc)
+                xi.glowingCaskets.onTrigger(player, npc)
             end,
             onEventFinish = function(player, csid, option, npc)
                 print(string.format("csid: %d option: %d", csid, option))
@@ -34,6 +37,35 @@ xi.glowingCaskets.insertGlowingCaskets = function(zone)
 
         table.insert(ID.glowingCaskets, glowingCasket:getID())
     until #ID.glowingCaskets == 15
+end
+
+xi.glowingCaskets.onTrigger = function(player, npc)
+    local openChanceString = xi.glowingCaskets.generatePlayerOpenChanceString(player)
+    local playerOpenChance = npc:getLocalVar(openChanceString)
+
+    if playerOpenChance == 0 then
+        playerOpenChance = xi.glowingCaskets.rollCasketChance()
+        npc:setLocalVar(openChanceString, playerOpenChance)
+    end
+    xi.glowingCaskets.sendOpenChanceToPlayer(player, playerOpenChance)
+end
+
+xi.glowingCaskets.generatePlayerOpenChanceString = function(player)
+    return string.format("OpenChance[%s]", player:getName())
+end
+
+xi.glowingCaskets.rollCasketChance = function()
+    return math.random(xi.glowingCaskets.openChanceMin, xi.glowingCaskets.openChanceMax)
+end
+
+xi.glowingCaskets.sendOpenChanceToPlayer = function(player, chance)
+    player:PrintToPlayer(
+        string.format(
+            "You are able to estimate that you have about a %d%s chance to open the casket.",
+            chance, "%"
+        ),
+        xi.msg.channel.NS_SAY
+    )
 end
 
 xi.glowingCaskets.shouldSpawnGlowingChest = function(player, mob)
