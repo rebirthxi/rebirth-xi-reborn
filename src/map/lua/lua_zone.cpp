@@ -382,6 +382,21 @@ sol::table CLuaZone::queryEntitiesByName(std::string const& name)
     return table;
 }
 
+void CLuaZone::setLights(uint32 one, uint32 two, uint32 three, uint32 four)
+{
+    XI_DEBUG_BREAK_IF(m_pLuaZone == nullptr);
+    m_pLuaZone->SetLights(one, two, three, four);
+}
+
+auto CLuaZone::getLights()
+{
+    XI_DEBUG_BREAK_IF(m_pLuaZone == nullptr);
+
+    auto lights = m_pLuaZone->GetLights();
+
+    return std::make_tuple(lights[0], lights[1], lights[2], lights[3]);
+}
+
 //======================================================//
 
 void CLuaZone::Register()
@@ -416,6 +431,9 @@ void CLuaZone::Register()
     SOL_REGISTER("setBackgroundMusicNight", CLuaZone::setBackgroundMusicNight);
 
     SOL_REGISTER("queryEntitiesByName", CLuaZone::queryEntitiesByName);
+
+    SOL_REGISTER("getLights", CLuaZone::getLights);
+    SOL_REGISTER("setLights", CLuaZone::setLights);
 }
 
 std::ostream& operator<<(std::ostream& os, const CLuaZone& zone)

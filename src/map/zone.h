@@ -509,6 +509,26 @@ struct zoneLine_t
  *                                                                       *
  ************************************************************************/
 
+enum ZONELIGHTS
+{
+    NO_LIGHTS    = 0,
+    BRIGHT_RED   = 1,
+    DIM_RED      = 2,
+    BRIGHT_BLUE  = 3,
+    DIM_BLUE     = 4,
+    BRIGHT_GOLD  = 5,
+    DIM_GOLD     = 6,
+    BRIGHT_GREEN = 7,
+    DIM_GREEN    = 8
+};
+
+
+/************************************************************************
+ *                                                                       *
+ *                                                                       *
+ *                                                                       *
+ ************************************************************************/
+
 class CBasicPacket;
 class CBaseEntity;
 class CCharEntity;
@@ -621,6 +641,8 @@ public:
 
     CNavMesh* m_navMesh; // zones navmesh for finding paths
 
+    void    SetLights(uint8 one, uint8 two, uint8 three, uint8 four);
+    std::array<ZONELIGHTS,4> GetLights();
 private:
     ZONEID         m_zoneID; // ID зоны
     ZONE_TYPE      m_zoneType;
@@ -649,11 +671,12 @@ private:
     void LoadZoneWeather();  // погода
     void LoadZoneSettings(); // настройки зоны
     void LoadNavMesh();      // Load the zones navmesh. Must exist in scripts/zones/:zone/NavMesh.nav
+    void LoadLights();
 
     CTreasurePool* m_TreasurePool; // глобальный TreasuerPool
 
     time_point m_timeZoneEmpty; // The time_point when the last player left the zone
-
+    std::array<ZONELIGHTS, 4> lights;
 protected:
     CTaskMgr::CTask* ZoneTimer; // указатель на созданный таймер - ZoneServer. необходим для возможности его остановки
     void createZoneTimer();

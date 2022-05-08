@@ -5042,4 +5042,17 @@ namespace luautils
         }
         return ingredients;
     }
+
+    void UpdateZoneLights()
+    {
+        auto updateZoneLights = lua["xi"]["zone_lights"]["updateZoneLights"];
+
+        if (!updateZoneLights.valid())
+        {
+            ShowError("luautils::UpdateZoneLights: updateZoneLights call into Lua failed because it was invalid.");
+            return;
+        }
+
+        updateZoneLights();
+    }
 }; // namespace luautils

@@ -71,6 +71,9 @@ public:
 
     sol::table queryEntitiesByName(std::string const& name);
 
+    void setLights(uint32 one, uint32 two, uint32 three, uint32 four);
+    auto getLights();
+
     static void Register();
 };
 

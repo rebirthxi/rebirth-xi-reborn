@@ -138,6 +138,7 @@ CZone::CZone(ZONEID ZoneID, REGION_TYPE RegionID, CONTINENT_TYPE ContinentID)
 , m_zoneType(ZONE_TYPE::NONE)
 , m_regionID(RegionID)
 , m_continentID(ContinentID)
+, lights{{NO_LIGHTS,NO_LIGHTS,NO_LIGHTS,NO_LIGHTS}}
 {
     TracyZoneScoped;
     std::ignore = m_useNavMesh;
@@ -157,6 +158,7 @@ CZone::CZone(ZONEID ZoneID, REGION_TYPE RegionID, CONTINENT_TYPE ContinentID)
     LoadZoneLines();
     LoadZoneWeather();
     LoadNavMesh();
+    LoadLights();
 }
 
 CZone::~CZone()
@@ -443,6 +445,40 @@ void CZone::LoadNavMesh()
         delete m_navMesh;
         m_navMesh = nullptr;
     }
+}
+
+void CZone::LoadLights()
+{
+    static const char *Query = "SELECT lightone, lighttwo, lightthree, lightfour FROM zone_lights WHERE zoneid=%u;";
+    if (sql->Query(Query, m_zoneID) != SQL_ERROR &&
+        sql->NumRows() != 0 &&
+        sql->NextRow() == SQL_SUCCESS)
+    {
+        lights[0] = static_cast<ZONELIGHTS>(sql->GetUIntData(0));
+        lights[1] = static_cast<ZONELIGHTS>(sql->GetUIntData(1));
+        lights[2] = static_cast<ZONELIGHTS>(sql->GetUIntData(2));
+        lights[3] = static_cast<ZONELIGHTS>(sql->GetUIntData(3));
+    }
+}
+
+void CZone::SetLights( uint8 one, uint8 two, uint8 three, uint8 four )
+{
+    static const char *Query = "INSERT INTO zone_lights (zoneid, lightone, lighttwo, lightthree, lightfour) VALUES (%u, %u, %u, %u, %u)"
+                               " ON DUPLICATE KEY UPDATE lightone=%u, lighttwo=%u, lightthree=%u, lightfour=%u;";
+    lights[0] = static_cast<ZONELIGHTS>(one);
+    lights[1] = static_cast<ZONELIGHTS>(two);
+    lights[2] = static_cast<ZONELIGHTS>(three);
+    lights[3] = static_cast<ZONELIGHTS>(four);
+    if (sql->Query(Query, m_zoneID, one, two, three, four, one, two, three, four) != SQL_SUCCESS)
+    {
+        ShowDebug("Failed to update lights for zone %d\n", m_zoneID);
+    }
+
+}
+
+std::array<ZONELIGHTS, 4> CZone::GetLights()
+{
+    return lights;
 }
 
 /************************************************************************

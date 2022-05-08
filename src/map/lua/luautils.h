@@ -332,6 +332,9 @@ namespace luautils
     void  doSynthSkillUp(CCharEntity* PChar);
     bool isLuaRecipe(CCharEntity* PChar);
     sol::table getSynthIngredients(CCharEntity* PChar);
+
+    // QR Lights
+    void UpdateZoneLights();
 }; // namespace luautils
 
 #endif // _LUAUTILS_H -

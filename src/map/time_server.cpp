@@ -53,6 +53,7 @@ int32 time_server(time_point tick, CTaskMgr::CTask* PTask)
             roeutils::CycleWeeklyRecords();
             roeutils::CycleUnityRankings();
             lastConquestTally = tick;
+            luautils::UpdateZoneLights();
         }
     }
     // Hourly conquest update
