@@ -6,6 +6,7 @@ require("scripts/globals/utils")
 require("scripts/globals/zone")
 require("scripts/globals/items")
 require("scripts/globals/qr_synth")
+require("scripts/globals/zone_lights")
 -----------------------------------
 xi.augments = xi.augments or {}
 
@@ -37,6 +38,127 @@ xi.augments.sources = {
     [24]  = {100, 0,   1}, -- Pet Macc 1-2
     [25]  = {1792, 0,  0}, -- Pet Str +1
     [26]  = {1796, 0,  0}, -- Pet Int +1
+
+    -- Red Light Sources
+    [27]  = {23,    0,   5 }, -- Accuracy
+    [28]  = {27,    0,   5 }, -- Ranged Acc
+    [29]  = {25,    1,   9 }, -- Attack
+    [30]  = {29,    1,   9 }, -- Ranged Attack
+    [31]  = {41,    0,   0 }, -- Crit hit
+    [32]  = {68,    0,   3 }, -- Accuracy and Attack
+    [33]  = {69,    0,   3 }, -- Ranged Accuracy and Ranged Attack
+    [34]  = {132,    0,   0 }, -- Double Atk and Crit Hit rate
+    [35]  = {139,    0,   2 }, -- Rapid Shot
+    [36]  = {143,    0,   1 }, -- Double Attack
+    [37]  = {144,    0,   1 }, -- Triple Attack
+    [38]  = {146,    0,   1 }, -- Dual Wield
+    [39]  = {151,    0,   1 }, -- Martial Arts
+    [40]  = {194,    0,   1 }, -- Kick Attacks Rate
+    [41]  = {198,    0,   1 }, -- Zanshin
+    [42]  = {211,    0,   2 }, -- Snapshot
+    [43]  = {257,    0,   2 }, -- Hand To Hand Skill
+    [44]  = {258,    0,   2 }, -- Dagger Skill
+    [45]  = {260,    0,   2 }, -- Great Sword Skill
+    [46]  = {261,    0,   2 }, -- Axe Skill
+    [47]  = {262,    0,   2 }, -- Great Axe Skill
+    [48]  = {263,    0,   2 }, -- Scythe Skill
+    [49]  = {264,    0,   2 }, -- Polearm Skill
+    [50]  = {265,    0,   2 }, -- Katana Skill
+    [51]  = {266,    0,   2 }, -- Great Katana Skill
+    [52]  = {281,    0,   2 }, -- Archery Skill
+    [53]  = {282,    0,   2 }, -- Marksmanship Skill
+    [54]  = {283,    0,   2 }, -- Throwing Skill
+    [55]  = {328,    0,   2 }, -- Crit hit damage
+    [56]  = {332,    0,   4 }, -- Skillchain Dmg
+    [57]  = {512,    0,   2 }, -- STR
+    [58]  = {513,    0,   2 }, -- DEX
+
+    -- Blue Light Sources
+    [59]  = {35,    0,   4 }, -- Magic Accuracy
+    [60]  = {40,    0,   5 }, -- Enmity -
+    [61]  = {51,    0,   4 }, -- MP Recovery while resting
+    [62]  = {53,    0,   4 }, -- Spell Interrupt
+    [63]  = {57,    0,   3 }, -- Magic Crit Rate
+    [64]  = {131,    0,   0 }, -- Magic Accuracy and Magic Attack
+    [65]  = {133,    0,   2 }, -- Magic Attack
+    [66]  = {140,    0,   1 }, -- Fast Cast
+    [67]  = {141,    0,   3 }, -- Conserve MP
+    [68]  = {288,    0,   4 }, -- Divine Magic Skill
+    [69]  = {289,    0,   4 }, -- Healing Magic Skill
+    [70]  = {290,    0,   4 }, -- Enhancing Magic Skill
+    [71]  = {291,    0,   4 }, -- Enfeebling Magic Skill
+    [72]  = {292,    0,   4 }, -- Elemental Magic Skill
+    [73]  = {293,    0,   4 }, -- Dark Magic Skill
+    [74]  = {294,    0,   4 }, -- Summoning Magic Skill
+    [75]  = {295,    0,   4 }, -- Ninjutsu Skill
+    [76]  = {296,    0,   4 }, -- Singing Skill
+    [77]  = {298,    0,   4 }, -- Wind Skill
+    [78]  = {299,    0,   4 }, -- Blue Skill
+    [79]  = {322,    0,   1 }, -- Songspell Casting time
+    [80]  = {334,    0,   4 }, -- Magic Burst Dmg %
+    [81]  = {335,    0,   4 }, -- Magic Crit Dmg%
+    [82]  = {343,    0,   4 }, -- Drain and Aspir Potency
+    [83]  = {362,    4,   9 }, -- Magic Damage
+    [84]  = {516,    0,   2 }, -- INT
+    [85]  = {517,    0,   2 }, -- MND
+    [86]  = {518,    0,   2 }, -- CHR
+    [88]  = {896,    0,   4 }, -- Sword Enhancement Spell Damage
+    [89]  = {1249,    0,   4 }, -- Helix Duration
+    [90]  = {267,    0,   2 }, -- Club Skill
+    [91]  = {268,    0,   2 }, -- Staff Skill
+
+    -- Yellow Light Sources
+    [92]  = {1, 14, 29}, -- HP
+    [93]  = {9, 9, 19}, -- MP
+    [94]  = {31, 0, 4}, -- Evasion
+    [95]  = {33, 0, 4}, -- Def
+    [96]  = {37, 0, 4}, -- Magic Evasion
+    [97]  = {39, 0, 5}, -- Enmity +
+    [98]  = {51, 0, 4}, -- HP Recovery while resting
+    [99]  = {54, 0, 3}, -- Phys %Dmg Down
+    [100]  = {55, 0, 3}, -- Magic %Dmg Down
+    [101]  = {56, 0, 9}, -- Breath %Dmg Down
+    [102]  = {71, 0, 1}, -- Damage Taken
+    [103]  = {42, 0, 3}, -- Enemy Crit Rate
+    [104]  = {134, 0, 2}, -- Magic Defense Bonus
+    [105]  = {137, 0, 3}, -- Regen
+    [106]  = {153, 0, 1}, -- Shield Mastery
+    [107]  = {286, 0, 4}, -- Shield Skill
+    [108]  = {329, 0, 4}, -- Cute Potency
+    [109]  = {330, 0, 4}, -- Waltz Potency
+    [110]  = {356, 0, 4}, -- Cure Potency Received
+    [111]  = {363, 0, 2}, -- Block Chance
+    [112]  = {368, 0, 2}, -- Phalanx
+    [113]  = {514, 0, 2}, -- VIT
+    [114]  = {515, 0, 2}, -- AGI
+    [115]  = {259, 0, 2}, -- Sword Skill
+    [116]  = {145, 0, 1}, -- Counter
+    [87]  =  {796, 0, 4 }, -- All Elemental Resist
+
+    -- Green Light Sources
+    [117]  = {96, 0, 6}, -- Accuracy and Ranged Accuracy
+    [118]  = {97, 0, 14}, -- Attack and Ranged Attack
+    [119]  = {98, 0, 9}, -- Evasion
+    [120]  = {99, 0, 9}, -- Def
+    [121]  = {100, 0, 6}, -- Magic Accuracy
+    [122]  = {101, 0, 4}, -- Magic Attack
+    [123]  = {102, 0, 3}, -- Crit Rate
+    [124]  = {108, 0, 2}, -- Magic Accuracy and Magic Attack
+    [125]  = {109, 0, 1}, -- Double Attack and Crit Hit Rate
+    [126]  = {122, 0, 2}, -- TP Bonus
+    [127]  = {123, 0, 3}, -- Double Attack
+    [128]  = {278, 1, 5}, -- Automation Melee Skill
+    [129]  = {279, 1, 5}, -- Automation Ranged Skill
+    [130]  = {280, 1, 5}, -- Automation Magic Skill
+    [131]  = {320, 0, 0}, -- Blood Pact Ability Delay
+    [132]  = {369, 4, 9}, -- Blood Pact Damage
+    [133]  = {1792, 0, 4}, -- STR
+    [134]  = {1793, 0, 4}, -- DEX
+    [135]  = {1794, 0, 4}, -- VIT
+    [136]  = {1795, 0, 4}, -- AGI
+    [137]  = {1796, 0, 4}, -- INT
+    [138]  = {1797, 0, 4}, -- MND
+    [139]  = {1798, 0, 4}, -- CHR
 }
 
 xi.augments.strings = {
@@ -244,6 +366,57 @@ xi.augments.page_pools = {
     [1] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26}
 }
 
+xi.augments.lights_pools = {
+    [xi.zone_lights.lights.BRIGHT_RED]   = {
+        27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
+        43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
+        27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
+        43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
+        27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
+        43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
+    },
+    [xi.zone_lights.lights.DIM_RED]      = {
+        27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
+        43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
+    },
+    [xi.zone_lights.lights.BRIGHT_BLUE]  = {
+        59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
+        75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 88, 89, 90, 91,
+        59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
+        75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 88, 89, 90, 91,
+        59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
+        75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 88, 89, 90, 91,
+    },
+    [xi.zone_lights.lights.DIM_BLUE]     = {
+        59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
+        75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 88, 89, 90, 91,
+    },
+    [xi.zone_lights.lights.BRIGHT_GOLD]  = {
+        92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105,
+        106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 87,
+        92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105,
+        106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 87,
+        92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105,
+        106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 87,
+    },
+    [xi.zone_lights.lights.DIM_GOLD]     = {
+        92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105,
+        106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 87,
+    },
+    [xi.zone_lights.lights.BRIGHT_GREEN] = {
+        117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+        128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
+        117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+        128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
+        117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+        128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
+    },
+    [xi.zone_lights.lights.DIM_GREEN]    = {
+        117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+        128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
+    },
+}
+
 xi.augments.ingredients = {
     LOWBIE_AUG = 16485,
     MID_AUG    = 16481,
@@ -443,4 +616,51 @@ xi.augments.RollRegionalItemAugment = function(itemId)
         end
     end
     return augments
+end
+
+xi.augments.rollLightsAugment = function(zone)
+    local augments     = {}
+    local augment_srcs = {}
+
+    -- Build the Augment Pool
+    local augment_pool = {}
+    local lights = {zone:getLights()}
+
+    for _, light in ipairs(lights) do
+        if light ~= 0 then
+            for _, source_id in ipairs(xi.augments.lights_pools[light]) do
+                table.insert(augment_pool, source_id)
+            end
+        end
+    end
+
+    local on_aug = 0
+    for i, light in ipairs(lights) do
+        if light ~= 0 then
+            -- Do we do an augment selection?
+            local chance = math.random()
+            if chance < xi.zone_lights.zones[zone:getID()][i] then
+                -- pick an augment
+                local augment_src_id = augment_pool[math.random(1, #augment_pool)]
+                local augment_src = xi.augments.sources[augment_src_id]
+
+                augment_srcs[string.format("aug%d_src", on_aug)] = augment_src_id
+                augment_srcs[string.format("aug%d_min", on_aug)] = augment_src[2] -- min
+                augment_srcs[string.format("aug%d_max", on_aug)] = augment_src[3] -- max
+
+                -- roll the range on the augment
+                if( augments[augment_src[1]] ~= nil ) then
+                    augments[augment_src[1]] = augments[augment_src[1]] + math.random(augment_src[2], augment_src[3])
+                else
+                    local amt = math.random(augment_src[2], augment_src[3])
+                    augments[augment_src[1]] = amt
+                end
+                on_aug = on_aug + 1
+            end
+        else
+            break
+        end
+    end
+
+    return augments, augment_srcs
 end

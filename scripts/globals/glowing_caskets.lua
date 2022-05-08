@@ -2,12 +2,14 @@
 require("scripts/globals/status")
 require("scripts/globals/msg")
 require("scripts/globals/qr_utils")
+require("scripts/globals/qr_augments")
 -----------------------------------
 xi = xi or {}
 xi.glowingCaskets = xi.glowingCaskets or {}
 
 xi.glowingCaskets.openChanceMin = 10
 xi.glowingCaskets.openChanceMax = 90
+xi.glowingCaskets.IsOpenString = "IsOpen"
 
 xi.glowingCaskets.insertGlowingCaskets = function(zone)
     local zoneId = zone:getID()
@@ -27,6 +29,9 @@ xi.glowingCaskets.insertGlowingCaskets = function(zone)
             onTrigger = function(player, npc)
                 xi.glowingCaskets.onTrigger(player, npc)
             end,
+            onTrade = function(player, npc, trade)
+                xi.glowingCaskets.onTrade(player, npc, trade)
+            end,
             onEventFinish = function(player, csid, option, npc)
                 print(string.format("csid: %d option: %d", csid, option))
             end
@@ -39,15 +44,34 @@ xi.glowingCaskets.insertGlowingCaskets = function(zone)
     until #ID.glowingCaskets == 15
 end
 
+-----------------------------------
+--- on Trigger
+-----------------------------------
 xi.glowingCaskets.onTrigger = function(player, npc)
+    local openChance = xi.glowingCaskets.playerOpenChance(player, npc)
+
+    if not xi.glowingCaskets.playerIsOwnerOfCasket(player, npc) then
+        player:PrintToPlayer("You cannot tell your chances of opening this chest because you do not own it.", xi.msg.channel.NS_SAY)
+        return
+    end
+
+    if not xi.glowingCaskets.casketIsOpen(npc) then
+        xi.glowingCaskets.sendOpenChanceToPlayer(player, openChance)
+    else
+        xi.glowingCaskets.sendOpenChestMenu(player)
+    end
+end
+
+xi.glowingCaskets.playerOpenChance = function(player, casket)
     local openChanceString = xi.glowingCaskets.generatePlayerOpenChanceString(player)
-    local playerOpenChance = npc:getLocalVar(openChanceString)
+    local playerOpenChance = casket:getLocalVar(openChanceString)
 
     if playerOpenChance == 0 then
         playerOpenChance = xi.glowingCaskets.rollCasketChance()
-        npc:setLocalVar(openChanceString, playerOpenChance)
+        casket:setLocalVar(openChanceString, playerOpenChance)
     end
-    xi.glowingCaskets.sendOpenChanceToPlayer(player, playerOpenChance)
+
+    return playerOpenChance
 end
 
 xi.glowingCaskets.generatePlayerOpenChanceString = function(player)
@@ -68,6 +92,70 @@ xi.glowingCaskets.sendOpenChanceToPlayer = function(player, chance)
     )
 end
 
+-----------------------------------
+--- onTrade
+-----------------------------------
+
+xi.glowingCaskets.onTrade = function(player, npc, trade)
+    if not xi.glowingCaskets.playerIsOwnerOfCasket(player, npc) then
+        player:PrintToPlayer("You do not have a right to attempt to open this chest.", xi.msg.channel.NS_SAY)
+        return
+    end
+
+    if xi.glowingCaskets.casketIsOpen(npc) then return; end
+
+    if trade:getSlotCount() ~= 1 then return; end
+
+    if trade:getGil() ~= 100 then return; end
+
+    player:tradeComplete()
+
+    local openChance = xi.glowingCaskets.playerOpenChance(player, npc)
+
+    if openChance > math.random(0, 100) then
+        xi.glowingCaskets.successfullyOpenedCasket(player, npc)
+    else
+        xi.glowingCaskets.unsuccessfullyOpenedCasket(player, npc)
+    end
+end
+
+xi.glowingCaskets.successfullyOpenedCasket = function(player, casket)
+    xi.glowingCaskets.setCasketToOpen(casket)
+    player:PrintToPlayer("You have successfully opened the glowing casket!", xi.msg.channel.NS_SAY)
+
+    local augs, augment_srcs =  xi.glowingCaskets.generateAugmentInfo(casket)
+
+    xi.glowingCaskets.setAugmentInfo(casket, augs, augment_srcs)
+
+    local msgToAlliance = string.format("%s successfully opened a glowing casket!", player:getName())
+    xi.qr_utils.sendMsgToPlayersAllianceButNotThePlayer(player, msgToAlliance, xi.msg.channel.PARTY)
+end
+
+xi.glowingCaskets.generateAugmentInfo = function(casket)
+    local augs, augment_srcs = xi.augments.rollLightsAugment(casket:getZone())
+    augment_srcs.augment_item_src = xi.augments.ingredients.MID_AUG
+
+    return augs, augment_srcs
+end
+
+xi.glowingCaskets.setAugmentInfo = function(casket, augs, augment_srcs)
+    casket:setLocalStringVar("Augments", utils.serializeTable(augs))
+    casket:setLocalStringVar("AugmentSrcs", utils.serializeTable(augment_srcs))
+end
+
+xi.glowingCaskets.unsuccessfullyOpenedCasket = function(player, casket)
+    xi.glowingCaskets.despawnCasket(casket)
+    player:PrintToPlayer("You have unsuccessfully opened the glownig casket...", xi.msg.channel.NS_SAY)
+
+    local msgToAlliance = string.format("%s failed to open a glowing casket...", player:getName())
+    xi.qr_utils.sendMsgToPlayersAllianceButNotThePlayer(player, msgToAlliance, xi.msg.channel.PARTY)
+end
+
+xi.glowingCaskets.despawnCasket = function(casket)
+    casket:setStatus(xi.status.DISAPPEAR)
+end
+
+
 xi.glowingCaskets.shouldSpawnGlowingChest = function(player, mob)
     local zoneID = player:getZoneID()
     if xi.zone_lights.zones[zoneID] ~= nil then
@@ -84,10 +172,12 @@ end
 xi.glowingCaskets.spawnCasket = function(player, casket, position)
     -- set the internal data variables
     casket:resetLocalVars()
+    xi.glowingCaskets.setCasketToClosed(casket)
+
+    casket:setLocalVar("Owner", player:getLeaderID())
 
     -- set casket animation
     casket:setAnimation(0)
-    casket:setAnimationSub(4)
 
 
     -- set casket visual data
@@ -97,10 +187,36 @@ xi.glowingCaskets.spawnCasket = function(player, casket, position)
 
     -- set despawn timer (in milliseconds)
     casket:timer(180000, function(npc)
-        npc:setStatus(xi.status.DISAPPEAR)
+        xi.glowingCaskets.despawnCasket(npc)
     end)
 
     xi.qr_utils.sendMsgToPlayerAlliance(player, "A casket glowing with strange light has been revealed.", xi.msg.channel.NS_SAY)
+end
+
+xi.glowingCaskets.casketIsOpen = function(casket)
+    return casket:getLocalVar(xi.glowingCaskets.IsOpenString) == 1
+end
+
+xi.glowingCaskets.setCasketToClosed = function(casket)
+    casket:setAnimationSub(4)
+    casket:setLocalVar(xi.glowingCaskets.IsOpenString, 0)
+end
+
+xi.glowingCaskets.setCasketToOpen = function(casket)
+    casket:setAnimationSub(1)
+    casket:setLocalVar(xi.glowingCaskets.IsOpenString, 1)
+end
+
+xi.glowingCaskets.playerIsOwnerOfCasket = function(player, casket)
+    return xi.glowingCaskets.getCasketOwnerID(casket) == player:getLeaderID()
+end
+
+xi.glowingCaskets.setCasketOwnerID = function(casket, ownerID)
+    casket:setLocalVar("Owner", ownerID)
+end
+
+xi.glowingCaskets.getCasketOwnerID = function(casket)
+    return casket:getLocalVar("Owner")
 end
 
 xi.glowingCaskets.getAvailableCasket = function(mob)
@@ -115,17 +231,6 @@ xi.glowingCaskets.getAvailableCasket = function(mob)
     end
 
     return nil
-end
-
-xi.glowingCaskets.openCasket = function(player, casket)
-    casket:setAnimationSub(1)
-
-    -- Send the message to the player
-    player:PrintToPlayer("You open the glowing casket!", xi.msg.channel.NS_SAY)
-
-    -- Send the message to everyone
-    local msg = string.format("%s has decided to open the glowing casket!", player:getName())
-    xi.qr_utils.sendMsgToPlayersAllianceButNotThePlayer(player, msg, xi.msg.channel.NS_SAY)
 end
 
 xi.glowingCaskets.sendOpenChestMenu = function(player, npc)
