@@ -65,7 +65,7 @@ xi.recipe.recipes = {
             {id=xi.augments.ingredients.COMBINER, quantity=1},
             {id=xi.augments.ingredients.MID_AUG, quantity=1},
             xi.augments.synthIsAugmentRecipe,
-            xi.augments.itemIsOverLevel(35)
+            xi.augments.itemIsOverLevel(34)
         },
         break_rate_adjustment = function(initial_break_rate) return 0.0; end,
         calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
