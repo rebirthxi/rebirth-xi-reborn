@@ -126,6 +126,7 @@ xi.glowingCaskets.successfullyOpenedCasket = function(player, casket)
     local augs, augment_srcs =  xi.glowingCaskets.generateAugmentInfo(casket)
 
     xi.glowingCaskets.setAugmentInfo(casket, augs, augment_srcs)
+    xi.glowingCaskets.printAugmentInfoToParty(player, augs)
 
     local msgToAlliance = string.format("%s successfully opened a glowing casket!", player:getName())
     xi.qr_utils.sendMsgToPlayersAllianceButNotThePlayer(player, msgToAlliance, xi.msg.channel.PARTY)
@@ -147,6 +148,16 @@ xi.glowingCaskets.getAugmentInfo = function(casket)
     return
         loadstring(casket:getLocalStringVar("Augments"))(),
         loadstring(casket:getLocalStringVar("AugmentSrcs"))()
+end
+
+xi.glowingCaskets.printAugmentInfoToParty = function(player, augs)
+    local msg = "\n===== Mid Tier Augment ======\n"
+
+    for i, v in pairs(augs) do
+        msg = msg .. string.format(" - %s for %d\n", xi.augments.strings[i], v+1)
+    end
+
+    xi.qr_utils.sendMsgToPlayerAlliance(player, msg, xi.msg.channel.NS_PARTY)
 end
 
 xi.glowingCaskets.unsuccessfullyOpenedCasket = function(player, casket)
