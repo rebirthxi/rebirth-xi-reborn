@@ -65,7 +65,7 @@ xi.glowingCaskets.spawnCasket = function(player, casket, position)
         npc:setStatus(xi.status.DISAPPEAR)
     end)
 
-    xi.qr_utils.sendMsgToPlayerAlliance(player, "A casket glowing with strange light has been reaveled.", xi.msg.channel.NS_SAY)
+    xi.qr_utils.sendMsgToPlayerAlliance(player, "A casket glowing with strange light has been revealed.", xi.msg.channel.NS_SAY)
 end
 
 xi.glowingCaskets.getAvailableCasket = function(mob)
