@@ -168,7 +168,7 @@ end
 
 xi.glowingCaskets.unsuccessfullyOpenedCasket = function(player, casket)
     xi.glowingCaskets.despawnCasket(casket)
-    player:PrintToPlayer("You have unsuccessfully opened the glownig casket...", xi.msg.channel.NS_SAY)
+    player:PrintToPlayer("You have unsuccessfully opened the glowing casket...", xi.msg.channel.NS_SAY)
 
     xi.glowingCaskets.increasePlayerFailureCount(player)
 
