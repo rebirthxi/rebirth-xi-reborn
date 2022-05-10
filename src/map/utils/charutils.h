@@ -239,6 +239,7 @@ namespace charutils
     uint8 getItemLevelDifference(CCharEntity* PChar);
     uint8 getMainhandItemLevel(CCharEntity* PChar);
     uint8 getRangedItemLevel(CCharEntity* PChar);
+    bool hasEntitySpawned(CCharEntity* PChar, CBaseEntity* entity);
 
     /*
      * RebirthXI Reborn Custom Char Utils
@@ -248,7 +249,6 @@ namespace charutils
     void AddExperiencePoints(bool expFromRaise, CCharEntity* PChar, CBaseEntity* PMob, uint32 exp, EMobDifficulty mobCheck = EMobDifficulty::TooWeak,
                              bool isexpchain = false); // by defaulting to true, it makes the existing ambiguous and compiler will error if I've missed one
     bool ShouldDistributeXp(CCharEntity* PChar, JOBTYPE job);
-
 }; // namespace charutils
 
 #endif // _CHARUTILS_H
