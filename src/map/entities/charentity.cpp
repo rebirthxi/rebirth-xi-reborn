@@ -1780,7 +1780,7 @@ void CCharEntity::OnItemFinish(CItemState& state, action_t& action)
                             "SET extra = '%s' "
                             "WHERE charid = %u AND location = %u AND slot = %u;";
 
-        sql->Query(Query, extra, this->id, PItem->getLocationID(), PItem->getSlotID());
+        sql->Async(Query, extra, this->id, PItem->getLocationID(), PItem->getSlotID());
 
         if (PItem->getCurrentCharges() != 0)
         {
