@@ -1512,7 +1512,7 @@ void CBattleEntity::OnCastFinished(CMagicState& state, action_t& action)
     }
     if ((!(PSpell->isHeal()) || PSpell->tookEffect()) && PActionTarget->isAlive())
     {
-        if (objtype != TYPE_PET)
+        if (objtype != TYPE_PET && objtype != TYPE_TRUST)
         {
             battleutils::ClaimMob(PActionTarget, this);
         }
