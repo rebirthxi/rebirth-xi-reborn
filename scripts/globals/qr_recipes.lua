@@ -71,5 +71,57 @@ xi.recipe.recipes = {
         calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
         do_synth_result = xi.augments.synthResultAugmentBond(xi.augments.ingredients.MID_AUG),
         skill_up = function(player, ingredients) return; end
-    }
+    },
+    -- Fotia Gorget
+    [4] = {
+        crystal = 4102,
+        total_ingredients = 8,
+        required_inventory_slots = 1,
+        ingredients = {
+            {id=15495, quantity=1}, -- Flame Gorget
+            {id=15500, quantity=1}, -- Aqua Gorget
+            {id=15496, quantity=1}, -- Snow Gorget
+            {id=15499, quantity=1}, -- Thunder Gorget
+            {id=15498, quantity=1}, -- Soil Gorget
+            {id=15497, quantity=1}, -- Breeze Gorget
+            {id=15501, quantity=1}, -- Light Gorget
+            {id=15502, quantity=1}, -- Shadow Gorget
+        },
+        break_rate_adjustment = function(initial_break_rate) return 0.0; end,
+        calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
+        do_synth_result = function(player, ingredients)
+            local item_id = 27510
+
+            player:addItem({id=item_id})
+
+            return item_id, 1, true
+        end,
+        skill_up = function(player, ingredients) return; end,
+    },
+    -- Hachirin-no-obi
+    [5] = {
+        crystal = 4102,
+        total_ingredients = 8,
+        required_inventory_slots = 1,
+        ingredients = {
+            {id=15441, quantity=1}, -- Korin Obi
+            {id=15442, quantity=1}, -- Anrin Obi
+            {id=15435, quantity=1}, -- Karin Obi
+            {id=15436, quantity=1}, -- Hyorin Obi
+            {id=15437, quantity=1}, -- Furin Obi
+            {id=15438, quantity=1}, -- Dorin Obi
+            {id=15439, quantity=1}, -- Rairin Obi
+            {id=15440, quantity=1}, -- Suirin Obi
+        },
+        break_rate_adjustment = function(initial_break_rate) return 0.0; end,
+        calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
+        do_synth_result = function(player, ingredients)
+            local item_id = 28419
+
+            player:addItem({id=item_id})
+
+            return item_id, 1, true
+        end,
+        skill_up = function(player, ingredients) return; end,
+    },
 }
