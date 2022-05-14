@@ -7,8 +7,8 @@ require("scripts/globals/qr_augments")
 xi = xi or {}
 xi.glowingCaskets = xi.glowingCaskets or {}
 
-xi.glowingCaskets.openChanceMin = 10
-xi.glowingCaskets.openChanceMax = 90
+xi.glowingCaskets.openChanceMin = 20
+xi.glowingCaskets.openChanceMax = 80
 xi.glowingCaskets.IsOpenString = "IsOpen"
 xi.glowingCaskets.baseSpawnChance = 20
 xi.glowingCaskets.baseSpawnBonusChance = 60
