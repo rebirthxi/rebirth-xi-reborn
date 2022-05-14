@@ -183,29 +183,31 @@ std::function<void(map_session_data_t* const, CCharEntity* const, CBasicPacket)>
 
 void PrintPacket(CBasicPacket data)
 {
-    char message[50];
-    memset(&message, 0, 50);
-
-    for (size_t y = 0; y < data.getSize(); y++)
-    {
-        // TODO: -Wno-restrict - undefined behavior to print and write src into dest
-        // TODO: -Wno-format-overflow - writing between 4 and 53 bytes into destination of 50
-        // TODO: FIXME
-        // cppcheck-suppress sprintfOverlappingData
-        snprintf(message, sizeof(message), "%s %02hhx", message, *((uint8*)data[(int)y]));
-        if (((y + 1) % 16) == 0)
-        {
-            message[48] = '\n';
-            ShowDebug(message);
-            memset(&message, 0, 50);
-        }
-    }
-
-    if (strlen(message) > 0)
-    {
-        message[strlen(message)] = '\n';
-        ShowDebug(message);
-    }
+    // Comment out for now because I don't use PrintPacket
+    // And this seems to be preventing compilation
+//    char message[50];
+//    memset(&message, 0, 50);
+//
+//    for (size_t y = 0; y < data.getSize(); y++)
+//    {
+//        // TODO: -Wno-restrict - undefined behavior to print and write src into dest
+//        // TODO: -Wno-format-overflow - writing between 4 and 53 bytes into destination of 50
+//        // TODO: FIXME
+//        // cppcheck-suppress sprintfOverlappingData
+//        snprintf(message, sizeof(message), "%s %02hhx", message, *((uint8*)data[(int)y]));
+//        if (((y + 1) % 16) == 0)
+//        {
+//            message[48] = '\n';
+//            ShowDebug(message);
+//            memset(&message, 0, 50);
+//        }
+//    }
+//
+//    if (strlen(message) > 0)
+//    {
+//        message[strlen(message)] = '\n';
+//        ShowDebug(message);
+//    }
 }
 
 /************************************************************************
