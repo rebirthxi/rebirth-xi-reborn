@@ -262,6 +262,12 @@ void CParty::RemoveMember(CBattleEntity* PEntity)
     XI_DEBUG_BREAK_IF(PEntity == nullptr);
     XI_DEBUG_BREAK_IF(PEntity->PParty != this);
 
+    if (PEntity->objtype == TYPE_PC)
+    {
+        auto* PChar {static_cast<CCharEntity*>(PEntity)};
+        charutils::SetCharVar(PChar, "GlowingCasketsFailed", 0);
+    }
+
     if (m_PLeader == PEntity)
     {
         RemovePartyLeader(PEntity);
@@ -503,6 +509,12 @@ void CParty::AddMember(CBattleEntity* PEntity)
 
     PEntity->PParty = this;
     members.push_back(PEntity);
+
+    if (PEntity->objtype == TYPE_PC)
+    {
+        auto* PChar = static_cast<CCharEntity*>(PEntity);
+        charutils::SetCharVar(PChar, "GlowingCasketsFailed", 0);
+    }
 
     if (PEntity->objtype == TYPE_PC && this->members.size() > 1)
     {

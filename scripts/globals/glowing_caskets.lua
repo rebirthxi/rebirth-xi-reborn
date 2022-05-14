@@ -131,7 +131,10 @@ xi.glowingCaskets.successfullyOpenedCasket = function(player, casket)
 
     xi.glowingCaskets.setAugmentInfo(casket, augs, augment_srcs)
     xi.glowingCaskets.printAugmentInfoToParty(player, augs)
-    xi.glowingCaskets.resetPlayerFailureCount(player)
+
+    for _, member in pairs(player:getAlliance()) do
+        xi.glowingCaskets.resetPlayerFailureCount(member)
+    end
 
     local msgToAlliance = string.format("%s successfully opened a glowing casket!", player:getName())
     xi.qr_utils.sendMsgToPlayersAllianceButNotThePlayer(player, msgToAlliance, xi.msg.channel.PARTY)
