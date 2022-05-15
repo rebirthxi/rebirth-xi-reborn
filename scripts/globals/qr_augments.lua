@@ -422,6 +422,7 @@ xi.augments.ingredients = {
     MID_AUG    = 16481,
     COMBINER   = 9847,
     SEPARATOR  = 9848,
+    EXEMPTOR   = 9849,
 }
 
 xi.augments.exemptions = {
@@ -437,6 +438,13 @@ xi.augments.exemptions = {
     [15990] = true, -- Delta Earring
 }
 
+xi.augments.EXEMPTIONS = "AugmentExemptions"
+xi.augments.EXEMPT_PREFIX = "AugmentExempt"
+xi.augments.AUGPOINTS = "AugPoints"
+
+xi.augments.exemption_cost_map = {[0] = 25, [1] = 50, [2] = 100, [3] = 200, max = 400}
+
+
 xi.augments.synthIsAugmentRecipe = function(ingredients, player)
     local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
@@ -447,6 +455,12 @@ xi.augments.synthIsCleansableRecipe = function(ingredients)
     local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
     return xi.augments.itemIsCleansable(item)
+end
+
+xi.augments.itemCanBeExempted = function(ingredients, player)
+    local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
+
+    return xi.augments.itemIsExemptable(item, player)
 end
 
 xi.augments.getItemToAugmentFromIngredients = function(ingredients)
@@ -477,7 +491,7 @@ xi.augments.itemIsAugmentable = function(item, player)
     end
 
     -- Make sure it is not RARE or EX
-    if xi.augments.itemIsRareOrEx(item) and xi.augments.itemIsNotExempt(item) then
+    if xi.augments.itemIsRareOrEx(item) and xi.augments.itemIsNotExempt(item, player) then
         print("It is rare or EX")
         return false
     end
@@ -485,7 +499,7 @@ xi.augments.itemIsAugmentable = function(item, player)
     return true
 end
 
-xi.augments.itemIsRareOrEx = function(item)
+xi.augments.itemIsRareOrEx = function(item, player)
     local flags = item:getFlag()
 
     if bit.band(flags, 16384) == 16384 or bit.band(flags, 32768) == 32768 then
@@ -494,10 +508,81 @@ xi.augments.itemIsRareOrEx = function(item)
     return false
 end
 
-xi.augments.itemIsNotExempt = function(item)
+xi.augments.itemIsNotExempt = function(item, player)
     local itemId = item:getID()
+    local playerExemptList = xi.augments.acquirePlayerExemptList(player)
 
-    return xi.augments.exemptions[itemId] == nil
+    return xi.augments.exemptions[itemId] == nil and playerExemptList[itemId] == nil
+end
+
+xi.augments.itemIsExempt = function(item, player)
+    return not xi.augments.itemIsNotExempt(item, player)
+end
+
+xi.augments.acquirePlayerExemptList = function(player)
+    local numExemptions = player:getCharVar(xi.augments.EXEMPTIONS)
+
+    if numExemptions == 0 then
+        return {}
+    end
+
+    local exemption_ids = {}
+    for i = 1, numExemptions, 1 do
+        local exemptId = player:getCharVar(xi.augments.EXEMPT_PREFIX .. i)
+
+        exemption_ids[exemptId] = true
+    end
+
+    return exemption_ids
+end
+
+xi.augments.addItemToPlayerExemptList = function(player, itemId)
+    local numExemptions = player:getCharVar(xi.augments.EXEMPTIONS)
+
+    numExemptions = numExemptions + 1
+
+    player:setCharVar(xi.augments.EXEMPTIONS, numExemptions)
+    player:setCharVar(xi.augments.EXEMPT_PREFIX .. numExemptions, itemId)
+end
+
+xi.augments.playerCanAffordExemption = function(ingredients, player)
+    local augPoints = xi.augments.getAugPoints(player)
+    local cost = xi.augments.getNextExemptionCost(player)
+    local canAfford = augPoints >= cost
+
+    if not canAfford then
+        player:PrintToPlayer("You cannot afford to exempt this.")
+    end
+
+    return canAfford
+end
+
+xi.augments.getNextExemptionCost = function(player)
+    local numExemptions = player:getCharVar(xi.augments.EXEMPTIONS)
+
+    local cost = xi.augments.exemption_cost_map[numExemptions]
+
+    if cost == nil then
+        cost = xi.augments.exemption_cost_map.max
+    end
+
+    return cost
+end
+
+xi.augments.getAugPoints = function(player)
+    return player:getCharVar(xi.augments.AUGPOINTS)
+end
+
+xi.augments.addAugPoints = function(player, addPoints)
+    local augPoints = xi.augments.getAugPoints(player)
+
+    player:setCharVar(xi.augments.AUGPOINTS, augPoints + addPoints)
+end
+
+xi.augments.remAugPoints = function(player, remPoints)
+    local augPoints = xi.augments.getAugPoints(player)
+
+    player:setCharVar(xi.augments.AUGPOINTS, augPoints - remPoints)
 end
 
 xi.augments.itemIsCleansable = function(item)
@@ -545,13 +630,38 @@ xi.augments.itemIsOverLevel = function(level)
     end
 end
 
+xi.augments.itemIsExemptable = function(item, player)
+    if xi.augments.itemIsExempt(item, player) then
+        return false
+    end
+    return true
+end
+
+xi.augments.exemptItem = function(player, ingredients)
+    local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
+    local item_id = item:getID()
+    local cost = xi.augments.getNextExemptionCost(player)
+
+    xi.augments.remAugPoints(player, cost)
+    xi.augments.addItemToPlayerExemptList(player, item_id)
+
+    return item_id, 1, false
+end
+
 xi.augments.synthResultAugmentBond = function(ingredient)
     return function(player, ingredients)
         local aug = xi.synth.ingredientFromIngredients(ingredients, ingredient)
         local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
         local item_id = item:getID()
+        local aug_table = aug:getAugTable()
+        local aug_src_table = aug:getAugSrc()
+        local signature_str = item:getSignature()
 
-        player:addItem({id=item_id, augments=aug:getAugTable(), aug_src=aug:getAugSrc(), signature=item:getSignature()})
+        -- use a timer to handle rare items that can't be added until they are removed
+        -- and they are removed by the function in C that has called this one.
+        player:timer(1000, function(playerArg)
+            playerArg:addItem({id=item_id, augments=aug_table, aug_src=aug_src_table, signature=signature_str})
+        end)
 
         return item_id, 1, true
     end
@@ -564,9 +674,11 @@ xi.augments.synthCleanseAugmentSplit = function(player, ingredients)
     local augments = item:getAugTable()
     local aug_src = item:getAugSrc()
 
-    player:addItem({id=item_id, signature=sig})
-    player:addItem({id=aug_src.augment_item_src, augments=augments, aug_src=aug_src})
-    player:messageSpecial(zones[player:getZoneID()].text.ITEM_OBTAINED, aug_src.augment_item_src)
+    player:timer(1000, function(playerArg)
+        playerArg:addItem({id=item_id, signature=sig})
+        playerArg:addItem({id=aug_src.augment_item_src, augments=augments, aug_src=aug_src})
+        playerArg:messageSpecial(zones[playerArg:getZoneID()].text.ITEM_OBTAINED, aug_src.augment_item_src)
+    end)
 
     return item_id, 1, true
 end

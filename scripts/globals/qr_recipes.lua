@@ -124,4 +124,19 @@ xi.recipe.recipes = {
         end,
         skill_up = function(player, ingredients) return; end,
     },
+    -- Exempt an R/X item
+    [6] = {
+        crystal = 4102, -- Light Crystal
+        total_ingredients = 2,
+        required_inventory_slots = 1,
+        ingredients = {
+            {id=xi.augments.ingredients.EXEMPTOR, quantity=1},
+            xi.augments.itemCanBeExempted,
+            xi.augments.playerCanAffordExemption,
+        },
+        break_rate_adjustment = function(initial_break_rate) return 0.0; end,
+        calc_synth_result = function(player, ingredients) return xi.recipe.results.SYNTHESIS_SUCCESS; end,
+        do_synth_result = xi.augments.exemptItem,
+        skill_up = function(player, ingredients) return; end
+    }
 }
