@@ -25,6 +25,7 @@ m:addOverride("xi.zones.Selbina.npcs.Dohdjuma.onTrigger", function(player, npc)
         2866, 9200,    -- Selbina Waystone
         xi.augments.ingredients.COMBINER, 4321,
         xi.augments.ingredients.SEPARATOR, 11023,
+        xi.augments.ingredients.EXEMPTOR, 112310,
     }
 
     player:showText(npc, ID.text.DOHDJUMA_SHOP_DIALOG)
