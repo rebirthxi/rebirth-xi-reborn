@@ -138,3 +138,59 @@ INSERT INTO mob_droplist VALUES (2819, 0, 0, 1000, 4750, 65); -- Scroll of Rerai
 INSERT INTO mob_droplist VALUES (2819, 0, 0, 1000, 747, 138); -- O.Ingot
 INSERT INTO mob_droplist VALUES (2819, 0, 0, 1000, 831, 184); -- Shining Cloth
 INSERT INTO mob_droplist VALUES (2819, 0, 0, 1000, 658, 169); -- D.Ingot
+
+-- Fire Elemental - Ruby
+INSERT INTO `mob_droplist` VALUES (3300,0,0,1000,4104,1000);
+INSERT INTO `mob_droplist` VALUES (3300,0,0,1000,4104,400);
+INSERT INTO `mob_droplist` VALUES (3300,0,0,1000,4104,150);
+INSERT INTO `mob_droplist` VALUES (3300,0,0,1000, 786,75);
+UPDATE mob_groups SET dropid=3300 WHERE name='Fire_Elemental' and zoneid=130;
+
+-- Water Elemental - Sapphire
+INSERT INTO `mob_droplist` VALUES (3301,0,0,1000,4109,1000);
+INSERT INTO `mob_droplist` VALUES (3301,0,0,1000,4109,400);
+INSERT INTO `mob_droplist` VALUES (3301,0,0,1000,4109,150);
+INSERT INTO `mob_droplist` VALUES (3301,0,0,1000, 794,75);
+UPDATE mob_groups SET dropid=3301 WHERE name='Water_Elemental' and zoneid=130;
+
+-- Air Elemental - Emerald
+INSERT INTO `mob_droplist` VALUES (3302,0,0,1000,4106,1000);
+INSERT INTO `mob_droplist` VALUES (3302,0,0,1000,4106,400);
+INSERT INTO `mob_droplist` VALUES (3302,0,0,1000,4106,150);
+INSERT INTO `mob_droplist` VALUES (3302,0,0,1000, 785,75);
+UPDATE mob_groups SET dropid=3302 WHERE name='Air_Elemental' and zoneid=130;
+
+-- Thunder Elemental - Spinel
+INSERT INTO `mob_droplist` VALUES (3303,0,0,1000,4108,1000);
+INSERT INTO `mob_droplist` VALUES (3303,0,0,1000,4108,400);
+INSERT INTO `mob_droplist` VALUES (3303,0,0,1000,4108,150);
+INSERT INTO `mob_droplist` VALUES (3303,0,0,1000, 804,75);
+UPDATE mob_groups SET dropid=3303 WHERE name='Thunder_Elemental' and zoneid=130;
+
+-- Light Elemental - Angelstone
+INSERT INTO `mob_droplist` VALUES (3304,0,0,1000,4110,1000);
+INSERT INTO `mob_droplist` VALUES (3304,0,0,1000,4110,400);
+INSERT INTO `mob_droplist` VALUES (3304,0,0,1000,4110,150);
+INSERT INTO `mob_droplist` VALUES (3304,0,0,1000, 813,75);
+UPDATE mob_groups SET dropid=3304 WHERE name='Light_Elemental' and zoneid=130;
+
+-- Dark Elemental - Deathstone
+INSERT INTO `mob_droplist` VALUES (3305,0,0,1000,4111,1000);
+INSERT INTO `mob_droplist` VALUES (3305,0,0,1000,4111,400);
+INSERT INTO `mob_droplist` VALUES (3305,0,0,1000,4111,150);
+INSERT INTO `mob_droplist` VALUES (3305,0,0,1000, 812,75);
+UPDATE mob_groups SET dropid=3305 WHERE name='Dark_Elemental' and zoneid=130;
+
+-- Ice Elemental - Diamond
+INSERT INTO `mob_droplist` VALUES (3306,0,0,1000,4105,1000);
+INSERT INTO `mob_droplist` VALUES (3306,0,0,1000,4105,400);
+INSERT INTO `mob_droplist` VALUES (3306,0,0,1000,4105,150);
+INSERT INTO `mob_droplist` VALUES (3306,0,0,1000, 787,75);
+UPDATE mob_groups SET dropid=3306 WHERE name='Ice_Elemental' and zoneid=130;
+
+-- Earth Elemental - Topaz
+INSERT INTO `mob_droplist` VALUES (3307,0,0,1000,4107,1000);
+INSERT INTO `mob_droplist` VALUES (3307,0,0,1000,4107,400);
+INSERT INTO `mob_droplist` VALUES (3307,0,0,1000,4107,150);
+INSERT INTO `mob_droplist` VALUES (3307,0,0,1000, 789,75);
+UPDATE mob_groups SET dropid=3307 WHERE name='Earth_Elemental' and zoneid=130;
