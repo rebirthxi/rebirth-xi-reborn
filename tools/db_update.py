@@ -97,6 +97,7 @@ safe_files_to_load = [
     "sql/qr_sql/hnm_stat_changes.sql",
     "sql/qr_sql/dynamis.sql",
     "sql/qr_sql/item_price_changes.sql",
+    "sql/qr_sql/mid_nm_drops.sql",
 ]
 
 for sql_file in safe_files_to_load:
