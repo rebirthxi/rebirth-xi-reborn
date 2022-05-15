@@ -424,10 +424,23 @@ xi.augments.ingredients = {
     SEPARATOR  = 9848,
 }
 
-xi.augments.synthIsAugmentRecipe = function(ingredients)
+xi.augments.exemptions = {
+    [17857] = true, -- Animator + 1
+    [16228] = true, -- Aslan Cape
+    [16229] = true, -- Gleeman's Cape
+    [16267] = true, -- Ritter Gorget
+    [16268] = true, -- Kubira Bead Necklace
+    [16269] = true, -- Morgana's Chooker
+    [15911] = true, -- Buccaneer's Belt
+    [15799] = true, -- Iota Ring
+    [15800] = true, -- Omega Ring
+    [15990] = true, -- Delta Earring
+}
+
+xi.augments.synthIsAugmentRecipe = function(ingredients, player)
     local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
-    return xi.augments.itemIsAugmentable(item)
+    return xi.augments.itemIsAugmentable(item, player)
 end
 
 xi.augments.synthIsCleansableRecipe = function(ingredients)
@@ -445,7 +458,7 @@ xi.augments.getItemToAugmentFromIngredients = function(ingredients)
     return nil
 end
 
-xi.augments.itemIsAugmentable = function(item)
+xi.augments.itemIsAugmentable = function(item, player)
     -- do a nil check (just cause)
     if item == nil then
         return false
@@ -464,13 +477,27 @@ xi.augments.itemIsAugmentable = function(item)
     end
 
     -- Make sure it is not RARE or EX
-    local flags = item:getFlag()
-    if bit.band(flags, 16384) == 16384 or bit.band(flags, 32768) == 32768 then
+    if xi.augments.itemIsRareOrEx(item) and xi.augments.itemIsNotExempt(item) then
         print("It is rare or EX")
         return false
     end
 
     return true
+end
+
+xi.augments.itemIsRareOrEx = function(item)
+    local flags = item:getFlag()
+
+    if bit.band(flags, 16384) == 16384 or bit.band(flags, 32768) == 32768 then
+        return true
+    end
+    return false
+end
+
+xi.augments.itemIsNotExempt = function(item)
+    local itemId = item:getID()
+
+    return xi.augments.exemptions[itemId] == nil
 end
 
 xi.augments.itemIsCleansable = function(item)

@@ -13,31 +13,31 @@ xi.synth = xi.synth or {}
 ---
 --- Recipe IDs should be Ints
 ---
-xi.synth.lookup = function(ingredients, recipes)
+xi.synth.lookup = function(ingredients, recipes, player)
     for recipe_id, recipe_info in ipairs(recipes) do
-        if xi.synth.recipeMatchesIngredients(recipe_info, ingredients) then return recipe_id; end
+        if xi.synth.recipeMatchesIngredients(recipe_info, ingredients, player) then return recipe_id; end
     end
     return 0
 end
 
-xi.synth.recipeMatchesIngredients = function(recipe_info, ingredients)
+xi.synth.recipeMatchesIngredients = function(recipe_info, ingredients, player)
     if recipe_info.crystal ~= ingredients.crystal then return false; end
 
     if recipe_info.total_ingredients ~= #ingredients then return false; end
 
     for _, ingredient in ipairs(recipe_info.ingredients) do
-        if xi.synth.checkForIngredientInIngredients(ingredient, ingredients) == false then return false; end
+        if xi.synth.checkForIngredientInIngredients(ingredient, ingredients, player) == false then return false; end
     end
 
     return true
 end
 
-xi.synth.checkForIngredientInIngredients = function(ingredient, ingredients)
+xi.synth.checkForIngredientInIngredients = function(ingredient, ingredients, player)
     if type(ingredient) == "table" then
         return xi.synth.ingredientsHasItemIDAndQuantity(ingredients, ingredient.id, ingredient.quantity)
     end
     if type(ingredient) == "function" then
-        return ingredient(ingredients)
+        return ingredient(ingredients, player)
     end
 end
 

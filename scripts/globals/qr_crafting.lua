@@ -22,7 +22,7 @@ xi.qr_crafting.recipe_index_key = "luaSynth"
 --- Returns false if it is not
 ---
 xi.qr_crafting.isRightRecipe = function(player, ingredients)
-    local recipe_id = xi.synth.lookup(ingredients, xi.recipe.recipes)
+    local recipe_id = xi.synth.lookup(ingredients, xi.recipe.recipes, player)
 
     -- Bail out if it didn't find a good recipe
     if recipe_id == 0 then
