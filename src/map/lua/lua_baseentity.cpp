@@ -4749,6 +4749,7 @@ void CLuaBaseEntity::setCallForHelpFlag(bool cfh)
     if (auto* PMob = dynamic_cast<CMobEntity*>(m_PBaseEntity))
     {
         PMob->SetCallForHelpFlag(cfh);
+        return;
     }
     ShowWarning("setCallForHelpFlag called on invalid entity.");
 }
@@ -4782,6 +4783,7 @@ void CLuaBaseEntity::setCallForHelpBlocked(bool blocked)
     if (auto* PMob = dynamic_cast<CMobEntity*>(m_PBaseEntity))
     {
         PMob->m_CallForHelpBlocked = blocked;
+        return;
     }
     ShowWarning("setCallForHelpBlocked called on invalid entity.");
 }
