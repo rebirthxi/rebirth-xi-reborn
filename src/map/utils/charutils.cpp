@@ -1341,7 +1341,7 @@ namespace charutils
                                 "aug3_max) "
                                 "VALUES(%u,%u,%u,%u,%u,'%s','%s',%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u)";
 
-            int8 signature[21];
+            int8 signature[DecodeStringLength];
             if (PItem->isType(ITEM_LINKSHELL))
             {
                 DecodeStringLinkshell((int8*)PItem->getSignature(), signature);
