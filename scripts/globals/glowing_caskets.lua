@@ -4,6 +4,8 @@ require("scripts/globals/msg")
 require("scripts/globals/qr_utils")
 require("scripts/globals/qr_augments")
 -----------------------------------
+math.randomseed(os.time())
+
 xi = xi or {}
 xi.glowingCaskets = xi.glowingCaskets or {}
 
@@ -203,7 +205,7 @@ xi.glowingCaskets.getPlayerSpawnChance = function(player)
                    xi.glowingCaskets.getPlayerBonusChance(player) +
                    xi.glowingCaskets.getPlayerOpenFailureBonus(player)
 
-    return utils.clamp(chance, xi.glowingCaskets.baseSpawnBonusChance, 100)
+    return utils.clamp(chance, xi.glowingCaskets.baseSpawnChance, 100)
 end
 
 xi.glowingCaskets.getPlayerBonusChance = function(player)
