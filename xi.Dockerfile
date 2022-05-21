@@ -48,9 +48,9 @@ RUN apt update && apt install -y --no-install-recommends \
     && apt clean
 
 
-COPY --from=build /app/topaz_connect /
-COPY --from=build /app/topaz_game /
-COPY --from=build /app/topaz_search /
+COPY --from=build /app/xi_connect /
+COPY --from=build /app/xi_map /
+COPY --from=build /app/xi_search /
 
 ADD ./conf /conf
 ADD ./scripts /scripts

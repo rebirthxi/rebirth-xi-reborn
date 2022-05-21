@@ -24,7 +24,7 @@ services:
     tty: true
     restart: unless-stopped
     command: >
-      bash -c "./topaz_connect"
+      bash -c "./xi_connect"
   xigame:
     image: xi-run-time:main
     environment:
@@ -43,7 +43,7 @@ services:
     tty: true
     restart: unless-stopped
     command: >
-      bash -c "./topaz_game"
+      bash -c "./xi_map"
   xisearch:
     image: xi-run-time:main
     environment:
@@ -59,7 +59,7 @@ services:
         ipv4_address: 192.168.10.3
     restart: unless-stopped
     command: >
-      bash -c "./topaz_search"
+      bash -c "./xi_search"
 
 networks:
   xi-network:
