@@ -1,13 +1,13 @@
 -- Adamantoise
-DELETE FROM mob_droplist WHERE dropId=91;
-INSERT INTO `mob_droplist` VALUES (91, 0, 0, 1000, 1525, 123); -- Adamantoise Egg
-INSERT INTO `mob_droplist` VALUES (91, 0, 0, 1000, 646, 300); -- Adaman Ore
-INSERT INTO `mob_droplist` VALUES (91, 0, 0, 1000, 646, 300); -- Adaman Ore
-INSERT INTO `mob_droplist` VALUES (91, 0, 0, 1000, 646, 300); -- Adaman Ore
-INSERT INTO `mob_droplist` VALUES (91, 0, 0, 1000, 646, 300); -- Adaman Ore
-INSERT INTO `mob_droplist` VALUES (91, 0, 0, 1000, 908, 100); -- Adamantoise Shell
-INSERT INTO `mob_droplist` VALUES (91, 0, 0, 1000, 12361, 70); -- Sipar
-INSERT INTO `mob_droplist` VALUES (91, 0, 0, 1000, 13794, 70); -- Heavy Cuirass
+DELETE FROM mob_droplist WHERE dropId=21;
+INSERT INTO `mob_droplist` VALUES (21, 0, 0, 1000, 1525, 123); -- Adamantoise Egg
+INSERT INTO `mob_droplist` VALUES (21, 0, 0, 1000, 646, 300); -- Adaman Ore
+INSERT INTO `mob_droplist` VALUES (21, 0, 0, 1000, 646, 300); -- Adaman Ore
+INSERT INTO `mob_droplist` VALUES (21, 0, 0, 1000, 646, 300); -- Adaman Ore
+INSERT INTO `mob_droplist` VALUES (21, 0, 0, 1000, 646, 300); -- Adaman Ore
+INSERT INTO `mob_droplist` VALUES (21, 0, 0, 1000, 908, 100); -- Adamantoise Shell
+INSERT INTO `mob_droplist` VALUES (21, 0, 0, 1000, 12361, 70); -- Sipar
+INSERT INTO `mob_droplist` VALUES (21, 0, 0, 1000, 13794, 70); -- Heavy Cuirass
 
 -- Aspidochelone
 DELETE FROM mob_droplist WHERE dropId=183;
