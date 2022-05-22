@@ -626,7 +626,7 @@ xi.augments.itemIsOverLevel = function(level)
     return function(ingredients)
         local item = xi.augments.getItemToAugmentFromIngredients(ingredients)
 
-        return item:getReqLvl() > 35
+        return item:getReqLvl() > level
     end
 end
 
