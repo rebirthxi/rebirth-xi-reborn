@@ -118,8 +118,8 @@ std::pair<uint16, uint16> CGuild::getDailyGPItem(CCharEntity* PChar)
     rank = std::clamp<uint8>(rank, 3, 9);
 
     auto GPItem    = m_GPItems[rank - 3];
-    auto curPoints = (uint16)charutils::GetCharVar(PChar, "[GUILD]daily_points");
-    if (curPoints <= 0) // char_var set to -1 in crafting.lua file. Deleted in guildutils.cpp
+    auto curPoints = charutils::GetCharVar(PChar, "[GUILD]daily_points");
+    if (curPoints < 0) // char_var set to -1 in crafting.lua file. Deleted in guildutils.cpp
     {
         return std::make_pair(GPItem[0].item->getID(), 0);
     }
