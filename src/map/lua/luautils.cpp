@@ -199,6 +199,7 @@ namespace luautils
         lua.set_function("SelectDailyItem", &luautils::SelectDailyItem);
         lua.set_function("GetQuestAndMissionFilenamesList", &luautils::GetQuestAndMissionFilenamesList);
         lua.set_function("GetCachedInstanceScript", &luautils::GetCachedInstanceScript);
+        lua.set_function("GetItemIDByName", &luautils::GetItemIDByName);
 
         // This binding specifically exists to forcefully crash the server.
         // clang-format off
@@ -4889,6 +4890,23 @@ namespace luautils
         }
 
         customMenuContext.erase(PChar->id);
+    }
+
+    uint16 GetItemIDByName(std::string const& name)
+    {
+        uint16      id    = 0;
+        const char* Query = "SELECT itemid FROM item_basic WHERE name = '%s' LIMIT 1;";
+        int32       ret   = sql->Query(Query, name);
+
+        if (ret != SQL_ERROR && sql->NumRows() != 0)
+        {
+            while (sql->NextRow() == SQL_SUCCESS)
+            {
+                id = sql->GetIntData(0);
+            }
+        }
+
+        return id;
     }
 
     bool isRightRecipe(CCharEntity* PChar)

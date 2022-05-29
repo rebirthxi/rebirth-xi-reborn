@@ -329,6 +329,8 @@ namespace luautils
     bool HasCustomMenuContext(CCharEntity* PChar);
     void HandleCustomMenu(CCharEntity* PChar, std::string selection);
 
+    uint16 GetItemIDByName(std::string const& name); // Retrive the first itemId that matches a name
+
     // QR custom lua crafting
     bool isRightRecipe(CCharEntity* PChar);
     void setIsLuaRecipe(CCharEntity* PChar);
