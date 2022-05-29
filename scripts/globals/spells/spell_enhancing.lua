@@ -255,7 +255,7 @@ xi.spells.spell_enhancing.useEnhancingSpell = function(caster, target, spell)
     -- Bar-Element (They use addStatusEffect argument 6. Bar-Status current implementation doesn't.)
     if spellEffect >= xi.effect.BARFIRE and spellEffect <= xi.effect.BARWATER then
         magicDefenseBonus = caster:getMerit(xi.merit.BAR_SPELL_EFFECT) + caster:getMod(xi.mod.BARSPELL_MDEF_BONUS)
-        -- Embrava
+    -- Embrava
     elseif spellEffect == xi.effect.EMBRAVA then
         -- If Tabula Rasa wears before spell goes off, no Embrava for you!
         if not caster:hasStatusEffect(xi.effect.TABULA_RASA) then
