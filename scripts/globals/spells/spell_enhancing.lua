@@ -36,7 +36,7 @@ xi.spells.spell_enhancing.calculateEnhancingBasePower = function(caster, target,
             basePower = basePower + 1
         end
 
-    -- Bar-Element
+        -- Bar-Element
     elseif spellEffect >= xi.effect.BARFIRE and spellEffect <= xi.effect.BARWATER then
         if skillLevel > 300 then
             basePower = 25 + math.floor(skillLevel / 4) -- 150 at 500
@@ -45,23 +45,23 @@ xi.spells.spell_enhancing.calculateEnhancingBasePower = function(caster, target,
         end
 
         basePower = utils.clamp(basePower, 40, 150) -- Max is 150 and min is 40 at skill 0.
-    -- Bar-Status
+        -- Bar-Status
     elseif spellEffect == xi.effect.BARAMNESIA or (spellEffect >= xi.effect.BARSLEEP and spellEffect <= xi.effect.BARVIRUS) then
         basePower = basePower + skillLevel / 50 -- This is WRONG. SO SO WRONG.
 
-    -- Boost-Stat / Gain-Stat
+        -- Boost-Stat / Gain-Stat
     elseif spellEffect >= xi.effect.STR_BOOST and spellEffect <= xi.effect.CHR_BOOST then
         basePower = basePower + utils.clamp(math.floor((skillLevel - 300) / 10), 0, 20)
 
-    -- Embrava
+        -- Embrava
     elseif spellEffect == xi.effect.EMBRAVA then
         basePower = math.min(skillLevel, 500)
 
-    -- En-Spells (Info from from BG-Wiki) and Auspice
+        -- En-Spells (Info from from BG-Wiki) and Auspice
     elseif
-        (spellEffect >= xi.effect.ENFIRE and spellEffect <= xi.effect.ENWATER) or
-        (spellEffect >= xi.effect.ENFIRE_II and spellEffect <= xi.effect.ENWATER_II) or
-        spellEffect == xi.effect.AUSPICE
+    (spellEffect >= xi.effect.ENFIRE and spellEffect <= xi.effect.ENWATER) or
+            (spellEffect >= xi.effect.ENFIRE_II and spellEffect <= xi.effect.ENWATER_II) or
+            spellEffect == xi.effect.AUSPICE
     then
         if skillLevel > 500 then
             basePower = math.floor(3 * (skillLevel + 50) / 25)
@@ -73,7 +73,7 @@ xi.spells.spell_enhancing.calculateEnhancingBasePower = function(caster, target,
             basePower = math.max(math.floor(math.sqrt(skillLevel)) - 1, 0)
         end
 
-    -- Phalanx
+        -- Phalanx
     elseif spellEffect == xi.effect.PHALANX then
         if skillLevel > 300 then -- Phalanx I and II over 300 skill
             basePower = utils.clamp(math.floor((skillLevel - 300.5) / 28.5) + 28, 28, 35)
@@ -85,15 +85,15 @@ xi.spells.spell_enhancing.calculateEnhancingBasePower = function(caster, target,
             end
         end
 
-    -- Blaze Spikes (Info from from BG-Wiki)
+        -- Blaze Spikes (Info from from BG-Wiki)
     elseif spellEffect == xi.effect.BLAZE_SPIKES then
         basePower = utils.clamp(math.floor(math.floor((caster:getStat(xi.mod.INT) + 50) / 12) * (1 + caster:getMod(xi.mod.MATT) / 100)), 1, 25)
 
-    -- Ice Spikes, Shock Spikes (Info from from BG-Wiki)
+        -- Ice Spikes, Shock Spikes (Info from from BG-Wiki)
     elseif spellEffect == xi.effect.ICE_SPIKES or spellEffect == xi.effect.SHOCK_SPIKES then
         basePower = utils.clamp(math.floor(math.floor((caster:getStat(xi.mod.INT) + 50) / 20) * (1 + caster:getMod(xi.mod.MATT) / 100)), 1, 15)
 
-    -- Temper
+        -- Temper
     elseif spellEffect == xi.effect.MULTI_STRIKES then
         if skillLevel >= 360 then
             basePower = math.floor((skillLevel - 300) / 10)
@@ -128,34 +128,34 @@ xi.spells.spell_enhancing.calculateEnhancingFinalPower = function(caster, target
     if spellEffect >= xi.effect.BARFIRE and spellEffect <= xi.effect.BARWATER then
         finalPower = finalPower + caster:getMerit(xi.merit.BAR_SPELL_EFFECT) + caster:getMod(xi.mod.BARSPELL_AMOUNT) + caster:getJobPointLevel(xi.jp.BAR_SPELL_EFFECT) * 2
 
-    -- Bar-Status
+        -- Bar-Status
     elseif spellEffect == xi.effect.BARAMNESIA or (spellEffect >= xi.effect.BARSLEEP and spellEffect <= xi.effect.BARVIRUS) then
         finalPower = finalPower + caster:getMerit(xi.merit.BAR_SPELL_EFFECT) + caster:getMod(xi.mod.BARSPELL_MDEF_BONUS)
 
-    -- Protect/Protectra
+        -- Protect/Protectra
     elseif spellEffect == xi.effect.PROTECT then
         if target:getMod(xi.mod.ENHANCES_PROT_SHELL_RCVD) > 0 then
             finalPower = finalPower + (tier * 2)
         end
 
-    -- Refresh
+        -- Refresh
     elseif spellEffect == xi.effect.REFRESH then
         finalPower = finalPower + caster:getMod(xi.mod.ENHANCES_REFRESH)
 
-    -- Regen
+        -- Regen
     elseif spellEffect == xi.effect.REGEN then
         finalPower = math.ceil(finalPower * (1 + caster:getMod(xi.mod.REGEN_MULTIPLIER) / 100)) -- Bonus HP from Gear.
         finalPower = finalPower + caster:getMerit(xi.merit.REGEN_EFFECT) -- Bonus HP from Merits.
         finalPower = finalPower + caster:getMod(xi.mod.LIGHT_ARTS_REGEN) -- Bonus HP from Light Arts.
         finalPower = finalPower + caster:getMod(xi.mod.REGEN_BONUS)      -- Bonus HP from Job Point Gift.
 
-    -- Shell/Shellra
+        -- Shell/Shellra
     elseif spellEffect == xi.effect.SHELL then
         if target:getMod(xi.mod.ENHANCES_PROT_SHELL_RCVD) > 0 then
             finalPower = finalPower + (tier * 39)
         end
 
-    -- -storm
+        -- -storm
     elseif spellEffect >= xi.effect.FIRESTORM and spellEffect <= xi.effect.VOIDSTORM then
         finalPower = finalPower + caster:getMerit(xi.merit.STORMSURGE) + caster:getMod(xi.mod.STORMSURGE_EFFECT)
     end
@@ -191,7 +191,7 @@ xi.spells.spell_enhancing.calculateEnhancingDuration = function(caster, target, 
     ------------------------------
     -- Merits and Job Points. (Applicable to all enhancing spells. Prior to multipliers, according to bg-wiki.)
     ------------------------------
-    if caster:getJob() == xi.job.RDM then
+    if caster:getMainJob() == xi.job.RDM then
         duration = duration + caster:getMerit(xi.merit.ENHANCING_MAGIC_DURATION) + caster:getJobPointLevel(xi.jp.ENHANCING_DURATION)
     end
 
@@ -203,11 +203,11 @@ xi.spells.spell_enhancing.calculateEnhancingDuration = function(caster, target, 
         duration = duration + caster:getMod(xi.mod.REGEN_DURATION)
         duration = duration + caster:getJobPointLevel(xi.jp.REGEN_DURATION) * 3
 
-    -- Invisible
+        -- Invisible
     elseif spellEffect == xi.effect.INVISIBLE then
         duration = duration + target:getMod(xi.mod.INVISIBLE_DURATION)
 
-    -- Sneak
+        -- Sneak
     elseif spellEffect == xi.effect.SNEAK then
         duration = duration + target:getMod(xi.mod.SNEAK_DURATION)
     end
@@ -255,7 +255,7 @@ xi.spells.spell_enhancing.useEnhancingSpell = function(caster, target, spell)
     -- Bar-Element (They use addStatusEffect argument 6. Bar-Status current implementation doesn't.)
     if spellEffect >= xi.effect.BARFIRE and spellEffect <= xi.effect.BARWATER then
         MDB = caster:getMerit(xi.merit.BAR_SPELL_EFFECT) + caster:getMod(xi.mod.BARSPELL_MDEF_BONUS)
-    -- Embrava
+        -- Embrava
     elseif spellEffect == xi.effect.EMBRAVA then
         -- If Tabula Rasa wears before spell goes off, no Embrava for you!
         if not caster:hasStatusEffect(xi.effect.TABULA_RASA) then
@@ -263,14 +263,14 @@ xi.spells.spell_enhancing.useEnhancingSpell = function(caster, target, spell)
             return 0
         end
 
-    -- Refresh
+        -- Refresh
     elseif spellEffect == xi.effect.REFRESH then
         if target:hasStatusEffect(xi.effect.SUBLIMATION_ACTIVATED) or target:hasStatusEffect(xi.effect.SUBLIMATION_COMPLETE) then
             spell:setMsg(xi.msg.basic.MAGIC_NO_EFFECT)
             return 0
         end
 
-    -- Boost-Stat / Gain-Stat
+        -- Boost-Stat / Gain-Stat
     elseif spellEffect >= xi.effect.STR_BOOST and spellEffect <= xi.effect.CHR_BOOST then
         -- Only one Boost Effect can be active at once, so if the player has any we have to cancel & overwrite
         local effectOverwrite =
@@ -290,7 +290,7 @@ xi.spells.spell_enhancing.useEnhancingSpell = function(caster, target, spell)
             end
         end
 
-    -- -storm spells
+        -- -storm spells
     elseif spellEffect >= xi.effect.FIRESTORM and spellEffect <= xi.effect.VOIDSTORM then
         -- Only one storm effect can be active at once, so if the player has any we have to cancel & overwrite
         local effectOverwrite =
