@@ -42,7 +42,7 @@ public:
 
     uint32 getType();
     uint32 getSubType();
-    uint16 getPower();
+    uint32 getPower();
     uint16 getSubPower();
     uint16 getTier();
     uint32 getDuration();
@@ -54,7 +54,7 @@ public:
     uint16 getIcon();
 
     void setIcon(uint16 icon);
-    void setPower(uint16 power);
+    void setPower(uint32 power);
     void setSubPower(uint16 subpower);
     void setTier(uint16 tier);
     void setDuration(uint32 duration);

@@ -2471,7 +2471,7 @@ namespace battleutils
         }
 
         // Apply TP
-        PAttacker->addTP(std::max((PAttacker->getMod(Mod::SAVETP)), standbyTp));
+        PAttacker->addTP(std::max((PAttacker->getMod(Mod::SAVETP)), static_cast<int32>(standbyTp)));
 
         // Remove Hagakure Effect if present
         if (PAttacker->StatusEffectContainer->HasStatusEffect(EFFECT_HAGAKURE))

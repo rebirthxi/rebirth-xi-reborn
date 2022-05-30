@@ -65,7 +65,7 @@ public:
         LATENT ConditionsID;
         uint16 ConditionsValue;
         Mod    ModValue;
-        int16  ModPower;
+        int32  ModPower;
     };
 
     uint8  getReqLvl() const;
@@ -103,7 +103,7 @@ public:
 
     void addModifier(CModifier modifier);
     void addPetModifier(CPetModifier modifier);
-    void addLatent(LATENT ConditionsID, uint16 ConditionsValue, Mod ModValue, int16 ModPower);
+    void addLatent(LATENT ConditionsID, uint16 ConditionsValue, Mod ModValue, int32 ModPower);
 
     std::vector<CModifier>    modList;    // список модификаторов
     std::vector<CPetModifier> petModList; // mod list for pets

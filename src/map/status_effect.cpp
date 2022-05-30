@@ -154,7 +154,7 @@ void CStatusEffect::SetSlot(uint8 Slot)
     m_Slot = Slot;
 }
 
-void CStatusEffect::SetPower(uint16 Power)
+void CStatusEffect::SetPower(uint32 Power)
 {
     m_Power = Power;
 }

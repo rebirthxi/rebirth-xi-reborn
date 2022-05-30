@@ -10568,7 +10568,7 @@ uint16 CLuaBaseEntity::stealStatusEffect(CLuaBaseEntity* PTargetEntity, sol::obj
  *  Notes   : If Mod ID already exists, adds the amount to existing amount
  ************************************************************************/
 
-void CLuaBaseEntity::addMod(uint16 type, int16 amount)
+void CLuaBaseEntity::addMod(uint16 type, int32 amount)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
 
@@ -10588,7 +10588,7 @@ void CLuaBaseEntity::addMod(uint16 type, int16 amount)
  *  Notes   :
  ************************************************************************/
 
-int16 CLuaBaseEntity::getMod(uint16 modID)
+int32 CLuaBaseEntity::getMod(uint16 modID)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
 
@@ -10602,7 +10602,7 @@ int16 CLuaBaseEntity::getMod(uint16 modID)
  *  Notes   :
  ************************************************************************/
 
-void CLuaBaseEntity::setMod(uint16 modID, int16 value)
+void CLuaBaseEntity::setMod(uint16 modID, int32 value)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
 
@@ -10616,7 +10616,7 @@ void CLuaBaseEntity::setMod(uint16 modID, int16 value)
  *  Notes   :
  ************************************************************************/
 
-void CLuaBaseEntity::delMod(uint16 modID, int16 value)
+void CLuaBaseEntity::delMod(uint16 modID, int32 value)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype == TYPE_NPC);
 
@@ -10629,7 +10629,7 @@ void CLuaBaseEntity::delMod(uint16 modID, int16 value)
  *  Example : player:addLatent(xi.latent.LATENT_HP_UNDER_PERCENT, 95, xi.mod.REGEN, 1)
  ************************************************************************/
 
-void CLuaBaseEntity::addLatent(uint16 condID, uint16 conditionValue, uint16 mID, int16 modValue)
+void CLuaBaseEntity::addLatent(uint16 condID, uint16 conditionValue, uint16 mID, int32 modValue)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 
@@ -10646,7 +10646,7 @@ void CLuaBaseEntity::addLatent(uint16 condID, uint16 conditionValue, uint16 mID,
  *  Notes   :
  ************************************************************************/
 
-bool CLuaBaseEntity::delLatent(uint16 condID, uint16 conditionValue, uint16 mID, int16 modValue)
+bool CLuaBaseEntity::delLatent(uint16 condID, uint16 conditionValue, uint16 mID, int32 modValue)
 {
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_PC);
 

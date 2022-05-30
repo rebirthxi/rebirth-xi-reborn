@@ -21,7 +21,7 @@
 
 #include "modifier.h"
 
-CModifier::CModifier(Mod type, int16 amount)
+CModifier::CModifier(Mod type, int32 amount)
 : m_id(type)
 , m_amount(amount)
 {
@@ -37,7 +37,7 @@ int16 CModifier::getModAmount() const
     return m_amount;
 }
 
-void CModifier::setModAmount(int16 amount)
+void CModifier::setModAmount(int32 amount)
 {
     m_amount = amount;
 }

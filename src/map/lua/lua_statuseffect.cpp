@@ -52,7 +52,7 @@ uint32 CLuaStatusEffect::getSubType()
 
 //======================================================//
 
-uint16 CLuaStatusEffect::getPower()
+uint32 CLuaStatusEffect::getPower()
 {
     return m_PLuaStatusEffect->GetPower();
 }
@@ -144,7 +144,7 @@ void CLuaStatusEffect::setIcon(uint16 icon)
 
 //======================================================//
 
-void CLuaStatusEffect::setPower(uint16 power)
+void CLuaStatusEffect::setPower(uint32 power)
 {
     m_PLuaStatusEffect->SetPower(power);
 }

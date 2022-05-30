@@ -599,14 +599,14 @@ public:
     uint8  dispelAllStatusEffect(sol::object const& flagObj);                            // Dispels all effects and returns number erased
     uint16 stealStatusEffect(CLuaBaseEntity* PTargetEntity, sol::object const& flagObj); // Used in mob skills to steal effects
 
-    void  addMod(uint16 type, int16 amount); // Adds Modifier Value
-    int16 getMod(uint16 modID);              // Retrieves Modifier Value
-    void  setMod(uint16 modID, int16 value); // Sets Modifier Value
-    void  delMod(uint16 modID, int16 value); // Subtracts Modifier Value
+    void  addMod(uint16 type, int32 amount); // Adds Modifier Value
+    int32 getMod(uint16 modID);              // Retrieves Modifier Value
+    void  setMod(uint16 modID, int32 value); // Sets Modifier Value
+    void  delMod(uint16 modID, int32 value); // Subtracts Modifier Value
     int16 getMaxGearMod(Mod modId);
 
-    void addLatent(uint16 condID, uint16 conditionValue, uint16 mID, int16 modValue); // Adds a latent effect
-    bool delLatent(uint16 condID, uint16 conditionValue, uint16 mID, int16 modValue); // Removes a latent effect
+    void addLatent(uint16 condID, uint16 conditionValue, uint16 mID, int32 modValue); // Adds a latent effect
+    bool delLatent(uint16 condID, uint16 conditionValue, uint16 mID, int32 modValue); // Removes a latent effect
 
     void   fold();
     void   doWildCard(CLuaBaseEntity* PEntity, uint8 total);

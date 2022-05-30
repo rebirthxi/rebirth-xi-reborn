@@ -571,14 +571,14 @@ public:
     virtual int32 takeDamage(int32 amount, CBattleEntity* attacker = nullptr, ATTACK_TYPE attackType = ATTACK_TYPE::NONE,
                              DAMAGE_TYPE damageType = DAMAGE_TYPE::NONE);
 
-    int16 getMod(Mod modID); // величина модификатора
+    int32 getMod(Mod modID); // величина модификатора
 
     bool CanRest();        // checks if able to heal
     bool Rest(float rate); // heal an amount of hp / mp
 
-    void addModifier(Mod type, int16 amount);
-    void setModifier(Mod type, int16 amount);
-    void delModifier(Mod type, int16 amount);
+    void addModifier(Mod type, int32 amount);
+    void setModifier(Mod type, int32 amount);
+    void delModifier(Mod type, int32 amount);
     void addModifiers(std::vector<CModifier>* modList);
     void addEquipModifiers(std::vector<CModifier>* modList, uint8 itemLevel, uint8 slotid);
     void setModifiers(std::vector<CModifier>* modList);
@@ -587,9 +587,9 @@ public:
     void saveModifiers();    // save current state of modifiers
     void restoreModifiers(); // restore to saved state
 
-    void addPetModifier(Mod type, PetModType, int16 amount);
-    void setPetModifier(Mod type, PetModType, int16 amount);
-    void delPetModifier(Mod type, PetModType, int16 amount);
+    void addPetModifier(Mod type, PetModType petmod, int32 amount);
+    void setPetModifier(Mod type, PetModType petmod, int32 amount);
+    void delPetModifier(Mod type, PetModType petmod, int32 amount);
     void addPetModifiers(std::vector<CPetModifier>* modList);
     void delPetModifiers(std::vector<CPetModifier>* modList);
     void applyPetModifiers(CPetEntity* PPet);
@@ -735,9 +735,9 @@ private:
     uint16     m_battleTarget{ 0 };
     time_point m_battleStartTime;
 
-    std::unordered_map<Mod, int16, EnumClassHash>                                                m_modStat;     // массив модификаторов
-    std::unordered_map<Mod, int16, EnumClassHash>                                                m_modStatSave; // saved state
-    std::unordered_map<PetModType, std::unordered_map<Mod, int16, EnumClassHash>, EnumClassHash> m_petMod;
+    std::unordered_map<Mod, int32, EnumClassHash>                                                m_modStat;     // массив модификаторов
+    std::unordered_map<Mod, int32, EnumClassHash>                                                m_modStatSave; // saved state
+    std::unordered_map<PetModType, std::unordered_map<Mod, int32, EnumClassHash>, EnumClassHash> m_petMod;
 };
 
 #endif
