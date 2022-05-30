@@ -20,6 +20,8 @@ battlefield_object.onBattlefieldInitialise = function(battlefield)
     battlefield:setLocalVar("restorePH", ID.npc.APOLLYON_SW_CRATE[3] + random + 1)
     battlefield:setLocalVar("itemPH", ID.npc.APOLLYON_SW_CRATE[3] + random + 2)
 
+    battlefield:setLocalVar("phaseChange", 1)
+
     xi.limbus.setupArmouryCrates(battlefield:getID())
 end
 

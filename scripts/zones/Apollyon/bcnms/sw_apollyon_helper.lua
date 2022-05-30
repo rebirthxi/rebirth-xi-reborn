@@ -170,6 +170,7 @@ xi.apollyon_sw.handleMobDeathFloorFour = function(mob, player, isKiller, noKille
                 GetMobByID(ID.mob.APOLLYON_SW_MOB[4] + table[3]):isDead()
             then
                 GetNPCByID(ID.npc.APOLLYON_SW_CRATE[4]):setStatus(xi.status.NORMAL)
+                battlefield:setLocalVar("phaseChange", 0)
             end
         end
     end
