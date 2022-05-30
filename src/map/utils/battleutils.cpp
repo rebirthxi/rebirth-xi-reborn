@@ -2456,7 +2456,7 @@ namespace battleutils
             else
             {
                 PDefender->addTP((int16)(tpMultiplier * targetTPMultiplier *
-                                         ((baseTp + 30) * (sBlowMult / 100.f) *
+                                         ((baseTp + 30) * sBlowMult *
                                           (1.0f + 0.01f * (float)PDefender->getMod(Mod::STORETP))))); // subtle blow also reduces the "+30" on mob tp gain
             }
         }
