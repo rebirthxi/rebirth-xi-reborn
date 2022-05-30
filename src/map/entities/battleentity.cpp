@@ -909,7 +909,7 @@ uint8 CBattleEntity::GetDeathType()
  *                                                                      *
  ************************************************************************/
 
-void CBattleEntity::addModifier(Mod type, int32 amount)
+void CBattleEntity::addModifier(Mod type, int16 amount)
 {
     m_modStat[type] += amount;
 }
@@ -1016,7 +1016,7 @@ void CBattleEntity::addEquipModifiers(std::vector<CModifier>* modList, uint8 ite
  *                                                                      *
  ************************************************************************/
 
-void CBattleEntity::setModifier(Mod type, int32 amount)
+void CBattleEntity::setModifier(Mod type, int16 amount)
 {
     m_modStat[type] = amount;
 }
@@ -1042,7 +1042,7 @@ void CBattleEntity::setModifiers(std::vector<CModifier>* modList)
  *                                                                      *
  ************************************************************************/
 
-void CBattleEntity::delModifier(Mod type, int32 amount)
+void CBattleEntity::delModifier(Mod type, int16 amount)
 {
     m_modStat[type] -= amount;
 }
@@ -1159,13 +1159,13 @@ void CBattleEntity::delEquipModifiers(std::vector<CModifier>* modList, uint8 ite
  *                                                                      *
  ************************************************************************/
 
-int32 CBattleEntity::getMod(Mod modID)
+int16 CBattleEntity::getMod(Mod modID)
 {
     TracyZoneScoped;
     return m_modStat[modID];
 }
 
-void CBattleEntity::addPetModifier(Mod type, PetModType petmod, int32 amount)
+void CBattleEntity::addPetModifier(Mod type, PetModType petmod, int16 amount)
 {
     TracyZoneScoped;
     m_petMod[petmod][type] += amount;
@@ -1177,7 +1177,7 @@ void CBattleEntity::addPetModifier(Mod type, PetModType petmod, int32 amount)
     }
 }
 
-void CBattleEntity::setPetModifier(Mod type, PetModType petmod, int32 amount)
+void CBattleEntity::setPetModifier(Mod type, PetModType petmod, int16 amount)
 {
     TracyZoneScoped;
     m_petMod[petmod][type] = amount;
@@ -1189,7 +1189,7 @@ void CBattleEntity::setPetModifier(Mod type, PetModType petmod, int32 amount)
     }
 }
 
-void CBattleEntity::delPetModifier(Mod type, PetModType petmod, int32 amount)
+void CBattleEntity::delPetModifier(Mod type, PetModType petmod, int16 amount)
 {
     TracyZoneScoped;
     m_petMod[petmod][type] -= amount;

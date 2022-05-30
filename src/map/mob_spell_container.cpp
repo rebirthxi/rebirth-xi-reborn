@@ -173,7 +173,7 @@ std::optional<SpellID> CMobSpellContainer::GetBestAvailable(SPELLFAMILY family)
 std::optional<SpellID> CMobSpellContainer::GetBestAgainstTargetWeakness(CBattleEntity* PTarget)
 {
     // Look up what the target has the _least resistance to_:
-    std::vector<int32> resistances
+    std::vector<int16> resistances
     {
          PTarget->getMod(Mod::FIRE_RES),
          PTarget->getMod(Mod::ICE_RES),

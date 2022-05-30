@@ -926,13 +926,13 @@ public:
     Mod   getModID();
     int16 getModAmount() const;
 
-    void setModAmount(int32 amount);
+    void setModAmount(int16 amount);
 
-    CModifier(Mod type, int32 amount = 0);
+    CModifier(Mod type, int16 amount = 0);
 
 private:
     Mod   m_id{ Mod::NONE };
-    int32 m_amount{ 0 };
+    int16 m_amount{ 0 };
 };
 
 enum class PetModType

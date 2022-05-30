@@ -228,7 +228,7 @@ void CItemEquipment::addPetModifier(CPetModifier modifier)
     petModList.push_back(modifier);
 }
 
-void CItemEquipment::addLatent(LATENT ConditionsID, uint16 ConditionsValue, Mod ModValue, int32 ModPower)
+void CItemEquipment::addLatent(LATENT ConditionsID, uint16 ConditionsValue, Mod ModValue, int16 ModPower)
 {
     itemLatent latent{ ConditionsID, ConditionsValue, ModValue, ModPower };
     latentList.push_back(latent);
@@ -325,7 +325,7 @@ void CItemEquipment::SetAugmentMod(uint16 type, uint8 value)
     {
         uint8 multiplier = (uint8)sql->GetUIntData(1);
         Mod   modId      = static_cast<Mod>(sql->GetUIntData(2));
-        int32 modValue   = sql->GetIntData(3);
+        int16 modValue   = (int16)sql->GetIntData(3);
 
         // type is 0 unless mod is for pets
         uint8      isPet   = (uint8)sql->GetUIntData(4);
