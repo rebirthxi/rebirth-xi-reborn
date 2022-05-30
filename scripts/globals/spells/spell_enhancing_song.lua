@@ -27,6 +27,7 @@ xi.spells.spell_enhancing_song.calculateEnhancingPower = function(caster, target
     local potencyCap  = enhancingTable[spellId][9]
     local multiplier  = enhancingTable[spellId][10]
     local divisor     = enhancingTable[spellId][11]
+
     local singingLvl  = caster:getSkillLevel(xi.skill.SINGING) + caster:getWeaponSkillLevel(xi.slot.RANGED)
 
     -- Get Potency bonuses from Singing Skill and Instrument Skill. TODO: Investigate JP-Wiki. Most of this makes no sense.
@@ -45,7 +46,7 @@ xi.spells.spell_enhancing_song.calculateEnhancingPower = function(caster, target
         elseif singingLvl >= 182 then
             power = power + 1
         end
-    -- NOTE: Tier 2 Etudes.
+        -- NOTE: Tier 2 Etudes.
     elseif songEffect == xi.effect.ETUDE and tier == 2 then
         if singingLvl >= 475 then
             power = power + 3
@@ -54,7 +55,7 @@ xi.spells.spell_enhancing_song.calculateEnhancingPower = function(caster, target
         elseif singingLvl >= 417 then
             power = power + 1
         end
-    -- Other songs.
+        -- Other songs.
     else
         if singingLvl > skillCap then
             -- NOTE: Paeon
@@ -62,12 +63,12 @@ xi.spells.spell_enhancing_song.calculateEnhancingPower = function(caster, target
                 if skillCap > 0 then
                     power = power + 1
                 end
-            -- NOTE: Aubade, Capriccio, Gavotte, Madrigal, March, Minne, Minuet, Operetta, Pastoral, Prelude, Round.
-            elseif divisor > 0 then
+                -- NOTE: Aubade, Capriccio, Gavotte, Madrigal, March, Minne, Minuet, Operetta, Pastoral, Prelude, Round.
+            elseif not divisor == 0 then
                 power = math.floor(power + (singingLvl - skillCap) / divisor)
             end
         end
-        -- NOTE: Ballad, Hymnus, Mazurka power doesn't scale with skill.
+        -- NOTE: Ballad, Hymnus, Mazurka have constant base power.
     end
 
     -- Apply Cap to power. (Applied before Merits, Job-Points and Status-Effects)
@@ -183,8 +184,6 @@ xi.spells.spell_enhancing_song.useEnhancingSong = function(caster, target, spell
     if caster:hasStatusEffect(xi.effect.MARCATO) then
         caster:delStatusEffect(xi.effect.MARCATO)
     end
-
-    tier = tier + (caster:getMod(xi.mod.ETUDE_EXTRA_BUFF) * 2)
 
     -- Change message when higher effect already in place.
     if not target:addBardSong(caster, songEffect, power, paramFour, duration, caster:getID(), subEffect, tier) then

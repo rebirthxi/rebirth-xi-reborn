@@ -33,9 +33,9 @@ xi.spells.spell_enhancing_teleport.useTeleportSpell = function(caster, target, s
     local campaign   = teleportTable[spellId][4]
 
     if
-        target:getObjType() == xi.objType.PC and
-        (keyItem == 0 or (keyItem > 0 and target:hasKeyItem(keyItem))) and
-        (not campaign or (campaign and target:getCampaignAllegiance() > 0))
+    target:getObjType() == xi.objType.PC and
+            (keyItem == 0 or (keyItem > 0 and target:hasKeyItem(keyItem))) and
+            (not campaign or (campaign and target:getCampaignAllegiance() > 0))
     then
         target:addStatusEffectEx(xi.effect.TELEPORT, 0, teleportId, 0, paramFive)
         spell:setMsg(xi.msg.basic.MAGIC_TELEPORT)

@@ -23,7 +23,7 @@ xi.spells.spell_enhancing_ninjutsu.calculateNinjutsuPower = function(caster, tar
         power = math.floor(caster:getSkillLevel(xi.skill.NINJUTSU) / 5)
         subPower = 100
 
-    -- Utsusemi
+        -- Utsusemi
     elseif spellEffect == xi.effect.COPY_IMAGE then
         power    = power + target:getMod(xi.mod.UTSUSEMI_BONUS)
         subPower = xi.effect.COPY_IMAGE_3
@@ -64,11 +64,11 @@ xi.spells.spell_enhancing_ninjutsu.useEnhancingNinjutsu = function(caster, targe
     if spellEffect == xi.effect.ENMITY_BOOST then
         target:delStatusEffect(xi.effect.PAX)
 
-    -- Monomi / Tonko
+        -- Monomi / Tonko
     elseif spellEffect == xi.effect.SNEAK or spellEffect == xi.effect.INVISIBLE then
         paramThree = 10
 
-    -- Yain
+        -- Yain
     elseif spellEffect == xi.effect.PAX then
         target:delStatusEffect(xi.effect.ENMITY_BOOST)
 
@@ -81,7 +81,7 @@ xi.spells.spell_enhancing_ninjutsu.useEnhancingNinjutsu = function(caster, targe
         target:delStatusEffect(spellEffect)
         target:addStatusEffect(spellEffect, power, paramThree, duration, 0, subPower)
 
-    -- Utsusemi exception.
+        -- Utsusemi exception.
     elseif not alwaysOverwrite and spellEffect == xi.effect.COPY_IMAGE then
         local targetEffect = target:getStatusEffect(xi.effect.COPY_IMAGE)
 
@@ -93,7 +93,7 @@ xi.spells.spell_enhancing_ninjutsu.useEnhancingNinjutsu = function(caster, targe
         paramThree = enhancingTable[spellId][3] - 2
 
         if targetEffect == nil or targetEffect:getPower() <= paramThree then
-            target:addStatusEffectEx(xi.effect.COPY_IMAGE, subpower, paramThree, duration, 900, 0, power) -- Not a mistake.
+            target:addStatusEffectEx(xi.effect.COPY_IMAGE, subPower, paramThree, duration, 900, 0, power) -- Not a mistake.
             spell:setMsg(xi.msg.basic.MAGIC_GAIN_EFFECT)
         else
             spell:setMsg(xi.msg.basic.MAGIC_NO_EFFECT)
