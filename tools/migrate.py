@@ -37,6 +37,7 @@ from migrations import add_new_wardrobe_columns
 from migrations import abyssea_unlocks
 from migrations import add_char_chatfilters
 from migrations import abyssea_conflux
+from migrations import waypoints
 
 
 migrations = [
@@ -69,6 +70,7 @@ migrations = [
     abyssea_unlocks,
     add_char_chatfilters,
     abyssea_conflux,
+    waypoints
 ]
 
 
