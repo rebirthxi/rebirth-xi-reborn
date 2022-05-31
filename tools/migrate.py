@@ -38,6 +38,7 @@ from migrations import abyssea_unlocks
 from migrations import add_char_chatfilters
 from migrations import abyssea_conflux
 from migrations import waypoints
+from migrations import home_zone_size
 
 
 migrations = [
@@ -70,7 +71,8 @@ migrations = [
     abyssea_unlocks,
     add_char_chatfilters,
     abyssea_conflux,
-    waypoints
+    waypoints,
+    home_zone_size
 ]
 
 
