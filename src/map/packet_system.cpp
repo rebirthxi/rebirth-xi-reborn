@@ -183,31 +183,28 @@ std::function<void(map_session_data_t* const, CCharEntity* const, CBasicPacket)>
 
 void PrintPacket(CBasicPacket data)
 {
-    // Comment out for now because I don't use PrintPacket
-    // And this seems to be preventing compilation
-//    char message[50];
-//    memset(&message, 0, 50);
-//
-//    for (size_t y = 0; y < data.getSize(); y++)
-//    {
-//        // TODO: -Wno-restrict - undefined behavior to print and write src into dest
-//        // TODO: -Wno-format-overflow - writing between 4 and 53 bytes into destination of 50
-//        // TODO: FIXME
-//        // cppcheck-suppress sprintfOverlappingData
-//        snprintf(message, sizeof(message), "%s %02hhx", message, *((uint8*)data[(int)y]));
-//        if (((y + 1) % 16) == 0)
-//        {
-//            message[48] = '\n';
-//            ShowDebug(message);
-//            memset(&message, 0, 50);
-//        }
-//    }
-//
-//    if (strlen(message) > 0)
-//    {
-//        message[strlen(message)] = '\n';
-//        ShowDebug(message);
-//    }
+    std::string message;
+    char buffer[5];
+
+    for (size_t y = 0; y < data.getSize(); y++)
+    {
+        std::memset(buffer, 0, sizeof(buffer));                               // TODO: Replace these three lines with std::format when/if we move to C++ 20.
+        snprintf(buffer, sizeof(buffer), "%02hhx ", *((uint8*)data[(int)y])); //
+        message.append(buffer);                                               //
+
+        if (((y + 1) % 16) == 0)
+        {
+            message += "\n";
+            ShowDebug(message.c_str());
+            message.clear();
+        }
+    }
+
+    if (message.length() > 0)
+    {
+        message += "\n";
+        ShowDebug(message.c_str());
+    }
 }
 
 /************************************************************************
