@@ -1335,9 +1335,9 @@ Usage:
                 PMob->setModifier(Mod::LIGHT_SDT, (int16)sql->GetFloatData(44));   // Modifier 60, base 10000 stored as signed integer. Positives signify less damage.
                 PMob->setModifier(Mod::DARK_SDT, (int16)sql->GetFloatData(45));    // Modifier 61, base 10000 stored as signed integer. Positives signify less damage.
 
-                PMob->setModifier(Mod::FIRE_RES, (int16)(sql->GetIntData(46)));    // These are stored as signed integers which
-                PMob->setModifier(Mod::ICE_RES, (int16)(sql->GetIntData(47)));     // is directly the modifier starting value.
-                PMob->setModifier(Mod::WIND_RES, (int16)(sql->GetIntData(48)));    // Positives signify increased resist chance.
+                PMob->setModifier(Mod::FIRE_RES, (int16)(sql->GetIntData(46))); // These are stored as signed integers which
+                PMob->setModifier(Mod::ICE_RES, (int16)(sql->GetIntData(47)));  // is directly the modifier starting value.
+                PMob->setModifier(Mod::WIND_RES, (int16)(sql->GetIntData(48))); // Positives signify increased resist chance.
                 PMob->setModifier(Mod::EARTH_RES, (int16)(sql->GetIntData(49)));
                 PMob->setModifier(Mod::THUNDER_RES, (int16)(sql->GetIntData(50)));
                 PMob->setModifier(Mod::WATER_RES, (int16)(sql->GetIntData(51)));
@@ -1360,7 +1360,7 @@ Usage:
 
                 // TODO: Remove me
                 // Check if we should be looking up scripts for this mob
-                //PMob->m_HasSpellScript = (uint8)sql->GetIntData(61);
+                // PMob->m_HasSpellScript = (uint8)sql->GetIntData(61);
 
                 PMob->m_SpellListContainer = mobSpellList::GetMobSpellList(sql->GetIntData(62));
 
@@ -1480,9 +1480,9 @@ Usage:
                 PMob->setModifier(Mod::LIGHT_SDT, (int16)sql->GetFloatData(44));   // Modifier 60, base 10000 stored as signed integer. Positives signify less damage.
                 PMob->setModifier(Mod::DARK_SDT, (int16)sql->GetFloatData(45));    // Modifier 61, base 10000 stored as signed integer. Positives signify less damage.
 
-                PMob->setModifier(Mod::FIRE_RES, (int16)(sql->GetIntData(46)));    // These are stored as signed integers which
-                PMob->setModifier(Mod::ICE_RES, (int16)(sql->GetIntData(47)));     // is directly the modifier starting value.
-                PMob->setModifier(Mod::WIND_RES, (int16)(sql->GetIntData(48)));    // Positives signify increased resist chance.
+                PMob->setModifier(Mod::FIRE_RES, (int16)(sql->GetIntData(46))); // These are stored as signed integers which
+                PMob->setModifier(Mod::ICE_RES, (int16)(sql->GetIntData(47)));  // is directly the modifier starting value.
+                PMob->setModifier(Mod::WIND_RES, (int16)(sql->GetIntData(48))); // Positives signify increased resist chance.
                 PMob->setModifier(Mod::EARTH_RES, (int16)(sql->GetIntData(49)));
                 PMob->setModifier(Mod::THUNDER_RES, (int16)(sql->GetIntData(50)));
                 PMob->setModifier(Mod::WATER_RES, (int16)(sql->GetIntData(51)));
@@ -1501,7 +1501,7 @@ Usage:
                 PMob->MPscale = sql->GetFloatData(60);
 
                 // TODO: Remove me
-                //PMob->m_HasSpellScript = (uint8)sql->GetIntData(61);
+                // PMob->m_HasSpellScript = (uint8)sql->GetIntData(61);
 
                 PMob->m_SpellListContainer = mobSpellList::GetMobSpellList(sql->GetIntData(62));
 
