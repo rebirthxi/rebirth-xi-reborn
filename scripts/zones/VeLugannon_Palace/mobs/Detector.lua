@@ -2,6 +2,7 @@
 -- Area: VeLugannon Palace
 --  Mob: Detector
 -----------------------------------
+local ID = require("scripts/zones/VeLugannon_Palace/IDs")
 require("scripts/globals/regimes")
 -----------------------------------
 local entity = {}
@@ -11,28 +12,24 @@ entity.onMobSpawn = function(mob)
 end
 
 local getMobToSpawn = function(detector)
-    local ID = require("scripts/zones/VeLugannon_Palace/IDs")
     local detectorID = detector:getID()
     local canSpawnSteamCleaner = GetServerVariable("[POP]SteamCleaner") < os.time() and utils.contains(detectorID, ID.mob.STEAM_CLEANER_DETECTORS)
     local steamCleanerSpawnChance = 10 -- percent
     local steamCleaner = GetMobByID(ID.mob.STEAM_CLEANER)
 
     if steamCleaner:isSpawned() then
-        -- this check is needed to prevent the detector from spawning BOTH steam cleaner and a caretaker
-        -- by essentially "re-returning" steam cleaner, the subsequent logic will know that he's already spawned as well
-        -- and won't try to respawn him
-        -- This silly check is basically needed because we fall back on a "my id + 1" convention instead of actually
-        -- doing some sort of "this detector owned/spawned this caretaker and while he is alive, I shouldn't summon
-        -- something else".
+        -- If this is the Detector that spawned SC, then he should continue to return SC
         if detector:getLocalVar("SpawnedSC") == 1 then
             return steamCleaner
         end
+        -- else fall through to the last return at the bottom that returns Caretaker
     elseif canSpawnSteamCleaner and math.random(100) < steamCleanerSpawnChance then
+        -- Set this as the Detector that spawned SC
         detector:setLocalVar("SpawnedSC", 1)
         return steamCleaner
     end
 
-    return GetMobByID(detectorID + 1)
+    return GetMobByID(detectorID + 1) -- return this detector's caretaker
 end
 
 entity.onMobFight = function(mob, target)
