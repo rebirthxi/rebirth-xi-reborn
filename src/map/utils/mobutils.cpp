@@ -768,6 +768,14 @@ namespace mobutils
             PMob->setMobMod(MOBMOD_ROAM_DISTANCE, 5);
             PMob->setMobMod(MOBMOD_ROAM_TURNS, 1);
         }
+
+        auto *zone = PMob->loc.zone;
+        if (zone->GetType() == ZONE_TYPE::DYNAMIS)
+        {
+            PMob->m_maxRoamDistance = 0.0f;
+            PMob->setMobMod( MOBMOD_ROAM_DISTANCE, 0);
+            PMob->setMobMod( MOBMOD_ROAM_TURNS, 0);
+        }
     }
 
     void SetupPetSkills(CMobEntity* PMob)
