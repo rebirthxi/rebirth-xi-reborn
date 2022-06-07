@@ -171,19 +171,19 @@ enum UPDATETYPE : uint8
 
 enum ENTITYFLAGS : uint16
 {
-    FLAG_NONE      = 0x000,
-    FLAG_INFO_ICON = 0x001, // (I) Icon next to name
-
+    FLAG_NONE           = 0x000,
+    FLAG_INFO_ICON      = 0x001, // (I) Icon next to name
+    FLAG_SIZE_1         = 0x002, // Increases size - You can use this in combination with FLAG_SIZE_2 to the maximum size
+    FLAG_SIZE_2         = 0x004, // Increases size - You can use this in combination with FLAG_SIZE_1 to the maximum size
     // TODO: Flags 0x002, 0x004 and 0x008 do different things for different entities.
     //     : It isn't one-size-fits-all, and different combinations may do different things.
     //     : It'll need to researched more.
     // FLAG_ALT_APPEARANCE = 0x002,
-
-    FLAG_HIDE_NAME     = 0x008,
-    FLAG_CALL_FOR_HELP = 0x020,
-    FLAG_HIDE_MODEL    = 0x080,
-    FLAG_HIDE_HP       = 0x100,
-    FLAG_UNTARGETABLE  = 0x800,
+    FLAG_HIDE_NAME      = 0x008,
+    FLAG_CALL_FOR_HELP  = 0x020,
+    FLAG_HIDE_MODEL     = 0x080,
+    FLAG_HIDE_HP        = 0x100,
+    FLAG_UNTARGETABLE   = 0x800,
 };
 
 enum NAMEVIS : uint8
