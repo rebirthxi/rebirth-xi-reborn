@@ -834,12 +834,6 @@ namespace luautils
         }
     }
 
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
-
     std::optional<CLuaZone> GetZone(uint16 zoneId)
     {
         TracyZoneScoped;
@@ -3730,12 +3724,6 @@ namespace luautils
         return result.get_type(0) == sol::type::number ? result.get<int32>(0) : 0;
     }
 
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
-
     int32 OnUseAbility(CBattleEntity* PUser, CBattleEntity* PTarget, CAbility* PAbility, action_t* action)
     {
         TracyZoneScoped;
@@ -4055,12 +4043,6 @@ namespace luautils
 
         return 0;
     }
-
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
 
     void StartElevator(uint32 ElevatorID)
     {

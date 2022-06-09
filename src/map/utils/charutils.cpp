@@ -2364,12 +2364,6 @@ namespace charutils
         }
     }
 
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
-
     void EquipItem(CCharEntity* PChar, uint8 slotID, uint8 equipSlotID, uint8 containerID)
     {
         CItemEquipment* PItem = dynamic_cast<CItemEquipment*>(PChar->getStorage(containerID)->GetItem(slotID));
@@ -2974,12 +2968,6 @@ namespace charutils
             PChar->WorkingSkills.skill[i] = 0xFFFF;
         }
     }
-
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
 
     void BuildingCharTraitsTable(CCharEntity* PChar)
     {
@@ -4647,12 +4635,6 @@ namespace charutils
     {
     }
 
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
-
     void SaveCharPosition(CCharEntity* PChar)
     {
         TracyZoneScoped;
@@ -4669,12 +4651,6 @@ namespace charutils
         sql->Query(Query, PChar->loc.p.rotation, PChar->loc.p.x, PChar->loc.p.y, PChar->loc.p.z, PChar->loc.boundary, PChar->id);
     }
 
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
-
     void SaveQuestsList(CCharEntity* PChar)
     {
         TracyZoneScoped;
@@ -4689,12 +4665,6 @@ namespace charutils
 
         sql->Query(Query, questslist, PChar->id);
     }
-
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
 
     void SaveFame(CCharEntity* PChar)
     {
@@ -4844,12 +4814,6 @@ namespace charutils
         sql->Query(fmtQuery, keyitems, PChar->id);
     }
 
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
-
     void SaveSpell(CCharEntity* PChar, uint16 spellID)
     {
         TracyZoneScoped;
@@ -4870,12 +4834,6 @@ namespace charutils
         sql->Query(Query, PChar->id, spellID);
     }
 
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
-
     void SaveLearnedAbilities(CCharEntity* PChar)
     {
         TracyZoneScoped;
@@ -4892,12 +4850,6 @@ namespace charutils
 
         sql->Query(Query, abilities, weaponskills, PChar->id);
     }
-
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
 
     void SaveTitles(CCharEntity* PChar)
     {
@@ -4916,12 +4868,6 @@ namespace charutils
         sql->Query(Query, titles, PChar->profile.title, PChar->id);
     }
 
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
-
     void SaveZonesVisited(CCharEntity* PChar)
     {
         TracyZoneScoped;
@@ -4933,12 +4879,6 @@ namespace charutils
 
         sql->Query(fmtQuery, zones, PChar->id);
     }
-
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
 
     void SaveCharEquip(CCharEntity* PChar)
     {
@@ -5227,12 +5167,6 @@ namespace charutils
         }
     }
 
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
-
     void SaveCharExp(CCharEntity* PChar, JOBTYPE job)
     {
         TracyZoneScoped;
@@ -5315,12 +5249,6 @@ namespace charutils
         }
         sql->Query(Query, PChar->jobs.exp[job], PChar->PMeritPoints->GetMeritPoints(), PChar->PMeritPoints->GetLimitPoints(), PChar->id);
     }
-
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
 
     void SaveCharSkills(CCharEntity* PChar, uint8 SkillID)
     {
@@ -5499,12 +5427,6 @@ namespace charutils
 
         return (complete != 0 ? 2 : (current != 0 ? 1 : 0));
     }
-
-    /************************************************************************
-     *                                                                       *
-     *                                                                       *
-     *                                                                       *
-     ************************************************************************/
 
     uint16 AvatarPerpetuationReduction(CCharEntity* PChar)
     {
