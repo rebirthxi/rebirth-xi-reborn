@@ -1034,7 +1034,7 @@ namespace synthutils
                         skillType    = skillID;
                         highestSkill = skillRequired;
                     }
-
+                }
                 RoeDatagram     roeItemId    = RoeDatagram("itemid", itemID);
                 RoeDatagram     roeSkillType = RoeDatagram("skillType", skillType);
                 RoeDatagramList roeSynthResult({ roeItemId, roeSkillType });
