@@ -122,8 +122,9 @@ CZone::CZone(ZONEID ZoneID, REGION_TYPE RegionID, CONTINENT_TYPE ContinentID)
 , lights{{NO_LIGHTS,NO_LIGHTS,NO_LIGHTS,NO_LIGHTS}}
 {
     TracyZoneScoped;
-    std::ignore = m_useNavMesh;
-    ZoneTimer   = nullptr;
+    m_useNavMesh = false;
+    std::ignore  = m_useNavMesh;
+    ZoneTimer    = nullptr;
 
     m_TreasurePool       = nullptr;
     m_BattlefieldHandler = nullptr;
