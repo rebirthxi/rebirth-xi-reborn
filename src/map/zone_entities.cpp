@@ -247,7 +247,7 @@ void CZoneEntities::FindPartyForMob(CBaseEntity* PEntity)
 
     // force all mobs in a burning circle to link
     ZONE_TYPE zonetype  = m_zone->GetType();
-    bool      forceLink = zonetype == zonetype == ZONE_TYPE::BATTLEFIELD || PMob->getMobMod(MOBMOD_SUPERLINK);
+    bool      forceLink = zonetype == ZONE_TYPE::BATTLEFIELD || PMob->getMobMod(MOBMOD_SUPERLINK);
 
     if ((forceLink || PMob->m_Link) && PMob->PParty == nullptr)
     {
