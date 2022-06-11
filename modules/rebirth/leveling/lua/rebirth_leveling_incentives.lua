@@ -4,6 +4,7 @@
 -----------------------------------
 require("modules/module_utils")
 require("scripts/globals/magic")
+require("scripts/globals/player")
 -----------------------------------
 
 local m = Module:new("rebirth_leveling_incentives")

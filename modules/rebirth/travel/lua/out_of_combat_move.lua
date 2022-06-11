@@ -5,6 +5,7 @@
 require("modules/module_utils")
 require("scripts/globals/status")
 require("scripts/globals/msg")
+require("scripts/globals/player")
 -----------------------------------
 local m = Module:new("out_of_combat_move")
 

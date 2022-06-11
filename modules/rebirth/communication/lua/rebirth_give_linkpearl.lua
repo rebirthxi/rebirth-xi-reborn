@@ -2,6 +2,7 @@
 -- Gives new players a QuetzRebirthTwo linkpearl
 -----------------------------------
 require("modules/module_utils")
+require("scripts/globals/player")
 -----------------------------------
 local m = Module:new("rebirth_give_linkpearl")
 

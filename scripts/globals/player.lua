@@ -45,7 +45,7 @@ local startingJobGear =
 -----------------------------------
 
 xi = xi or {}
-xi.player = {}
+xi.player = xi.player or {}
 
 xi.player.charCreate = function(player)
     local race = player:getRace()
