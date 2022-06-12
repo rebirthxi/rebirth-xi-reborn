@@ -25,14 +25,22 @@ local findSlaveGlobeToSpawn = function()
     return nil, spawnCount
 end
 
-local spawnSlaveGlobe = function(mg, slaveGlobe)
-    slaveGlobe:setSpawn(mg:getXPos() + 1, mg:getYPos(), mg:getZPos() + 1)
+local calculateSlaveGlobePosition = function(mg, slaveGlobe, slavePositionSlot)
+    local mgPos = mg:getPos()
+    local xOffset = -1 * slavePositionSlot -- should offset based on the slot
+
+    return utils.lateralTranslateWithOriginRotation(mgPos, {x = xOffset, y = 0, z = 0})
+end
+
+local spawnSlaveGlobe = function(mg, slaveGlobe, slavePositionSlot)
+    local slaveGlobePos = calculateSlaveGlobePosition(mg, slaveGlobe, slavePositionSlot)
+    slaveGlobe:setSpawn(slaveGlobePos.x, slaveGlobePos.y, slaveGlobePos.z, slaveGlobePos.rot)
     slaveGlobe:spawn()
+    slaveGlobe:setLocalVar("slavePositionSlot", slavePositionSlot)
 
     if mg:isEngaged() then
         slaveGlobe:updateEnmity(mg:getTarget())
     end
-
 end
 
 local setNextSpawnSlaveGlobe = function(mg, spawnCount, nowTime)
@@ -54,8 +62,25 @@ local trySpawnSlaveGlobe = function(mg, nowTime)
     if shouldTryToSummonSlaveGlobe and (not inCombat or combatHasNotRecentlyStarted) then
         local slaveGlobe, spawnCount = findSlaveGlobeToSpawn(mg)
         if slaveGlobe then
-            spawnSlaveGlobe(mg, slaveGlobe)
+            spawnSlaveGlobe(mg, slaveGlobe, spawnCount)
             setNextSpawnSlaveGlobe(mg, spawnCount, os.time())
+        end
+    end
+end
+
+local handleSlaveGlobesRoam = function(mg)
+    local mgPos = mg:getPos()
+
+    for _, slaveGlobeID in ipairs(ID.mob.SLAVE_GLOBES) do
+        local slaveGlobe = GetMobByID(slaveGlobeID)
+
+        if slaveGlobe:isSpawned() then
+            local slavePositionSlot = slaveGlobe:getLocalVar("slavePositionSlot")
+            local xOffset = -1 * slavePositionSlot
+            local slaveGlobePos = utils.lateralTranslateWithOriginRotation(mgPos, {x = xOffset, y = 0, z = 0})
+
+            slaveGlobe:pathTo(slaveGlobePos.x, slaveGlobePos.y, slaveGlobePos.z)
+            slaveGlobe:setRotation(mgPos.rot)
         end
     end
 end
@@ -81,6 +106,7 @@ end
 
 entity.onMobRoam = function(mob)
     trySpawnSlaveGlobe(mob, os.time())
+    handleSlaveGlobesRoam(mob)
 end
 
 entity.onAdditionalEffect = function(mob, target, damage)
