@@ -334,13 +334,13 @@ xi.mobskills.mobMagicalMove = function(mob, target, skill, damage, element, dmgm
     -- plus 100 forces it to be a number
     local mab = (100 + mob:getMod(xi.mod.MATT)) / (100 + target:getMod(xi.mod.MDEF) + mdefBarBonus)
 
-    if mab > 1.3 then
-        mab = 1.3
-    end
-
-    if mab < 0.7 then
-        mab = 0.7
-    end
+    --if mab > 1.3 then
+    --    mab = 1.3
+    --end
+    --
+    --if mab < 0.7 then
+    --    mab = 0.7
+    --end
 
     if tpeffect == xi.mobskills.magicalTpBonus.DMG_BONUS then
         damage = damage * (((skill:getTP() / 10)*tpvalue) / 100)
