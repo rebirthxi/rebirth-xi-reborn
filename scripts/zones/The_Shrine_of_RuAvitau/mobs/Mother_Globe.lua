@@ -131,7 +131,7 @@ end
 
 entity.onMobFight = function(mob, target)
     -- Keep pets linked
-    for _, slaveGlobeID in ipairs(slaveGlobes) do
+    for _, slaveGlobeID in ipairs(ID.mob.SLAVE_GLOBES) do
         local pet = GetMobByID(slaveGlobeID)
         if pet:getCurrentAction() == xi.act.ROAMING then
             pet:updateEnmity(target)
@@ -159,7 +159,7 @@ end
 entity.onMobDeath = function(mob, player, isKiller)
     mob:setRespawnTime(math.random(10800, 21600)) -- respawn 3-6 hrs
 
-    for _, slaveGlobeID in ipairs(slaveGlobes) do
+    for _, slaveGlobeID in ipairs(ID.mob.SLAVE_GLOBES) do
         local pet = GetMobByID(slaveGlobeID)
         if pet:isSpawned() then
             DespawnMob(slaveGlobeID)
