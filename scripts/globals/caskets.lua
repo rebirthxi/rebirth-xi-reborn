@@ -789,13 +789,18 @@ end
 -- Desc: Function handles what happens when a player examines a chest.
 -----------------------------------
 xi.caskets.playerExamineChest = function(player, option, chestObj, baseMessage)
-    local hintsVar          = chestObj:getLocalVar("[caskets]HINTS_TABLE")
     local correctNumber     = chestObj:getLocalVar("[caskets]CORRECT_NUM")
     local attemptsAllowed   = chestObj:getLocalVar("[caskets]ATTEMPTS")
     local failedAtempts     = chestObj:getLocalVar("[caskets]FAILED_ATEMPTS")
     local remainingAttempts = attemptsAllowed - failedAtempts
-    local splitNumbers      = {}
-    local availableHints    = {}
+
+    -----------------------------------
+    -- Minigame
+    -----------------------------------
+
+    local splitNumbers   = {}
+    local hintsVar       = chestObj:getLocalVar("[caskets]HINTS_TABLE")
+    local availableHints = {}
 
     if hintsVar ~= 0 then
         for hint in string.gmatch(tostring(hintsVar), "%d") do

@@ -191,6 +191,19 @@ xi.znm.soultrapper.getZeniValue = function(target, user, item)
     return zeni
 end
 
+xi.znm.soultrapper.onItemUse = function(target, user, item)
+    -- Determine Zeni starting value
+    local zeni = xi.znm.soultrapper.getZeniValue(target, user, item)
+
+    -- Pick a skill totally at random
+    local skillIndex, skillEntry = utils.randomEntryIdx(xi.pankration.feralSkills)
+
+    -- Add plate
+    local plate = user:addSoulPlate(target:getName(), target:getFamily(), zeni, skillIndex, skillEntry.fp)
+    local data = plate:getSoulPlateData()
+    utils.unused(data)
+end
+
 -----------------------------------
 -- Ryo
 -----------------------------------
