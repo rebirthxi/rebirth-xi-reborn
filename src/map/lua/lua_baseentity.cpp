@@ -138,6 +138,8 @@
 #include "../packets/message_standard.h"
 #include "../packets/message_system.h"
 #include "../packets/message_text.h"
+#include "../packets/monipulator1.h"
+#include "../packets/monipulator2.h"
 #include "../packets/position.h"
 #include "../packets/quest_mission_log.h"
 #include "../packets/release.h"
@@ -5303,6 +5305,8 @@ void CLuaBaseEntity::changeJob(uint8 newJob)
     PChar->pushPacket(new CCharAbilitiesPacket(PChar));
     PChar->pushPacket(new CCharUpdatePacket(PChar));
     PChar->pushPacket(new CMenuMeritPacket(PChar));
+    PChar->pushPacket(new CMonipulatorPacket1(PChar));
+    PChar->pushPacket(new CMonipulatorPacket2(PChar));
     PChar->pushPacket(new CCharSyncPacket(PChar));
 }
 
@@ -5472,6 +5476,8 @@ void CLuaBaseEntity::setLevel(uint8 level)
         PChar->pushPacket(new CCharAbilitiesPacket(PChar));
         PChar->pushPacket(new CCharUpdatePacket(PChar));
         PChar->pushPacket(new CMenuMeritPacket(PChar));
+        PChar->pushPacket(new CMonipulatorPacket1(PChar));
+        PChar->pushPacket(new CMonipulatorPacket2(PChar));
         PChar->pushPacket(new CCharSyncPacket(PChar));
     }
 }
@@ -5518,6 +5524,8 @@ void CLuaBaseEntity::setsLevel(uint8 slevel)
     PChar->pushPacket(new CCharAbilitiesPacket(PChar));
     PChar->pushPacket(new CCharUpdatePacket(PChar));
     PChar->pushPacket(new CMenuMeritPacket(PChar));
+    PChar->pushPacket(new CMonipulatorPacket1(PChar));
+    PChar->pushPacket(new CMonipulatorPacket2(PChar));
     PChar->pushPacket(new CCharSyncPacket(PChar));
 }
 
@@ -7013,6 +7021,8 @@ void CLuaBaseEntity::setMerits(uint8 numPoints)
 
     PChar->PMeritPoints->SetMeritPoints(numPoints);
     PChar->pushPacket(new CMenuMeritPacket(PChar));
+    PChar->pushPacket(new CMonipulatorPacket1(PChar));
+    PChar->pushPacket(new CMonipulatorPacket2(PChar));
 
     charutils::SaveCharExp(PChar, PChar->GetMJob());
 }
@@ -9684,6 +9694,8 @@ void CLuaBaseEntity::recalculateStats()
         PChar->pushPacket(new CCharAbilitiesPacket(PChar));
         PChar->pushPacket(new CCharUpdatePacket(PChar));
         PChar->pushPacket(new CMenuMeritPacket(PChar));
+        PChar->pushPacket(new CMonipulatorPacket1(PChar));
+        PChar->pushPacket(new CMonipulatorPacket2(PChar));
         PChar->pushPacket(new CCharSyncPacket(PChar));
     }
 }

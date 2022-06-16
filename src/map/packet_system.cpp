@@ -142,6 +142,8 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "packets/message_combat.h"
 #include "packets/message_standard.h"
 #include "packets/message_system.h"
+#include "packets/monipulator1.h"
+#include "packets/monipulator2.h"
 #include "packets/party_define.h"
 #include "packets/party_invite.h"
 #include "packets/party_map.h"
@@ -3861,6 +3863,8 @@ void SmallPacket0x061(map_session_data_t* const PSession, CCharEntity* const PCh
     PChar->pushPacket(new CCharSkillsPacket(PChar));
     PChar->pushPacket(new CCharRecastPacket(PChar));
     PChar->pushPacket(new CMenuMeritPacket(PChar));
+    PChar->pushPacket(new CMonipulatorPacket1(PChar));
+    PChar->pushPacket(new CMonipulatorPacket2(PChar));
 
     if (charutils::hasKeyItem(PChar, 2544))
     {
@@ -5297,6 +5301,8 @@ void SmallPacket0x0BE(map_session_data_t* const PSession, CCharEntity* const PCh
             {
                 PChar->MeritMode = operation;
                 PChar->pushPacket(new CMenuMeritPacket(PChar));
+                PChar->pushPacket(new CMonipulatorPacket1(PChar));
+                PChar->pushPacket(new CMonipulatorPacket2(PChar));
             }
         }
         break;
@@ -5318,6 +5324,8 @@ void SmallPacket0x0BE(map_session_data_t* const PSession, CCharEntity* const PCh
                             break;
                     }
                     PChar->pushPacket(new CMenuMeritPacket(PChar));
+                    PChar->pushPacket(new CMonipulatorPacket1(PChar));
+                    PChar->pushPacket(new CMonipulatorPacket2(PChar));
                     PChar->pushPacket(new CMeritPointsCategoriesPacket(PChar, merit));
 
                     charutils::SaveCharExp(PChar, PChar->GetMJob());
@@ -6886,6 +6894,8 @@ void SmallPacket0x100(map_session_data_t* const PSession, CCharEntity* const PCh
         PChar->pushPacket(new CCharJobExtraPacket(PChar, true));
         PChar->pushPacket(new CCharJobExtraPacket(PChar, false));
         PChar->pushPacket(new CMenuMeritPacket(PChar));
+        PChar->pushPacket(new CMonipulatorPacket1(PChar));
+        PChar->pushPacket(new CMonipulatorPacket2(PChar));
         PChar->pushPacket(new CCharSyncPacket(PChar));
     }
 }
