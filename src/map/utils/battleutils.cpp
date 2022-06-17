@@ -2314,7 +2314,7 @@ namespace battleutils
 
                 float ratio = 1.0f;
 
-                if (weapon->getSkillType() == SKILL_HAND_TO_HAND)
+                if (weapon && weapon->getSkillType() == SKILL_HAND_TO_HAND)
                 {
                     ratio = 2.0f;
                 }
@@ -2660,7 +2660,7 @@ namespace battleutils
                 if (isPet)
                 {
                     CPetEntity* petEntity = dynamic_cast<CPetEntity*>(PAttacker);
-                    isAvatar              = petEntity->getPetType() == PET_TYPE::AVATAR;
+                    isAvatar              = petEntity ? petEntity->getPetType() == PET_TYPE::AVATAR : false;
                 }
 
                 if (isAvatar)
@@ -2691,7 +2691,7 @@ namespace battleutils
             // Broth
 
             int32 maxHitRate  = 99;
-            auto* targ_weapon = dynamic_cast<CItemWeapon*>(PAttacker->m_Weapons[SLOT_MAIN]);
+            auto* targ_weapon = PAttacker ? dynamic_cast<CItemWeapon*>(PAttacker->m_Weapons[SLOT_MAIN]) : nullptr;
 
             // As far as I can tell kick attacks fall under Hand-to-Hand so ignoring them and letting them go to 99
             bool isOffhand   = attackNumber == 1;
@@ -4103,7 +4103,12 @@ namespace battleutils
 
     CItemWeapon* GetEntityWeapon(CBattleEntity* PEntity, SLOTTYPE Slot)
     {
-        XI_DEBUG_BREAK_IF(Slot < SLOT_MAIN || Slot > SLOT_AMMO);
+        if (Slot < SLOT_MAIN || Slot > SLOT_AMMO)
+        {
+            ShowWarning("battleutils::GetEntityWeapon() - Received invalid slot type.");
+            return nullptr;
+        }
+
         return dynamic_cast<CItemWeapon*>(((CMobEntity*)PEntity)->m_Weapons[Slot]);
     }
 
@@ -4387,8 +4392,11 @@ namespace battleutils
 
     void GenerateCureEnmity(CBattleEntity* PSource, CBattleEntity* PTarget, int32 amount)
     {
-        XI_DEBUG_BREAK_IF(PSource == nullptr);
-        XI_DEBUG_BREAK_IF(PTarget == nullptr);
+        if (!PSource || !PTarget)
+        {
+            ShowWarning("battleutils::GenerateCureEnmity - PSource or PTarget was null.")
+            return;
+        }
 
         for (auto* entity : *PTarget->PNotorietyContainer)
         {
@@ -6705,6 +6713,12 @@ namespace battleutils
 
     int32 GetScaledItemModifier(CBattleEntity* PEntity, CItemEquipment* PItem, Mod mod)
     {
+        if (!PEntity || !PItem)
+        {
+            ShowWarning("battleutils::GetScaledItemModifier() - PEntity or PItem received as null.");
+            return 0;
+        }
+
         if (PEntity->GetMLevel() < PItem->getReqLvl())
         {
             auto modAmount = PItem->getModifier(mod);
