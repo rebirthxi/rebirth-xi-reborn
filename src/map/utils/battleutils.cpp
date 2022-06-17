@@ -3660,7 +3660,11 @@ namespace battleutils
 
     uint8 GetSkillchainSubeffect(SKILLCHAIN_ELEMENT skillchain)
     {
-        XI_DEBUG_BREAK_IF(skillchain < SC_NONE || skillchain > SC_DARKNESS_II);
+        if (skillchain < SC_NONE || skillchain > SC_DARKNESS_II)
+        {
+            ShowWarning("battleutils::GetSkillchainSubeffect() - Invalid Element passed to function.");
+            return 0;
+        }
 
         static const uint8 effects[] = {
             SUBEFFECT_NONE,          // SC_NONE
@@ -3687,7 +3691,11 @@ namespace battleutils
 
     uint8 GetSkillchainTier(SKILLCHAIN_ELEMENT skillchain)
     {
-        XI_DEBUG_BREAK_IF(skillchain < SC_NONE || skillchain > SC_DARKNESS_II);
+        if (skillchain < SC_NONE || skillchain > SC_DARKNESS_II)
+        {
+            ShowWarning("battleutils::GetSkillchainTier() - Invalid Element passed to function.");
+            return 0;
+        }
 
         static const uint8 tiers[] = {
             0, // SC_NONE
@@ -4015,8 +4023,11 @@ namespace battleutils
 
     int32 TakeSkillchainDamage(CBattleEntity* PAttacker, CBattleEntity* PDefender, int32 lastSkillDamage, CBattleEntity* taChar)
     {
-        XI_DEBUG_BREAK_IF(PAttacker == nullptr);
-        XI_DEBUG_BREAK_IF(PDefender == nullptr);
+        if (PAttacker == nullptr || PDefender == nullptr)
+        {
+            ShowWarning("battleutils::TakeSkillchainDamage() - PAttacker or PDefender was null.");
+            return 0;
+        }
 
         CStatusEffect* PEffect = PDefender->StatusEffectContainer->GetStatusEffect(EFFECT_SKILLCHAIN, 0);
 
@@ -4114,7 +4125,11 @@ namespace battleutils
 
     void MakeEntityStandUp(CBattleEntity* PEntity)
     {
-        XI_DEBUG_BREAK_IF(PEntity == nullptr);
+        if (PEntity == nullptr)
+        {
+            ShowWarning("battleutils::MakeEntityStandUp() - PEntity was null.");
+            return;
+        }
 
         if (PEntity->objtype == TYPE_PC)
         {
@@ -4136,7 +4151,11 @@ namespace battleutils
 
     bool HasNinjaTool(CBattleEntity* PEntity, CSpell* PSpell, bool ConsumeTool)
     {
-        XI_DEBUG_BREAK_IF(PEntity == nullptr || PSpell == nullptr);
+        if (PEntity == nullptr || PSpell == nullptr)
+        {
+            ShowWarning("battleutils::HasNinjaTool() - PEntity or PSpell was null.");
+            return false;
+        }
 
         if (PEntity->objtype == TYPE_PC)
         {
@@ -4413,7 +4432,11 @@ namespace battleutils
     // Generate enmity for all targets in range
     void GenerateInRangeEnmity(CBattleEntity* PSource, int16 CE, int16 VE)
     {
-        XI_DEBUG_BREAK_IF(PSource == nullptr);
+        if (PSource == nullptr)
+        {
+            ShowWarning("battleutils::GenerateInRangeEnmity() - PSource received as null.");
+            return;
+        }
 
         CCharEntity* PIterSource = nullptr;
 
