@@ -187,6 +187,24 @@ void CLuaZone::reloadNavmesh()
     m_pLuaZone->m_navMesh->reload();
 }
 
+bool CLuaZone::canRaycastBetweenPoints(const sol::table& startPos, const sol::table& endPos)
+{
+    auto solTableToPositionT = [](const sol::table& pos) -> position_t {
+        return {
+            pos["x"].get_or<float>(0),
+            pos["y"].get_or<float>(0),
+            pos["z"].get_or<float>(0),
+            pos["moving"].get_or<uint16>(0),
+            pos["rot"].get_or<uint8>(0)
+        };
+    };
+
+    auto cStartPos = solTableToPositionT(startPos);
+    auto cEndPos = solTableToPositionT(endPos);
+
+    return m_pLuaZone->m_navMesh->raycast(cStartPos, cEndPos, false);
+}
+
 std::optional<CLuaBaseEntity> CLuaZone::insertDynamicEntity(sol::table table)
 {
     auto& lua = luautils::lua;
@@ -466,6 +484,7 @@ void CLuaZone::Register()
     SOL_REGISTER("battlefieldsFull", CLuaZone::battlefieldsFull);
     SOL_REGISTER("getWeather", CLuaZone::getWeather);
     SOL_REGISTER("reloadNavmesh", CLuaZone::reloadNavmesh);
+    SOL_REGISTER("canRaycastBetweenPoints", CLuaZone::canRaycastBetweenPoints);
     SOL_REGISTER("insertDynamicEntity", CLuaZone::insertDynamicEntity);
 
     SOL_REGISTER("getSoloBattleMusic", CLuaZone::getSoloBattleMusic);

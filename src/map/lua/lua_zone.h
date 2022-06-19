@@ -57,6 +57,7 @@ public:
     bool        battlefieldsFull(int battlefieldId);
     WEATHER     getWeather();
     void        reloadNavmesh();
+    bool        canRaycastBetweenPoints(const sol::table& startPos, const sol::table& endPos);
 
     auto insertDynamicEntity(sol::table table) -> std::optional<CLuaBaseEntity>;
 
