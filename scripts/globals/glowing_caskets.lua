@@ -186,6 +186,11 @@ end
 
 
 xi.glowingCaskets.shouldSpawnGlowingChest = function(player, mob)
+    -- mobs that give no XP give no glowing caskets
+    if not player:checkKillCredit(mob) then
+        return false, nil
+    end
+
     local zoneID = player:getZoneID()
     if xi.zone_lights.zones[zoneID] ~= nil then
         local casket = xi.glowingCaskets.getAvailableCasket(mob)
