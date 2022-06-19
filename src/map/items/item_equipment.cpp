@@ -339,6 +339,10 @@ void CItemEquipment::SetAugmentMod(uint16 type, uint8 value)
         if ((modId == Mod::MAIN_DMG_RATING || modId == Mod::RANGED_DMG_RATING) && (getSlotID() != SLOT_MAIN && getSlotID() != SLOT_HANDS))
             break;
 
+        // prevent BP damage on more than weapon or grip
+        if (modId == Mod::BP_DAMAGE && (getSlotID() != SLOT_MAIN || getSlotID() != SLOT_SUB))
+            break;
+
         if (!isPet)
         {
             addModifier(CModifier(modId, modValue));
