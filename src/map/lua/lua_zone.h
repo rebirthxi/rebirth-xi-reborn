@@ -57,9 +57,7 @@ public:
     bool        battlefieldsFull(int battlefieldId);
     WEATHER     getWeather();
     void        reloadNavmesh();
-    bool        canRaycastBetweenPoints(const sol::table& startPos, const sol::table& endPos);
     bool        isNavigablePoint(const sol::table& position);
-
     auto insertDynamicEntity(sol::table table) -> std::optional<CLuaBaseEntity>;
 
     auto getSoloBattleMusic();
