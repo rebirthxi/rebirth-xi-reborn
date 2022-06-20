@@ -9,8 +9,9 @@ require("scripts/globals/status")
 -----------------------------------
 local entity = {}
 
-local startingSpacingDistance = -1
-local spacingDistanceMinimum = -.1
+local startingSpacingDistance = -1 -- how far apart to initially attempt to space the slaves
+local spacingDistanceMinimum = -.1 -- the distance at which if you're trying to build valid points this close together it will just bail out and stack on top of MG
+local spacingDivisor = 2  -- affects how quickly the list will converge to just stacking on MG (larger the faster)
 
 -- function returns two tables, one of spawned and one of unspawned
 local getSlaves = function()
@@ -31,13 +32,13 @@ local getSlaves = function()
 end
 
 -- calculates a list of all valid slave globe idle positions
--- shrinks the distance between them (if it fails the raycast test)
+-- shrinks the distance between them (if it fails the isNavigablePoint test)
 -- until the distance is low enough where they should just stack on mg
 -- the assumption here is that MG is likely not in a navmesh violation state
 local calculateValidSlaveGlobePositions = function(zone, mgPos, spacingDistance)
     local slavePositions = {}
 
-    -- extreme terminal decision so we don't recurse endless
+    -- extreme terminal decision so we don't recurse endlessly
     -- fall back to just piling up ontop of mg
     if spacingDistance > spacingDistanceMinimum then
         return {mgPos, mgPos, mgPos, mgPos, mgPos, mgPos}
@@ -47,10 +48,10 @@ local calculateValidSlaveGlobePositions = function(zone, mgPos, spacingDistance)
         local xOffset = spacingDistance * slavePositionSlot
         local slavePosition =  utils.lateralTranslateWithOriginRotation(mgPos, {x = xOffset, y = 0, z = 0})
 
-        if zone:canRaycastBetweenPoints(mgPos, slavePosition) then
+        if zone:isNavigablePoint(slavePosition) then
             table.insert(slavePositions, slavePosition)
         else
-            return calculateValidSlaveGlobePositions(zone, mgPos, spacingDistance / 2)
+            return calculateValidSlaveGlobePositions(zone, mgPos, spacingDistance / spacingDivisor)
         end
     end
 
