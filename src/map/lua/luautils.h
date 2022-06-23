@@ -144,6 +144,7 @@ namespace luautils
     uint8 GetConquestBalance();
     bool  IsConquestAlliance();
     int32 SetRegionalConquestOverseers(uint8 regionID); // Update NPC Conquest Guard
+    void  SendLuaFuncStringToZone(uint16 zoneId, std::string const& str);
 
     void UpdateSanrakusMobs(); // Update sanraku's (ZNM) subject of interest and recommended fauna
     void ZNMPopPriceDecay();   // Price of ZNM pop items decay over time

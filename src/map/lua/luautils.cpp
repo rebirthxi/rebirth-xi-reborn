@@ -68,6 +68,7 @@
 #include "../instance.h"
 #include "../items/item_puppet.h"
 #include "../map.h"
+#include "../message.h"
 #include "../mobskill.h"
 #include "../packets/action.h"
 #include "../packets/char_emotion.h"
@@ -200,6 +201,7 @@ namespace luautils
         lua.set_function("GetQuestAndMissionFilenamesList", &luautils::GetQuestAndMissionFilenamesList);
         lua.set_function("GetCachedInstanceScript", &luautils::GetCachedInstanceScript);
         lua.set_function("GetItemIDByName", &luautils::GetItemIDByName);
+        lua.set_function("SendLuaFuncStringToZone", &luautils::SendLuaFuncStringToZone);
 
         // This binding specifically exists to forcefully crash the server.
         // clang-format off
@@ -1015,6 +1017,11 @@ namespace luautils
         }
 
         return 0;
+    }
+
+    void SendLuaFuncStringToZone(uint16 zoneId, std::string const& str)
+    {
+        message::send(zoneId, str);
     }
 
     /************************************************************************
