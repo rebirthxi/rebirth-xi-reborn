@@ -162,6 +162,13 @@ void CParty::DisbandParty(bool playerInitiated)
             message::send(MSG_PT_DISBAND, data, sizeof data, nullptr);
         }
     }
+    else if (m_PartyType == PARTY_MOBS)
+    {
+        for (auto& member : members) // this should really only trigger when a dynamic entity dies and nothing else qualifies for it's party anymore (such as !fafnir in zones without dragons)
+        {
+            member->PParty = nullptr;
+        }
+    }
     delete this;
 }
 
@@ -279,8 +286,11 @@ void CParty::RemoveMember(CBattleEntity* PEntity)
         RemovePartyLeader(PEntity);
 
         // Remove their trusts
-        CCharEntity* PChar = (CCharEntity*)PEntity;
-        PChar->ClearTrusts();
+        CCharEntity* PChar = dynamic_cast<CCharEntity*>(PEntity);
+        if (PChar)
+        {
+            PChar->ClearTrusts();
+        }
     }
     else
     {
@@ -292,28 +302,16 @@ void CParty::RemoveMember(CBattleEntity* PEntity)
 
                 if (m_PartyType == PARTY_PCS)
                 {
-                    CCharEntity* PChar = (CCharEntity*)PEntity;
-
-                    if (m_PQuaterMaster == PChar)
+                    CCharEntity* PChar = dynamic_cast<CCharEntity*>(PEntity);
+                    if (PChar)
                     {
-                        SetQuarterMaster(nullptr);
-                    }
-                    if (m_PSyncTarget == PChar)
-                    {
-                        SetSyncTarget(nullptr, 553);
-                        CStatusEffect* sync = PChar->StatusEffectContainer->GetStatusEffect(EFFECT_LEVEL_SYNC);
-                        if (sync && sync->GetDuration() == 0)
+                        if (m_PQuaterMaster == PChar)
                         {
-                            PChar->pushPacket(new CMessageBasicPacket(PChar, PChar, 0, 30, 553));
-                            sync->SetStartTime(server_clock::now());
-                            sync->SetDuration(30000);
+                            SetQuarterMaster(nullptr);
                         }
-                        DisableSync();
-                    }
-                    if (m_PSyncTarget != nullptr && m_PSyncTarget != PChar)
-                    {
-                        if (PChar->status != STATUS_TYPE::DISAPPEAR)
+                        if (m_PSyncTarget == PChar)
                         {
+                            SetSyncTarget(nullptr, 553);
                             CStatusEffect* sync = PChar->StatusEffectContainer->GetStatusEffect(EFFECT_LEVEL_SYNC);
                             if (sync && sync->GetDuration() == 0)
                             {
@@ -321,27 +319,41 @@ void CParty::RemoveMember(CBattleEntity* PEntity)
                                 sync->SetStartTime(server_clock::now());
                                 sync->SetDuration(30000);
                             }
+                            DisableSync();
                         }
-                    }
-                    PChar->PLatentEffectContainer->CheckLatentsPartyMembers(members.size());
+                        if (m_PSyncTarget != nullptr && m_PSyncTarget != PChar)
+                        {
+                            if (PChar->status != STATUS_TYPE::DISAPPEAR)
+                            {
+                                CStatusEffect* sync = PChar->StatusEffectContainer->GetStatusEffect(EFFECT_LEVEL_SYNC);
+                                if (sync && sync->GetDuration() == 0)
+                                {
+                                    PChar->pushPacket(new CMessageBasicPacket(PChar, PChar, 0, 30, 553));
+                                    sync->SetStartTime(server_clock::now());
+                                    sync->SetDuration(30000);
+                                }
+                            }
+                        }
+                        PChar->PLatentEffectContainer->CheckLatentsPartyMembers(members.size());
 
-                    PChar->pushPacket(new CPartyDefinePacket(nullptr));
-                    PChar->pushPacket(new CPartyMemberUpdatePacket(PChar, 0, 0, PChar->getZone()));
-                    PChar->pushPacket(new CCharUpdatePacket(PChar));
-                    PChar->PParty = nullptr;
+                        PChar->pushPacket(new CPartyDefinePacket(nullptr));
+                        PChar->pushPacket(new CPartyMemberUpdatePacket(PChar, 0, 0, PChar->getZone()));
+                        PChar->pushPacket(new CCharUpdatePacket(PChar));
+                        PChar->PParty = nullptr;
 
-                    sql->Query("DELETE FROM accounts_parties WHERE charid = %u;", PChar->id);
+                        sql->Query("DELETE FROM accounts_parties WHERE charid = %u;", PChar->id);
 
-                    uint8 data[4]{};
-                    ref<uint32>(data, 0) = m_PartyID;
-                    message::send(MSG_PT_RELOAD, data, sizeof data, nullptr);
+                        uint8 data[4]{};
+                        ref<uint32>(data, 0) = m_PartyID;
+                        message::send(MSG_PT_RELOAD, data, sizeof data, nullptr);
 
-                    if (PChar->PTreasurePool != nullptr && PChar->PTreasurePool->GetPoolType() != TREASUREPOOL_ZONE)
-                    {
-                        PChar->PTreasurePool->DelMember(PChar);
-                        PChar->PTreasurePool = new CTreasurePool(TREASUREPOOL_SOLO);
-                        PChar->PTreasurePool->AddMember(PChar);
-                        PChar->PTreasurePool->UpdatePool(PChar);
+                        if (PChar->PTreasurePool != nullptr && PChar->PTreasurePool->GetPoolType() != TREASUREPOOL_ZONE)
+                        {
+                            PChar->PTreasurePool->DelMember(PChar);
+                            PChar->PTreasurePool = new CTreasurePool(TREASUREPOOL_SOLO);
+                            PChar->PTreasurePool->AddMember(PChar);
+                            PChar->PTreasurePool->UpdatePool(PChar);
+                        }
                     }
                 }
                 break;
@@ -418,6 +430,10 @@ void CParty::DelMember(CBattleEntity* PEntity)
                         PChar->PTreasurePool->UpdatePool(PChar);
                     }
                 }
+                else
+                {
+                    PEntity->PParty = nullptr;
+                }
                 break;
             }
         }
@@ -464,7 +480,11 @@ void CParty::PopMember(CBattleEntity* PEntity)
 
 void CParty::RemovePartyLeader(CBattleEntity* PEntity)
 {
-    XI_DEBUG_BREAK_IF(members.empty());
+    if (members.empty())
+    {
+        ShowWarning("CParty::RemovePartyLeader - called when \"member\" list was empty");
+        return;
+    }
 
     int ret = sql->Query("SELECT charname FROM accounts_sessions JOIN chars ON accounts_sessions.charid = chars.charid \
                                     JOIN accounts_parties ON accounts_parties.charid = chars.charid WHERE partyid = %u AND NOT partyflag & %d \
@@ -475,6 +495,21 @@ void CParty::RemovePartyLeader(CBattleEntity* PEntity)
         std::string newLeader((const char*)sql->GetData(0));
         SetLeader(newLeader.c_str());
     }
+
+    if (m_PartyType == PARTYTYPE::PARTY_MOBS)  // mob party, mob destructor being called and is leader of a party
+    {
+        for (auto member: members)
+        {
+            if (member != PEntity)             // assign leader to next party member
+            {
+                m_PLeader = member;
+                DelMember(PEntity);
+
+                return;
+            }
+        }
+    }
+
     if (m_PLeader == PEntity)
     {
         DisbandParty();
@@ -763,14 +798,14 @@ uint16 CParty::GetMemberFlags(CBattleEntity* PEntity)
     return Flags;
 }
 
-/************************************************************************
- *                                                                       *
- *  Обновляем карту группы для всех членов группы                        *
- *                                                                       *
- ************************************************************************/
-
+// update the party for all members
 void CParty::ReloadParty()
 {
+    if (m_PartyType == PARTYTYPE::PARTY_MOBS) // Mob parties don't need to send packets
+    {
+        return;
+    }
+
     auto info = GetPartyInfo();
 
     // alliance
