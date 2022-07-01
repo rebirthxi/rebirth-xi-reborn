@@ -797,7 +797,6 @@ xi.caskets.playerExamineChest = function(player, option, chestObj, baseMessage)
     -----------------------------------
     -- Minigame
     -----------------------------------
-
     local splitNumbers   = {}
     local hintsVar       = chestObj:getLocalVar("[caskets]HINTS_TABLE")
     local availableHints = {}
