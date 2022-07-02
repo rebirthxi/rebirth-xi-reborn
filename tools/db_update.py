@@ -107,8 +107,10 @@ safe_files_to_load = [
 ]
 
 for sql_file in safe_files_to_load:
+    print(f"Working on {sql_file}...")
     subprocess.run(
         f"docker exec -i {container} sh -c \"mysql -u {username} -p{password} {database}\" < {sql_file}",
         shell=True
     )
+    print(f"Completed work on {sql_file}.")
 
