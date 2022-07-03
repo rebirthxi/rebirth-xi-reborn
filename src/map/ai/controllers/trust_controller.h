@@ -67,6 +67,7 @@ private:
     void Declump(CCharEntity* PMaster, CBattleEntity* PTarget);
     void PathOutToDistance(CBattleEntity* PTarget, float amount);
     bool PartyDoesNotHaveEnmity();
+    void SetTrustRecast();
 
     CBattleEntity* m_LastTopEnmity;
 

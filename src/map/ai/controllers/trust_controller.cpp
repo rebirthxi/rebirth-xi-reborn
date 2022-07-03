@@ -64,6 +64,7 @@ CTrustController::~CTrustController()
 
 void CTrustController::Despawn()
 {
+    SetTrustRecast();
     POwner->PMaster   = nullptr;
     POwner->animation = ANIMATION_DESPAWN;
     CMobController::Despawn();
@@ -321,6 +322,12 @@ bool CTrustController::PartyDoesNotHaveEnmity()
     return true;
 }
 
+void CTrustController::SetTrustRecast()
+{
+    auto* PTrust = static_cast<CTrustEntity*>(POwner);
+    auto* PMaster = static_cast<CCharEntity*>(POwner->PMaster);
+    PMaster->PRecastContainer->Add(RECAST_MAGIC, PTrust->m_TrustID, 300); // hard code to 5 minutes
+}
 
 void CTrustController::PathOutToDistance(CBattleEntity* PTarget, float amount)
 {
