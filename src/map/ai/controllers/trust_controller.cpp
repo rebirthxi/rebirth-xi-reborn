@@ -19,6 +19,8 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 ===========================================================================
 */
 
+#include <algorithm>
+
 #include "trust_controller.h"
 #include "player_controller.h"
 
@@ -32,10 +34,12 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 #include "../../entities/trustentity.h"
 #include "../../items/item_weapon.h"
 #include "../../mob_spell_container.h"
+#include "../../notoriety_container.h"
 #include "../../packets/char.h"
 #include "../../recast_container.h"
 #include "../../status_effect_container.h"
 #include "../ai_container.h"
+#include "../../notoriety_container.h"
 
 CTrustController::CTrustController(CCharEntity* PChar, CTrustEntity* PTrust)
 : CMobController(PTrust)
@@ -257,7 +261,7 @@ void CTrustController::DoRoamTick(time_point tick)
         m_IdleGambitsContainer->Tick(tick);
     }
 
-    if (POwner->CanRest() && m_Tick - POwner->LastAttacked > m_tickDelays.at(0) && m_Tick - m_CombatEndTime > m_tickDelays.at(0) &&
+    if (PartyDoesNotHaveEnmity() && m_Tick - POwner->LastAttacked > m_tickDelays.at(0) && m_Tick - m_CombatEndTime > m_tickDelays.at(0) &&
         m_Tick - m_LastHealTickTime > m_tickDelays.at(m_NumHealingTicks))
     {
         if (POwner->health.hp != POwner->health.maxhp || POwner->health.mp != POwner->health.maxmp)
@@ -304,6 +308,19 @@ void CTrustController::Declump(CCharEntity* PMaster, CBattleEntity* PTarget)
         }
     }
 }
+
+bool CTrustController::PartyDoesNotHaveEnmity()
+{
+    auto* PMaster = static_cast<CCharEntity*>(POwner->PMaster);
+
+    if (PMaster->PParty) // let's just be safe, you know?
+    {
+        return std::all_of(PMaster->PParty->members.begin(), PMaster->PParty->members.end(), [](auto* member) { return !member->PNotorietyContainer->hasEnmity(); });
+    }
+
+    return true;
+}
+
 
 void CTrustController::PathOutToDistance(CBattleEntity* PTarget, float amount)
 {
