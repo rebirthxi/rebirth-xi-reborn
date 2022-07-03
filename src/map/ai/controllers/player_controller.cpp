@@ -43,6 +43,22 @@ CPlayerController::CPlayerController(CCharEntity* _PChar)
 
 void CPlayerController::Tick(time_point /*tick*/)
 {
+    auto* PChar = static_cast<CCharEntity*>(POwner);
+
+    if (!PChar->PTrusts.empty() && m_lastTrustCheck + 30s < server_clock::now())
+    {
+        const auto members = PChar->PParty->members;
+        auto playersCount = std::count_if(members.begin(), members.end(), [](const CBattleEntity* entity){return entity->objtype == TYPE_PC;});
+        auto trustsCount = PChar->PTrusts.size();
+
+        while (trustsCount > playersCount)
+        {
+            PChar->RemoveTrust(PChar->PTrusts.front());
+            trustsCount--;
+        }
+
+        m_lastTrustCheck = server_clock::now();
+    }
 }
 
 bool CPlayerController::Cast(uint16 targid, SpellID spellid)
