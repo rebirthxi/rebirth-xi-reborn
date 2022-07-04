@@ -1516,7 +1516,7 @@ namespace luautils
     {
         TracyZoneScoped;
         TracyZoneCString(variable);
-        return lua["xi"]["settings"][variable].valid() ? lua["xi"]["settings"][variable].get<uint8>() : 0;
+        return lua["xi"]["settings"]["main"][variable].valid() ? lua["xi"]["settings"]["main"][variable].get<uint8>() : 0;
     }
 
     /************************************************************************
@@ -4795,7 +4795,6 @@ namespace luautils
             // 0xFFFF is gil, so we will always return a value less than that as a warning
             id = 0xFFFF - sql->NumRows() + 1;
         }
-        
 
         return id;
     }
