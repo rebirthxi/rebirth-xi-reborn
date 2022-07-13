@@ -6151,7 +6151,7 @@ namespace charutils
         // clang-format on
     }
 
-    void AddCharVar(CCharEntity* PChar, std::string const& var, int32 value)
+    void IncrementCharVar(CCharEntity* PChar, std::string const& var, int32 value)
     {
         if (PChar == nullptr)
         {
