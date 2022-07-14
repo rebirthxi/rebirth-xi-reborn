@@ -2789,11 +2789,11 @@ void SmallPacket0x04D(map_session_data_t* const PSession, CCharEntity* const PCh
                 bool isAutoCommitOn = sql->GetAutoCommit();
                 bool commit         = false; // When in doubt back it out.
 
-                CItem*   PItem    = PChar->UContainer->GetItem(slotID);
-                auto     item_id  = PItem->getID();
-                auto     quantity = PItem->getQuantity();
-                uint32   senderID = 0;
-                string_t senderName;
+                CItem*      PItem    = PChar->UContainer->GetItem(slotID);
+                auto        item_id  = PItem->getID();
+                auto        quantity = PItem->getQuantity();
+                uint32      senderID = 0;
+                std::string senderName;
 
                 if (sql->SetAutoCommit(false) && sql->TransactionStart())
                 {
@@ -5254,7 +5254,7 @@ void SmallPacket0x0B6(map_session_data_t* const PSession, CCharEntity* const PCh
         return;
     }
 
-    string_t RecipientName = string_t((const char*)data[6], 15);
+    std::string RecipientName = std::string((const char*)data[6], 15);
 
     if (strcmp(RecipientName.c_str(), "_CUSTOM_MENU") == 0 &&
         luautils::HasCustomMenuContext(PChar))

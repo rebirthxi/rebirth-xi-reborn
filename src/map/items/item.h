@@ -172,9 +172,9 @@ private:
 
     bool m_sent;
 
-    string_t m_name;
-    string_t m_send;
-    string_t m_recv;
+    std::string m_name;
+    std::string m_send;
+    std::string m_recv;
 };
 
 #endif
