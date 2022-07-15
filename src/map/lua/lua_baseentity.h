@@ -832,6 +832,10 @@ public:
     /*
      * Back to the Regular Sand Ship Stuff
      */
+    auto getChocoboRaisingInfo() -> sol::table;
+    bool setChocoboRaisingInfo(sol::table table);
+    bool deleteRaisedChocobo();
+
     static void Register();
 };
 
