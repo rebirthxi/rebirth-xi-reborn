@@ -59,3 +59,4 @@ ADD ./navmeshes /navmeshes
 ADD ./tools/wait_for_silly_sql.sh /wait_for_silly_sql.sh
 ADD ./compress.dat /compress.dat
 ADD ./decompress.dat /decompress.dat
+ADD ./settings /settings
