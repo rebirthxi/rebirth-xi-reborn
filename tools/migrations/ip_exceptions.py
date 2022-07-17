@@ -17,7 +17,7 @@ def migrate(cur, db):
     try:
         cur.execute("CREATE TABLE ip_exceptions( \
                     accid int(10) unsigned NOT NULL DEFAULT '0', \
-                    exception datetime NOT NULL DEFAULT '0000-00-00 00:00:00', \
+                    exception datetime NOT NULL DEFAULT '1000-01-01 00:00:00', \
                     comment varchar(512) DEFAULT NULL, \
                     PRIMARY KEY ( accid ));")
         db.commit()
