@@ -39,6 +39,9 @@ from migrations import add_char_chatfilters
 from migrations import abyssea_conflux
 from migrations import waypoints
 from migrations import home_zone_size
+from migrations import ip_exceptions
+from migrations import char_effects_subid_size
+from migrations import add_char_chocobos_table
 
 
 migrations = [
@@ -72,7 +75,10 @@ migrations = [
     add_char_chatfilters,
     abyssea_conflux,
     waypoints,
-    home_zone_size
+    home_zone_size,
+    ip_exceptions,
+    char_effects_subid_size,
+    add_char_chocobos_table
 ]
 
 
