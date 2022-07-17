@@ -14385,7 +14385,7 @@ sol::table CLuaBaseEntity::getNpcScore()
     XI_DEBUG_BREAK_IF(m_PBaseEntity->objtype != TYPE_NPC);
 
     auto *PNpc = static_cast<CNpcEntity*>(m_PBaseEntity);
-    auto score = luautils::lua.create_table();
+    auto score = lua.create_table();
 
     score["Name"] = PNpc->name;
     score["NamePrefix"] = PNpc->name_prefix;

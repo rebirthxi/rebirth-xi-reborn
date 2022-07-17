@@ -6759,7 +6759,7 @@ namespace charutils
 
         if (!expFromRaise)
         {
-            exp = (uint32)(exp * map_config.exp_rate);
+            exp = (uint32)(exp * settings::get<float>("map.EXP_RATE"));
             for (uint8 i = JOB_WAR; i < MAX_JOBTYPE; i++)
             {
                 if (ShouldDistributeXp(PChar, static_cast<JOBTYPE>(i)))

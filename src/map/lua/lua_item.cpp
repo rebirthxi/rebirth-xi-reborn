@@ -327,7 +327,7 @@ auto CLuaItem::getSoulPlateData() -> sol::table
 
 auto CLuaItem::getAugSrc() -> sol::table
 {
-    auto table = luautils::lua.create_table();
+    auto table = lua.create_table();
 
     table["augment_item_src"] = m_PLuaItem->aug_src.augment_item_src;
     table["aug0_src"] = m_PLuaItem->aug_src.aug0_src;
@@ -348,7 +348,7 @@ auto CLuaItem::getAugSrc() -> sol::table
 
 auto CLuaItem::getAugTable() -> sol::table
 {
-    auto table = luautils::lua.create_table();
+    auto table = lua.create_table();
     auto* PItem = static_cast<CItemEquipment*>(m_PLuaItem);
 
     for (uint8 i = 0; i < 4; i++)
